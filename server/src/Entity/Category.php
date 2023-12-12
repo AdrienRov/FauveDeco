@@ -62,6 +62,36 @@ class Category
     }
 
     /**
+     * @return Collection<int, Category>
+     */
+    public function getSubCategories(): Collection
+    {
+        return $this->sub_categories;
+    }
+
+    public function addSubCategory(Category $subCategory): static
+    {
+        if (!$this->sub_categories->contains($subCategory)) {
+            $this->sub_categories->add($subCategory);
+            $subCategory->setParent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubCategory(Category $subCategory): static
+    {
+        if ($this->sub_categories->removeElement($subCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($subCategory->getParent() === $this) {
+                $subCategory->setParent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
      * @return Collection<int, Product>
      */
     public function getProducts(): Collection
