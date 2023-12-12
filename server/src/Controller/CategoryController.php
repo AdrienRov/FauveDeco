@@ -28,9 +28,7 @@ class CategoryController extends AbstractController
 
 
         $response = new Response();
-        $response->setContent(json_encode([
-            $arr
-        ]));
+        $response->setContent(json_encode($arr));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
     }
@@ -67,6 +65,7 @@ class CategoryController extends AbstractController
         if (empty($name)) {
             $response = new Response();
             $response->setContent(json_encode([
+                'status' => false,
                 'error' => 'Name is required'
             ]));
             $response->headers->set('Content-Type', 'application/json');
@@ -79,6 +78,7 @@ class CategoryController extends AbstractController
             if (!$parent) {
                 $response = new Response();
                 $response->setContent(json_encode([
+                    'status' => false,
                     'error' => 'Parent category not found'
                 ]));
                 $response->headers->set('Content-Type', 'application/json');
@@ -97,7 +97,8 @@ class CategoryController extends AbstractController
 
         $response = new Response();
         $response->setContent(json_encode([
-            'success' => 'Category created'
+            'status' => true,
+            'id' => $category->getId()
         ]));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -114,6 +115,7 @@ class CategoryController extends AbstractController
         if (!$category) {
             $response = new Response();
             $response->setContent(json_encode([
+                'status' => false,
                 'error' => 'Category not found'
             ]));
             $response->headers->set('Content-Type', 'application/json');
@@ -128,7 +130,7 @@ class CategoryController extends AbstractController
 
         $response = new Response();
         $response->setContent(json_encode([
-            'success' => 'Category deleted'
+            'status' => true
         ]));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
@@ -145,6 +147,7 @@ class CategoryController extends AbstractController
         if (!$category) {
             $response = new Response();
             $response->setContent(json_encode([
+                'status' => false,
                 'error' => 'Category not found'
             ]));
             $response->headers->set('Content-Type', 'application/json');
@@ -169,6 +172,7 @@ class CategoryController extends AbstractController
             if (!$parent) {
                 $response = new Response();
                 $response->setContent(json_encode([
+                    'status' => false,
                     'error' => 'Parent category not found'
                 ]));
                 $response->headers->set('Content-Type', 'application/json');
@@ -185,8 +189,7 @@ class CategoryController extends AbstractController
 
         $response = new Response();
         $response->setContent(json_encode([
-            'success' => 'Category updated',
-            'name' => $request->getContent()
+            'status' => true
         ]));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
