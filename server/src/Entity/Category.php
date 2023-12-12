@@ -18,8 +18,11 @@ class Category
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToOne(targetEntity: self::class, cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'sub_categories', targetEntity: Category::class)]
     private ?self $parent = null;
+
+    #[ORM\OneToMany(mappedBy: 'parent', targetEntity: Category::class)]
+    private ?Collection $sub_categories = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
     private Collection $products;
