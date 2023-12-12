@@ -43,7 +43,10 @@ class CategoryController extends AbstractController
         
         $response = new Response();
         $response->setContent(json_encode([
-            $category
+            'id' => $category->getId(),
+            'name' => $category->getName(),
+            'parent' => $category->getParent() ? $category->getParent()->getId() : null,
+            'sub_categories' => $category->getSubCategories()->map(fn($category) => $category->getId())->toArray(),
         ]));
         $response->headers->set('Content-Type', 'application/json');
         return $response;
