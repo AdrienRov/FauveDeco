@@ -32,6 +32,10 @@ class Order
     #[ORM\OneToMany(mappedBy: 'in_order', targetEntity: ProductOrder::class)]
     private Collection $productOrders;
 
+    #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $client = null;
+
     public function __construct()
     {
         $this->productOrders = new ArrayCollection();
@@ -116,6 +120,18 @@ class Order
                 $productOrder->setInOrder(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getClient(): ?User
+    {
+        return $this->client;
+    }
+
+    public function setClient(?User $client): static
+    {
+        $this->client = $client;
 
         return $this;
     }
