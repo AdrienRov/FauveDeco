@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\OrderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -26,6 +28,14 @@ class Order
 
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = null;
+
+    #[ORM\OneToMany(mappedBy: 'in_order', targetEntity: ProductOrder::class)]
+    private Collection $productOrders;
+
+    public function __construct()
+    {
+        $this->productOrders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -76,6 +86,36 @@ class Order
     public function setStatus(int $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductOrder>
+     */
+    public function getProductOrders(): Collection
+    {
+        return $this->productOrders;
+    }
+
+    public function addProductOrder(ProductOrder $productOrder): static
+    {
+        if (!$this->productOrders->contains($productOrder)) {
+            $this->productOrders->add($productOrder);
+            $productOrder->setInOrder($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductOrder(ProductOrder $productOrder): static
+    {
+        if ($this->productOrders->removeElement($productOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($productOrder->getInOrder() === $this) {
+                $productOrder->setInOrder(null);
+            }
+        }
 
         return $this;
     }
