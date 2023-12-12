@@ -1,7 +1,13 @@
 @import '../commons/colors.scss';
 
-categorie{
-    button{
-        color: $rose;
-    }
+.categorie{
+    background-color: $rose ;
+}
+
+.ligne{
+    flex-direction: row;
+}
+
+.colonne{
+    flex-direction: column;
 }

@@ -35,48 +35,47 @@ function Accueil() {
                 </div>
             </div>
 
-            <div className="flex flex-col w-full h-full lg:flex-row">
-                <div className="grid flex-grow h-full card place-items-center">
-                    <div className="card w-96 glass">
-                    <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
-                        <div className="card-body">
-                            <div className="card-actions justify-center">
-                            <button className="btn btn-primary">Bijoux</button>
+            <div className="flex w-full h-full colonne">
+                <div className="flex w-full h-full ligne">
+                    <div className="flex w-1/2 h-full card place-items-center">
+                        <div className="card w-4/5 glass">
+                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
+                            <div className="card-body">
+                                <div className="card-actions justify-center">
+                                    <button className="btn categorie">Bijoux</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div> 
-            <div className="divider lg:divider-horizontal"></div> 
-                <div className="grid flex-grow h-full card place-items-center">
-                    <div className="card w-96 glass">
-                    <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
-                        <div className="card-body">
-                            <div className="card-actions justify-center">
-                            <button className="btn btn-primary">Décorations</button>
+                    <div className="flex w-1/2 h-full card place-items-center">
+                        <div className="card w-4/5 glass">
+                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
+                            <div className="card-body">
+                                <div className="card-actions justify-center">
+                                    <button className="btn categorie">Décorations</button>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <div className="flex flex-col w-full h-full lg:flex-row">
-                <div className="grid flex-grow h-full card place-items-center">
-                    <div className="card w-96 glass">
-                    <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
-                        <div className="card-body">
-                            <div className="card-actions justify-center">
-                            <button className="btn btn-primary">Textile</button>
+                <div className="flex w-full h-full ligne">
+                    <div className="flex w-1/2 h-full card place-items-center">
+                        <div className="card w-4/5 glass">
+                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
+                            <div className="card-body">
+                                <div className="card-actions justify-center">
+                                    <button className="btn categorie">Textile</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div> 
-            <div className="divider lg:divider-horizontal"></div> 
-                <div className="grid flex-grow h-full card place-items-center">
-                    <div className="card w-96 glass">
-                    <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
-                        <div className="card-body">
-                            <div className="card-actions justify-center">
-                            <button className="btn btn-primary">Sacs / Paniers</button>
+                    <div className="flex w-1/2 h-full card place-items-center">
+                        <div className="card w-4/5 glass">
+                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
+                            <div className="card-body">
+                                <div className="card-actions justify-center">
+                                    <button className="btn categorie">Sacs / Paniers</button>
+                                </div>
                             </div>
                         </div>
                     </div>

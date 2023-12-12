@@ -1,4 +1,13 @@
 @import 'colors';
 .navbar{
     background-color: $vert-fonce;
+    color: $blanc;
+}
+
+.navbar-center{
+    display: flex;
+    flex-direction: column;
+    .text-xxl{
+        font-size: 30px;    
+    }
 }
