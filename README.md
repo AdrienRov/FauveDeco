@@ -8,10 +8,13 @@
 
 ## Installation
 - Installer la base de donnée sur Docker
+
 `docker run --name fauvedeco -e POSTGRES_PASSWORD=00000000 -d -p 5432:5432 postgres`
 - Cloner le repo
-`https://github.com/AdrienRov/FauveDeco`
+
+`git clone git@github.com:AdrienRov/FauveDeco.git`
 - Installer les composants
+
 ```sh
 cd server
 composer install
@@ -24,10 +27,13 @@ npm install
 ## Commandes Symphony
 
 Lancer serveur de développement
+
 `symfony server:start`
 
 Créer une migration
+
 `php bin/console make:migration`
+
 Appliquer une migration
 
 `php bin/console doctrine:migrations:migrate`
@@ -35,4 +41,5 @@ Appliquer une migration
 ## Commandes NodeJS
 
 Lancer serveur de développement
+
 `npm start`
