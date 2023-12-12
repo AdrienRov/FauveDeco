@@ -1,0 +1,23 @@
+_id: req_86ed42860baf481488cd43902ce3e597
+type: Request
+parentId: wrk_9b90cd6c3d064bb2bf727bab7348303e
+modified: 1702389554760
+created: 1702389523977
+url: http://127.0.0.1:8000/categories
+name: List categories
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: Insomnia/2023.5.6
+authentication: {}
+metaSortKey: -1702389523977
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

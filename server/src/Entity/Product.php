@@ -32,7 +32,7 @@ class Product
     private Collection $images;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?category $category = null;
+    private ?Category $category = null;
 
     public function __construct()
     {

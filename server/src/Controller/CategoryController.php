@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class CategoryController extends AbstractController
 {
@@ -25,12 +26,7 @@ class CategoryController extends AbstractController
                 'parent' => $category->getParent() ? $category->getParent()->getId() : null
             ];
         }
-
-
-        $response = new Response();
-        $response->setContent(json_encode($arr));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        return $this->json($arr);
     }
 
     #[Route('/category/{id}', name: 'app_category', methods: ['GET'])]
@@ -38,21 +34,25 @@ class CategoryController extends AbstractController
     {
         // get category from database
         $category = $entityManager->getRepository(Category::class)->find($id);
+
+        if (!$category) {
+            return $this->json([
+                'status' => false,
+                'error' => 'Category not found'
+            ]);
+        }
         
-        $response = new Response();
-        $response->setContent(json_encode([
+        return $this->json([
             'id' => $category->getId(),
             'name' => $category->getName(),
             'parent' => $category->getParent() ? $category->getParent()->getId() : null,
             'sub_categories' => $category->getSubCategories()->map(fn($category) => $category->getId())->toArray(),
-        ]));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        ]);
     }
 
     // Post to create new category
     #[Route('/category', name: 'app_category_create', methods: ['POST'])]
-    public function create(EntityManagerInterface $entityManager): Response
+    public function create(EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
         // get name and parent from request
         $request = Request::createFromGlobals();
@@ -61,47 +61,40 @@ class CategoryController extends AbstractController
         $name = $data['name'] ?? null;
         $parent = $data['parent'] ?? null;
 
-        // validate name
-        if (empty($name)) {
-            $response = new Response();
-            $response->setContent(json_encode([
-                'status' => false,
-                'error' => 'Name is required'
-            ]));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
-        }
-
-        // validate parent
-        if (!empty($parent)) {
-            $parent = $entityManager->getRepository(Category::class)->find($parent);
-            if (!$parent) {
-                $response = new Response();
-                $response->setContent(json_encode([
-                    'status' => false,
-                    'error' => 'Parent category not found'
-                ]));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
-            }
-        }
-
         // create new category
         $category = new Category();
         $category->setName($name);
-        $category->setParent($parent);
+
+        if (!empty($parent))
+        {
+            $parent = $entityManager->getRepository(Category::class)->find($parent);
+            if (!$parent) {
+                return $this->json([
+                    'status' => false,
+                    'error' => 'Parent category not found'
+                ]);
+            }
+            $category->setParent($parent);
+        }
+
+        // validate category
+        $errors = $validator->validate($category);
+
+        if (count($errors) > 0) {
+            return $this->json([
+                'status' => false,
+                'error' => (string) $errors
+            ]);
+        }
 
         // save to database
         $entityManager->persist($category);
         $entityManager->flush();
 
-        $response = new Response();
-        $response->setContent(json_encode([
+        return $this->json([
             'status' => true,
             'id' => $category->getId()
-        ]));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        ]);
     }
 
     // Delete a category
@@ -113,45 +106,34 @@ class CategoryController extends AbstractController
 
         // validate category
         if (!$category) {
-            $response = new Response();
-            $response->setContent(json_encode([
+            return $this->json([
                 'status' => false,
                 'error' => 'Category not found'
-            ]));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
+            ]);
         }
-        
-
 
         // delete category
         $entityManager->remove($category);
         $entityManager->flush();
 
-        $response = new Response();
-        $response->setContent(json_encode([
+        return $this->json([
             'status' => true
-        ]));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        ]);
     }
 
     // Patch to update category
     #[Route('/category/{id}', name: 'app_category_update', methods: ['PATCH'])]
-    public function update(EntityManagerInterface $entityManager, int $id): Response
+    public function update(EntityManagerInterface $entityManager, ValidatorInterface $validator, int $id): Response
     {
         // get category from database
         $category = $entityManager->getRepository(Category::class)->find($id);
 
         // validate category
         if (!$category) {
-            $response = new Response();
-            $response->setContent(json_encode([
+            return $this->json([
                 'status' => false,
                 'error' => 'Category not found'
-            ]));
-            $response->headers->set('Content-Type', 'application/json');
-            return $response;
+            ]);
         }
 
         // get name and parent from request
@@ -165,33 +147,35 @@ class CategoryController extends AbstractController
         if (!empty($name)) {
             $category->setName($name);
         }
-
-        // check if set to update
-        if (!empty($parent)) {
+        if (!empty($parent))
+        {
             $parent = $entityManager->getRepository(Category::class)->find($parent);
             if (!$parent) {
-                $response = new Response();
-                $response->setContent(json_encode([
+                return $this->json([
                     'status' => false,
                     'error' => 'Parent category not found'
-                ]));
-                $response->headers->set('Content-Type', 'application/json');
-                return $response;
+                ]);
             }
             $category->setParent($parent);
         }
 
+        // validate category
+        $errors = $validator->validate($category);
+
+        if (count($errors) > 0) {
+            return $this->json([
+                'status' => false,
+                'error' => (string) $errors
+            ]);
+        }
 
 
         // save to database
         $entityManager->persist($category);
         $entityManager->flush();
 
-        $response = new Response();
-        $response->setContent(json_encode([
+        return $this->json([
             'status' => true
-        ]));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;
+        ]);
     }
 }
