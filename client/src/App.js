@@ -15,7 +15,8 @@ import Shopping from "./pages/shopping/Shopping";
 import Produit from "./pages/produit/Produit";
 import Panier from "./pages/panier/Panier";
 import Contact from "./pages/contact/Contact";
-import NavBar from "./pages/commons/navbar";
+import NavBar from "./pages/commons/Navbar";
+import Footer from "./pages/commons/Footer";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </div>
-      
+      <Footer />
     </Router>
   );
 }
