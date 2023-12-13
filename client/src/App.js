@@ -15,7 +15,7 @@ import Shopping from "./pages/shopping/Shopping";
 import Produit from "./pages/produit/Produit";
 import Panier from "./pages/panier/Panier";
 import Contact from "./pages/contact/Contact";
-import NavBar from "./pages/commons/Navbar";
+import NavBar from "./pages/commons/NavBar";
 import Footer from "./pages/commons/Footer";
 
 function App() {
