@@ -1,17 +1,11 @@
-import React from "react";
+import React, { useEffect, useState, useContext } from 'react';
 
 function Categories(props) {
-    const { title, data } = props;
-
+    
+    const {title} = props;
+    console.log(title);
     return (
-        <div>
-            <h1>{title}</h1>
-            <ul>
-                {data.map(item => (
-                    <li key={item.id}>{item.name}</li>
-                ))}
-            </ul>
-        </div>
+        <h1 className="text-3xl font-bold text-center">{title}</h1>
     );
 }
 
