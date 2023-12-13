@@ -8,9 +8,29 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class UserController extends AbstractController
 {
+	#[Route('/user/self', name: 'app_test', methods: ['GET'])]
+	public function show_self(#[CurrentUser] ?User $user): Response
+	{
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+		return $this->json([
+			'status' => true,
+			'id' => $user->getId(),
+			'email' => $user->getEmail(),
+			'firstName' => $user->getFirstName(),
+			'lastName' => $user->getLastName(),
+			'role' => $user->getRole(),
+			'phone' => $user->getPhone(),
+			'address' => $user->getAddress(),
+			'country' => $user->getCountry()
+		]);
+	}
+
     #[Route('/users', name: 'app_users')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -24,17 +44,13 @@ class UserController extends AbstractController
 				'firstName' => $user->getFirstName(),
 				'lastName' => $user->getLastName(),
 				'role' => $user->getRole(),
-				'password' => $user->getPassword(),
 				'phone' => $user->getPhone(),
 				'address' => $user->getaddress(),
 				'country' => $user->getCountry()
 			];
 		}
 
-		$response = new Response();
-		$response->setContent(json_encode($arr));
-		$response->headers->set('Content-Type', 'application/json');
-		return $response;
+		return $this->json($arr);
     }
 
 	// user by id
@@ -43,25 +59,43 @@ class UserController extends AbstractController
 	{
 		$user = $entityManager->getRepository(User::class)->find($id);
 
-		$response = new Response();
-		$response->setContent(json_encode([
+		if (!$user) {
+			return $this->json([
+				'status' => false,
+				'error' => 'User not found'
+			]);
+		}
+
+		return $this->json([
 			'id' => $user->getId(),
 			'email' => $user->getEmail(),
 			'firstName' => $user->getFirstName(),
 			'lastName' => $user->getLastName(),
 			'role' => $user->getRole(),
-			'password' => $user->getPassword(),
 			'phone' => $user->getPhone(),
 			'address' => $user->getAddress(),
 			'country' => $user->getCountry()
-		]));
-		$response->headers->set('Content-Type', 'application/json');
-		return $response;
+		]);
 	}
 
-	// Post to create new user
+	// Authentification
+	#[Route('/login', name: 'app_login', methods: ['POST'])]
+	public function login(#[CurrentUser] ?User $user): Response
+	{
+		if (!$user) {
+			return $this->json([
+				'status' => false,
+				'error' => 'User not found'
+			]);
+		}
+
+		return $this->json([
+			"status" => true
+		]);
+	}
+
 	#[Route('/user', name: 'app_user_create', methods: ['POST'])]
-	public function create(EntityManagerInterface $entityManager): Response
+	public function create(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
 	{
 		// get name and parent from request
 		$request = Request::createFromGlobals();
@@ -71,13 +105,10 @@ class UserController extends AbstractController
 
 		foreach ($requiredKeys as $key) {
 			if (!isset($data[$key])) {
-				$response = new Response();
-				$response->setContent(json_encode([
+				return $this->json([
 					'status' => false,
 					'error' => "Missing or invalid key: $key",
-				]));
-				$response->headers->set('Content-Type', 'application/json');
-				return $response;
+				]);
 			}
 		}
 
@@ -86,16 +117,20 @@ class UserController extends AbstractController
 		$user->setFirstName($data['firstName']);
 		$user->setLastName($data['lastName']);
 		$user->setRole($data['role']);
-		$user->setPassword($data['password']);
 		$user->setPhone($data['phone']);
 		$user->setAddress($data['address']);
 		$user->setCountry($data['country']);
 
+		$hashed_password = $passwordHasher->hashPassword(
+			$user,
+			$data['password']
+		);
+		$user->setPassword($hashed_password);
+
 		$entityManager->persist($user);
 		$entityManager->flush();
 
-		$response = new Response();
-		$response->setContent(json_encode([
+		return $this->json([
 			'id' => $user->getId(),
 			'email' => $user->getEmail(),
 			'firstName' => $user->getFirstName(),
@@ -105,52 +140,42 @@ class UserController extends AbstractController
 			'phone' => $user->getPhone(),
 			'address' => $user->getAddress(),
 			'country' => $user->getCountry()
-		]));
-		$response->headers->set('Content-Type', 'application/json');
-		return $response;
+		]);
 	}
 
 	// Delete a user
-	#[Route('/userdelete/{id}', name: 'app_user_delete', methods: ['DELETE'])]
+	#[Route('/user/{id}', name: 'app_user_delete', methods: ['DELETE'])]
 	public function delete(EntityManagerInterface $entityManager, int $id): Response
 	{
 		$user = $entityManager->getRepository(User::class)->find($id);
 
 		if (!$user) {
-			$response = new Response();
-			$response->setContent(json_encode([
+			return $this->json([
 				'status' => false,
 				'error' => 'User not found'
-			]));
-			$response->headers->set('Content-Type', 'application/json');
-			return $response;
+			]);
 		}
 
 		$entityManager->remove($user);
 		$entityManager->flush();
 
-		$response = new Response();
-		$response->setContent(json_encode([
-			'status' => true
-		]));
-		$response->headers->set('Content-Type', 'application/json');
-		return $response;
+		return $this->json([
+			'status' => true,
+			'message' => 'User deleted'
+		]);
 	}
 
 	// Patch to update user
-	#[Route('/userupdate/{id}', name: 'app_user_update', methods: ['PATCH'])]
-	public function update(EntityManagerInterface $entityManager, int $id): Response
+	#[Route('/user/{id}', name: 'app_user_update', methods: ['PATCH'])]
+	public function update(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, int $id): Response
 	{
 		$user = $entityManager->getRepository(User::class)->find($id);
 
 		if (!$user) {
-			$response = new Response();
-			$response->setContent(json_encode([
+			return $this->json([
 				'status' => false,
 				'error' => 'User not found'
-			]));
-			$response->headers->set('Content-Type', 'application/json');
-			return $response;
+			]);
 		}
 
 		// get name and parent from request
@@ -169,9 +194,6 @@ class UserController extends AbstractController
 		if (isset($data['role'])) {
 			$user->setRole($data['role']);
 		}
-		if (isset($data['password'])) {
-			$user->setPassword($data['password']);
-		}
 		if (isset($data['phone'])) {
 			$user->setPhone($data['phone']);
 		}
@@ -181,12 +203,18 @@ class UserController extends AbstractController
 		if (isset($data['country'])) {
 			$user->setCountry($data['country']);
 		}
+		if (isset($data['password'])) {
+			$hashed_password = $passwordHasher->hashPassword(
+				$user,
+				$data['password']
+			);
+			$user->setPassword($hashed_password);
+		}
 
 		$entityManager->persist($user);
 		$entityManager->flush();
 
-		$response = new Response();
-		$response->setContent(json_encode([
+		return $this->json([
 			'id' => $user->getId(),
 			'email' => $user->getEmail(),
 			'firstName' => $user->getFirstName(),
@@ -196,8 +224,8 @@ class UserController extends AbstractController
 			'phone' => $user->getPhone(),
 			'address' => $user->getAddress(),
 			'country' => $user->getCountry()
-		]));
-		$response->headers->set('Content-Type', 'application/json');
-		return $response;
+		]);
 	}
+
+	
 }
