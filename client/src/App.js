@@ -18,6 +18,8 @@ import Contact from "./pages/contact/Contact";
 import NavBar from "./pages/commons/NavBar";
 import Footer from "./pages/commons/Footer";
 import Categories from "./pages/categories/Categories";
+import Connexion from "./form/Connexion";
+import Inscription from "./form/Inscription";
 
 function App() {
 
@@ -39,7 +41,8 @@ function App() {
       <NavBar />
       <div>
         <Routes>
-          <Route path="/" element={<Accueil category={categories} />} />
+          <Route path='/' element={<Accueil category={categories} />} />
+          <Route path="/accueil" element={<Accueil category={categories} />} />
           <Route path="/shopping" element={<Shopping />} />
           <Route path="/produit" element={<Produit />} />
           <Route path="/panier" element={<Panier />} />
