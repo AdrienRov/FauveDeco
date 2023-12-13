@@ -1,6 +1,6 @@
 import * as React from "react";
 
-function navbar() {
+function Navbar() {
     return (
         <div className="navbar">
             <div className="navbar-start">
@@ -8,7 +8,7 @@ function navbar() {
                 <a className="btn btn-ghost">A propos</a>
             </div>
             <div className="navbar-center hidden lg:flex">
-                <p className="text-xxl">Fauve</p>
+                <p className="text-xxl fauve">fauve</p>
                 <p className="">Décorations</p>
             </div>
             <div className="navbar-end">
@@ -26,4 +26,4 @@ function navbar() {
     )
 }
 
-export default navbar;
+export default Navbar;

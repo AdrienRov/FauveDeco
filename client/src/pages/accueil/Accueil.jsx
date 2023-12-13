@@ -35,54 +35,55 @@ function Accueil() {
                 </div>
             </div>
 
-            <div className="flex w-full h-full colonne">
-                <div className="flex w-full h-full ligne">
-                    <div className="flex w-1/2 h-full card place-items-center">
-                        <div className="card w-4/5 glass">
-                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
-                            <div className="card-body">
-                                <div className="card-actions justify-center">
-                                    <button className="btn categorie">Bijoux</button>
-                                </div>
-                            </div>
+
+
+            <div className="flex justify-center">
+                <div className="grid grid-cols-2 gap-8 p-10 h-3/5 w-3/5">
+                    <div className="relative overflow-hidden bg-gray-100 p-1 categorie">
+                        <img src="https://i.goopics.net/8dmjcn.jpg" alt="car!" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
+                            <button className="btn btn-ghost categorie-title">Bijoux</button>
                         </div>
                     </div>
-                    <div className="flex w-1/2 h-full card place-items-center">
-                        <div className="card w-4/5 glass">
-                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
-                            <div className="card-body">
-                                <div className="card-actions justify-center">
-                                    <button className="btn categorie">Décorations</button>
-                                </div>
-                            </div>
+                    <div className="relative overflow-hidden bg-gray-200 p-1 categorie">
+                        <img src="https://i.goopics.net/7aipq9.jpg" alt="car!" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
+                            <button className="btn btn-ghost categorie-title">Décorations</button>
                         </div>
                     </div>
-                </div>
-                <div className="flex w-full h-full ligne">
-                    <div className="flex w-1/2 h-full card place-items-center">
-                        <div className="card w-4/5 glass">
-                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
-                            <div className="card-body">
-                                <div className="card-actions justify-center">
-                                    <button className="btn categorie">Textile</button>
-                                </div>
-                            </div>
+                    <div className="relative overflow-hidden bg-gray-200 p-1 categorie">
+                        <img src="https://i.goopics.net/np8p6k.jpg" alt="car!" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
+                            <button className="btn btn-ghost categorie-title">Textile</button>
                         </div>
                     </div>
-                    <div className="flex w-1/2 h-full card place-items-center">
-                        <div className="card w-4/5 glass">
-                            <figure><img src="https://daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.jpg" alt="car!"/></figure>
-                            <div className="card-body">
-                                <div className="card-actions justify-center">
-                                    <button className="btn categorie">Sacs / Paniers</button>
-                                </div>
-                            </div>
+                    <div className="relative overflow-hidden bg-gray-200 p-1 categorie">
+                        <img src="https://i.goopics.net/68hds5.png" alt="car!" className="w-full h-full object-cover" />
+                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
+                            <button className="btn btn-ghost categorie-title">Sacs / Paniers</button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <hr className="my-10" />
+
+            <div className="flex justify-center px-20">
+                <div className="flex ligne">
+                    <div className="">
+                    <img src="https://lh3.googleusercontent.com/p/AF1QipOu_F6OZUWjNWWRAUVw-M2yavpyJ9Rex9mf98OR=s1360-w1360-h1020" alt="Boutique" className="" />
+                    </div>
+
+                    <div className="flex colonne justify-center ml-4">
+                        <h3>Making your favorite houseplant look pretty is what we do best</h3>
+                        <p>Lyss started Plantaby in early 2020. In the process of decorating her own indoor jungle, she found herself wanting pieces that reflect her love of color and spark joy in the home. It was during this time that she originally pivoted her art to focus on hand-painted pots, planters, and homewares. Through pairing an obsession with plants with a love of bright colors, the idea for Plantaby started to take root and grow.</p>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
-        
+
     )
 }
 
