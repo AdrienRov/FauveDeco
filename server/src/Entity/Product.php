@@ -136,4 +136,32 @@ class Product
 
         return $this;
     }
+
+    public function serialize(Product $product): array
+    {
+        return [
+            'id' => $product->getId(),
+            'name' => $product->getName(),
+            'price' => $product->getPrice(),
+            'description' => $product->getDescription(),
+            'quantity' => $product->getQuantity(),
+            'category' => $product->getCategory()->serialize($product->getCategory()),
+            'images' => $this->serializeImages($product->getImages()),
+        ];
+    }
+
+    private function serializeImages(iterable $images): array
+    {
+        $result = [];
+
+        foreach ($images as $image) {
+            $result[] = [
+                'id' => $image->getId(),
+                // Add other image properties as needed
+            ];
+        }
+
+        return $result;
+    }
+    
 }
