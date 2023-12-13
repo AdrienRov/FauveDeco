@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
-    #[Route('/users', name: 'app_user')]
+    #[Route('/users', name: 'app_users')]
     public function index(EntityManagerInterface $entityManager): Response
     {
 		$user = $entityManager->getRepository(User::class)->findall();
@@ -67,24 +67,18 @@ class UserController extends AbstractController
 		$request = Request::createFromGlobals();
 		$data = json_decode($request->getContent(), true);
 
-		$email = $data['email'] ?? null;
-		$firstName = $data['firstName'] ?? null;
-		$lastName = $data['lastName'] ?? null;
-		$role = $data['role'] ?? null;
-		$password = $data['password'] ?? null;
-		$phone = $data['phone'] ?? null;
-		$address = $data['address'] ?? null;
-		$country = $data['country'] ?? null;
+		$requiredKeys = ['email', 'firstName', 'lastName', 'role', 'password', 'phone', 'address', 'country'];
 
-		$user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-		if ($user) {
-			$response = new Response();
-			$response->setContent(json_encode([
-				'status' => false,
-				'error' => 'email already exists'
-			]));
-			$response->headers->set('Content-Type', 'application/json');
-			return $response;
+		foreach ($requiredKeys as $key) {
+			if (!isset($data[$key])) {
+				$response = new Response();
+				$response->setContent(json_encode([
+					'status' => false,
+					'error' => "Missing or invalid key: $key",
+				]));
+				$response->headers->set('Content-Type', 'application/json');
+				return $response;
+			}
 		}
 
 		$user = new User();
@@ -117,7 +111,7 @@ class UserController extends AbstractController
 	}
 
 	// Delete a user
-	#[Route('/user/{id}', name: 'app_user_delete', methods: ['DELETE'])]
+	#[Route('/userdelete/{id}', name: 'app_user_delete', methods: ['DELETE'])]
 	public function delete(EntityManagerInterface $entityManager, int $id): Response
 	{
 		$user = $entityManager->getRepository(User::class)->find($id);
@@ -144,7 +138,7 @@ class UserController extends AbstractController
 	}
 
 	// Patch to update user
-	#[Route('/user/{id}', name: 'app_user_update', methods: ['PATCH'])]
+	#[Route('/userupdate/{id}', name: 'app_user_update', methods: ['PATCH'])]
 	public function update(EntityManagerInterface $entityManager, int $id): Response
 	{
 		$user = $entityManager->getRepository(User::class)->find($id);
@@ -163,14 +157,30 @@ class UserController extends AbstractController
 		$request = Request::createFromGlobals();
 		$data = json_decode($request->getContent(), true);
 
-		$user->setEmail($data['email']);
-		$user->setFirstName($data['firstName']);
-		$user->setLastName($data['lastName']);
-		$user->setRole($data['role']);
-		$user->setPassword($data['password']);
-		$user->setPhone($data['phone']);
-		$user->setaddress($data['address']);
-		$user->setCountry($data['country']);
+		if (isset($data['email'])) {
+			$user->setEmail($data['email']);
+		}
+		if (isset($data['firstName'])) {
+			$user->setFirstName($data['firstName']);
+		}
+		if (isset($data['lastName'])) {
+			$user->setLastName($data['lastName']);
+		}
+		if (isset($data['role'])) {
+			$user->setRole($data['role']);
+		}
+		if (isset($data['password'])) {
+			$user->setPassword($data['password']);
+		}
+		if (isset($data['phone'])) {
+			$user->setPhone($data['phone']);
+		}
+		if (isset($data['address'])) {
+			$user->setAddress($data['address']);
+		}
+		if (isset($data['country'])) {
+			$user->setCountry($data['country']);
+		}
 
 		$entityManager->persist($user);
 		$entityManager->flush();
@@ -184,7 +194,7 @@ class UserController extends AbstractController
 			'role' => $user->getRole(),
 			'password' => $user->getPassword(),
 			'phone' => $user->getPhone(),
-			'address' => $user->getaddress(),
+			'address' => $user->getAddress(),
 			'country' => $user->getCountry()
 		]));
 		$response->headers->set('Content-Type', 'application/json');
