@@ -2,54 +2,134 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
-
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ProductController extends AbstractController
 {
-    #[Route('/product', name: 'app_product')]
-    public function index(): Response
+    #[Route('/products', name: 'app_products', methods: ['GET'])]
+    public function index(EntityManagerInterface $entityManager): JsonResponse
     {
-        return $this->render('product/index.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
+        $products = $entityManager->getRepository(Product::class)->findAll();
+
+        $arr = [];
+        foreach ($products as $product) {
+            $arr[] = $this->serializeProduct($product);
+        }
+
+        return $this->json($arr);
     }
 
-    #[Route('/product/{id}', name: 'app_product_show')]
-    public function show($id): Response
+    #[Route('/product/{id}', name: 'app_product', methods: ['GET'])]
+    public function show(Product $product): JsonResponse
     {
-        return $this->render('product/show.html.twig', [
-            'controller_name' => 'ProductController',
-            'id' => $id
-        ]);
+        return $this->json($this->serializeProduct($product));
     }
 
-    #[Route('/product/{id}/edit', name: 'app_product_edit')]
-    public function edit($id): Response
+    #[Route('/product', name: 'app_product_create', methods: ['POST'])]
+    public function create(Request $request, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse
     {
-        return $this->render('product/edit.html.twig', [
-            'controller_name' => 'ProductController',
-            'id' => $id
-        ]);
+        $data = json_decode($request->getContent(), true);
+        $product = $this->createProductFromRequest($data);
+
+        $errors = $validator->validate($product);
+
+        if (count($errors) > 0) {
+            return $this->json(['status' => false, 'error' => (string) $errors], 400);
+        }
+
+        $entityManager->persist($product);
+        $entityManager->flush();
+
+        return $this->json(['status' => true, 'id' => $product->getId()]);
     }
 
-    #[Route('/product/{id}/delete', name: 'app_product_delete')]
-    public function delete($id): Response
+    #[Route('/product/{id}', name: 'app_product_delete', methods: ['DELETE'])]
+    public function delete(Product $product, EntityManagerInterface $entityManager): JsonResponse
     {
-        return $this->render('product/delete.html.twig', [
-            'controller_name' => 'ProductController',
-            'id' => $id
-        ]);
+        $entityManager->remove($product);
+        $entityManager->flush();
+
+        return $this->json(['status' => true]);
     }
 
-    #[Route('/product/new', name: 'app_product_new')]
-    public function new(): Response
+    #[Route('/product/{id}', name: 'app_product_update', methods: ['PATCH'])]
+    public function update(Request $request, Product $product, EntityManagerInterface $entityManager, ValidatorInterface $validator): JsonResponse
     {
-        return $this->render('product/new.html.twig', [
-            'controller_name' => 'ProductController',
-        ]);
+        $data = json_decode($request->getContent(), true);
+        $product = $this->updateProductFromRequest($product, $data);
+
+        $errors = $validator->validate($product);
+
+        if (count($errors) > 0) {
+            return $this->json(['status' => false, 'error' => (string) $errors], 400);
+        }
+
+        $entityManager->persist($product);
+        $entityManager->flush();
+
+        return $this->json(['status' => true]);
+    }
+
+
+    private function serializeProduct(Product $product): array
+    {
+        return [
+            'id' => $product->getId(),
+            'name' => $product->getName(),
+            'price' => $product->getPrice(),
+            'description' => $product->getDescription(),
+            'quantity' => $product->getQuantity(),
+            'category' => $product->getCategory() ? $product->getCategory()->getId() : null,
+
+        ];
+    }
+
+
+    private function createProductFromRequest(array $data): Product
+    {
+        $name = $data['name'] ?? null;
+        $price = $data['price'] ?? null;
+        $description = $data['description'] ?? null;
+        $quantity = $data['quantity'] ?? null;
+
+        $product = new Product();
+        $product->setName($name);
+        $product->setPrice($price);
+        $product->setDescription($description);
+        $product->setQuantity($quantity);
+
+
+
+        return $product;
+    }
+
+
+    private function updateProductFromRequest(Product $product, array $data): Product
+    {
+        $name = $data['name'] ?? null;
+        $price = $data['price'] ?? null;
+        $description = $data['description'] ?? null;
+        $quantity = $data['quantity'] ?? null;
+
+        if (!empty($name)) {
+            $product->setName($name);
+        }
+        if (!empty($price)) {
+            $product->setPrice($price);
+        }
+        if (!empty($description)) {
+            $product->setDescription($description);
+        }
+        if (!empty($quantity)) {
+            $product->setQuantity($quantity);
+        }
+
+        return $product;
     }
 }
