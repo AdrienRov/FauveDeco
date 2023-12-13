@@ -27,7 +27,6 @@ function App() {
   useEffect(() => {
       axios.get(url)
           .then((response) => {
-            console.log(response.data);
               setCategories(response.data);
           })
           .catch((error) => {
@@ -40,7 +39,7 @@ function App() {
       <NavBar />
       <div>
         <Routes>
-          <Route path="/" element={<Accueil />} />
+          <Route path="/" element={<Accueil category={categories} />} />
           <Route path="/shopping" element={<Shopping />} />
           <Route path="/produit" element={<Produit />} />
           <Route path="/panier" element={<Panier />} />

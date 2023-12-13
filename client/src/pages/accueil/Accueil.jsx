@@ -1,7 +1,13 @@
-import * as React from "react";
+import React, { useEffect, useState, useContext } from 'react';
 
-function Accueil() {
+function Accueil(props) {
+    //recuperation des categories depuis le props
+    const { category } = props;
+    useEffect(() => {
+        console.log(category);
+    }, []);
     return (
+
         <div className="container mx-auto">
             <div className="carousel w-full h-96">
                 <div id="item1" className="carousel-item w-full">
@@ -28,30 +34,14 @@ function Accueil() {
 
             <div className="flex justify-center">
                 <div className="grid grid-cols-2 gap-8 p-10 h-3/5 w-3/5">
-                    <div className="relative overflow-hidden bg-gray-100 p-1 categorie">
-                        <img src="https://i.goopics.net/8dmjcn.jpg" alt="car!" className="w-full h-full object-cover" />
-                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
-                            <button className="btn btn-ghost categorie-title">Bijoux</button>
-                        </div>
-                    </div>
-                    <div className="relative overflow-hidden bg-gray-200 p-1 categorie">
-                        <img src="https://i.goopics.net/7aipq9.jpg" alt="car!" className="w-full h-full object-cover" />
-                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
-                            <button className="btn btn-ghost categorie-title">Décorations</button>
-                        </div>
-                    </div>
-                    <div className="relative overflow-hidden bg-gray-200 p-1 categorie">
-                        <img src="https://i.goopics.net/np8p6k.jpg" alt="car!" className="w-full h-full object-cover" />
-                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
-                            <button className="btn btn-ghost categorie-title">Textile</button>
-                        </div>
-                    </div>
-                    <div className="relative overflow-hidden bg-gray-200 p-1 categorie">
-                        <img src="https://i.goopics.net/68hds5.png" alt="car!" className="w-full h-full object-cover" />
-                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
-                            <button className="btn btn-ghost categorie-title">Sacs / Paniers</button>
-                        </div>
-                    </div>
+                    {category.map(categ => (
+                       <div className="relative overflow-hidden bg-gray-100 p-1 categorie">
+                       <img src="https://i.goopics.net/8dmjcn.jpg" alt="car!" className="w-full h-full object-cover" />
+                       <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
+                           <button className="btn btn-ghost categorie-title">{categ.name}</button>
+                       </div>
+                   </div>
+                    ))}
                 </div>
             </div>
 
@@ -91,7 +81,7 @@ function Accueil() {
                                 />
                             </div>
                             <div class="p-6">
-                                <h6 class="mb-4 block font-sans text-base font-semibold uppercase leading-relaxed tracking-normal titre-color antialiased">
+                                <h6 class="mb-4 block font-sans text-base font-semibold uppercase leading-relaxed tracking-normal vert-color antialiased">
                                     10 000€
                                 </h6>
                                 <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
