@@ -41,21 +41,17 @@ function App() {
       <NavBar />
       <div>
         <Routes>
+
           <Route path='/' element={<Accueil category={categories} />} />
           <Route path="/accueil" element={<Accueil category={categories} />} />
           <Route path="/shopping" element={<Shopping />} />
           <Route path="/produit" element={<Produit />} />
           <Route path="/panier" element={<Panier />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/categories" element={<Categories />} />
+          <Route path="/categories/:id" element={<Categories categories={categories} />} />
+          <Route path="/categories" element={<Categories categories={categories} />} />
           <Route path="*" element={<Accueil />} />
-          {categories.map(category => (
-            <Route
-              key={category.id}
-              path={`/categories/${category.id}`}
-              element={ <Categories title={category.name} />}
-            />
-          ))}
+
         </Routes>
       </div>
       <Footer />
