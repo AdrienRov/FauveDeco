@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -29,7 +31,7 @@ class Order
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = null;
 
-    #[ORM\OneToMany(mappedBy: 'in_order', targetEntity: ProductOrder::class)]
+    #[ORM\OneToMany(mappedBy: 'in_order', targetEntity: ProductOrder::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $productOrders;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
@@ -134,5 +136,25 @@ class Order
         $this->client = $client;
 
         return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('date', new Assert\NotNull());
+        //$metadata->addPropertyConstraint('date', new Assert\DateTime());
+
+        $metadata->addPropertyConstraint('total', new Assert\NotNull());
+        $metadata->addPropertyConstraint('total', new Assert\PositiveOrZero());
+
+        $metadata->addPropertyConstraint('type', new Assert\NotNull());
+        $metadata->addPropertyConstraint('type', new Assert\Positive());
+
+        $metadata->addPropertyConstraint('status', new Assert\NotNull());
+        $metadata->addPropertyConstraint('status', new Assert\Positive());
+
+        $metadata->addPropertyConstraint('client', new Assert\NotNull());
+
+        $metadata->addPropertyConstraint('productOrders', new Assert\NotNull());
+        $metadata->addPropertyConstraint('productOrders', new Assert\Count(min: 1));
     }
 }
