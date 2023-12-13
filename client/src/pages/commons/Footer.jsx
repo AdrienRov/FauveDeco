@@ -6,9 +6,11 @@ function Footer() {
         <footer className="footer footer-center p-10 text-base-content rounded">
             <div className="flex justify-between">
                 <nav className="">
-                    <Link className="link link-hover pr-3">A Propos</Link>
-                    <Link className="link link-hover pr-3">Contact</Link>
-                    <Link className="link link-hover pr-3">Shopping</Link>
+
+                    <Link to="/apropos" className="link link-hover pr-3">A Propos</Link>
+                    <Link to="/contact" className="link link-hover pr-3">Contact</Link>
+                    <Link to="/shopping" className="link link-hover pr-3">Shopping</Link>
+
                 </nav>
                 <div className="flex items-center">
                     <Link to="https://www.instagram.com/fauve.lh/" className="pr-5">
