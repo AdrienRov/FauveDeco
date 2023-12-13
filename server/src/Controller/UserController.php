@@ -9,9 +9,28 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class UserController extends AbstractController
 {
+	#[Route('/user/self', name: 'app_test', methods: ['GET'])]
+	public function show_self(#[CurrentUser] ?User $user): Response
+	{
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+		return $this->json([
+			'status' => true,
+			'id' => $user->getId(),
+			'email' => $user->getEmail(),
+			'firstName' => $user->getFirstName(),
+			'lastName' => $user->getLastName(),
+			'role' => $user->getRole(),
+			'phone' => $user->getPhone(),
+			'address' => $user->getAddress(),
+			'country' => $user->getCountry()
+		]);
+	}
+
     #[Route('/users', name: 'app_users')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -61,14 +80,8 @@ class UserController extends AbstractController
 
 	// Authentification
 	#[Route('/login', name: 'app_login', methods: ['POST'])]
-	public function login(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+	public function login(#[CurrentUser] ?User $user): Response
 	{
-		// get name and parent from request
-		$request = Request::createFromGlobals();
-		$data = json_decode($request->getContent(), true);
-
-		$user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
-
 		if (!$user) {
 			return $this->json([
 				'status' => false,
@@ -76,25 +89,8 @@ class UserController extends AbstractController
 			]);
 		}
 
-		$plain_password = $data['password'];
-		$hashed_password = $user->getPassword();
-
-		if (!$passwordHasher->isPasswordValid($user, $plain_password)) {
-			return $this->json([
-				'status' => false,
-				'error' => 'Wrong password'
-			]);
-		}
-
 		return $this->json([
-			'id' => $user->getId(),
-			'email' => $user->getEmail(),
-			'firstName' => $user->getFirstName(),
-			'lastName' => $user->getLastName(),
-			'role' => $user->getRole(),
-			'phone' => $user->getPhone(),
-			'address' => $user->getAddress(),
-			'country' => $user->getCountry()
+			"status" => true
 		]);
 	}
 
@@ -230,4 +226,6 @@ class UserController extends AbstractController
 			'country' => $user->getCountry()
 		]);
 	}
+
+	
 }
