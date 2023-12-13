@@ -9,7 +9,7 @@ function Navbar() {
             </div>
             <div className="navbar-center hidden lg:flex">
                 <p className="text-xxl fauve">fauve</p>
-                <p className="">Décorations</p>
+                <p className="">DECORATION</p>
             </div>
             <div className="navbar-end">
                 <a className="btn btn-ghost">
