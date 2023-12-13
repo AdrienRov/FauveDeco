@@ -1,0 +1,31 @@
+_id: req_ca394b21002c4b02bde938b6d44fed74
+type: Request
+parentId: wrk_9b90cd6c3d064bb2bf727bab7348303e
+modified: 1702390122616
+created: 1702389568513
+url: http://127.0.0.1:8000/category
+name: Create category
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+    	"name": "test insomnia",
+    	"parent": 4
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+  - name: User-Agent
+    value: Insomnia/2023.5.6
+authentication: {}
+metaSortKey: -1702389568513
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
