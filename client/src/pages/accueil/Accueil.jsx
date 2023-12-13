@@ -2,9 +2,9 @@ import React, { useEffect, useState, useContext } from 'react';
 
 function Accueil(props) {
     //recuperation des categories depuis le props
-    const { category } = props;
+    const { categories } = props;
     useEffect(() => {
-        console.log(category);
+        console.log(categories);
     }, []);
     return (
 
@@ -34,7 +34,7 @@ function Accueil(props) {
 
             <div className="flex justify-center">
                 <div className="grid grid-cols-2 gap-8 p-10 h-3/5 w-3/5">
-                    {category.map(categ => (
+                    {categories?.map(categ => (
                        <div className="relative overflow-hidden bg-gray-100 p-1 categorie">
                        <img src="https://i.goopics.net/8dmjcn.jpg" alt="car!" className="w-full h-full object-cover" />
                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">

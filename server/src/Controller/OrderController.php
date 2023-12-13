@@ -18,7 +18,12 @@ class OrderController extends AbstractController
     #[Route('/orders', name: 'app_orders')]
     public function index(EntityManagerInterface $entityManager): Response
     {
-        $orders = $entityManager->getRepository(Order::class)->findAll();
+        $request = Request::createFromGlobals();
+        $order = $request->query->get('order', 'asc');
+        $limit = $request->query->get('limit', 10);
+        $start = $request->query->get('start', 0);
+        
+        $orders = $entityManager->getRepository(Order::class)->findBy([], ['id' => $order], $limit, $start);
 
         $arr = [];
 

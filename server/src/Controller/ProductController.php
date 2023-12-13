@@ -15,7 +15,12 @@ class ProductController extends AbstractController
     #[Route('/products', name: 'app_products', methods: ['GET'])]
     public function index(EntityManagerInterface $entityManager): JsonResponse
     {
-        $products = $entityManager->getRepository(Product::class)->findAll();
+        $request = Request::createFromGlobals();
+        $order = $request->query->get('order', 'asc');
+        $limit = $request->query->get('limit', 10);
+        $start = $request->query->get('start', 0);
+
+        $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
 
         $arr = [];
         foreach ($products as $product) {
