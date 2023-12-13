@@ -16,11 +16,11 @@ class ProductOrder
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'productOrders', targetEntity: Product::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
-    #[ORM\ManyToOne(inversedBy: 'productOrders')]
+    #[ORM\ManyToOne(inversedBy: 'productOrders', targetEntity: Order::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $in_order = null;
 

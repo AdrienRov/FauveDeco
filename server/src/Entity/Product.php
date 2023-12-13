@@ -34,6 +34,9 @@ class Product
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Category $category = null;
 
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOrder::class, cascade: ['persist'])]
+    private Collection $productOrders;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
