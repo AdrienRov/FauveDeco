@@ -20,6 +20,7 @@ import Footer from "./pages/commons/Footer";
 import Categories from "./pages/categories/Categories";
 import Connexion from "./form/Connexion";
 import Inscription from "./form/Inscription";
+import Account from './pages/account/Account';
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/categories/:id" element={<Categories categories={categories} />} />
           <Route path="/categories" element={<Categories categories={categories} />} />
+          <Route path="/account" element={<Account />} />
           <Route path="*" element={<Accueil />} />
 
         </Routes>
