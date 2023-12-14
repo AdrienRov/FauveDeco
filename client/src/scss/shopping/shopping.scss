@@ -1,5 +1,7 @@
 @import '../commons/colors.scss';
 
 .row{
-    margin-top: 20px;
+    display: grid;
+    // grid de deux colonnes
+    grid-template-columns: 1fr 1fr; 
 }
