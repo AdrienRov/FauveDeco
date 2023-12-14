@@ -74,49 +74,53 @@ function Categories(props) {
 
     let parents = getParents(categories, category);
     
+    // Layout with subcategories in a list of small cards on the left, and products on the right
     return (<>
-        {
-        parents.reverse().map(parent => (<>
-            <Link key={parent.id} to={`/categories/${parent.id}`} className="text-blue-600 hover:text-blue-800">{parent.name}</Link>
-            <span className="mx-2">/</span>
-            </>))
-        }
-        <span className="text-2xl font-bold">{category.name}</span>
-        {
-            // child categories as card
-        }
-        <h2 className="text-xl font-bold mt-4">Subcategories</h2>
-        <div className="grid grid-cols-3 gap-4">
-            {
-                category.children.map(child => (<div key={child.id} className="bg-white rounded-lg shadow-lg p-4">
-                    <Link to={`/categories/${child.id}`} className="text-blue-600 hover:text-blue-800">{child.name}</Link>
-                </div>))
-            }
+        <div className="grid grid-cols-3 gap-4 mt-4">
+            <div className="col-span-1">
+
+                <div className="bg-white rounded-lg shadow-lg p-4">
+                    {
+                        parents.length > 0 && (<div className="mb-4">
+                            {
+                                // back button with parent name
+                            }
+                            <Link to={`/categories/${parents[0].id}`} className="text-blue-600 hover:text-blue-800">
+                                <span className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">{parents[0].name}</span>
+                            </Link>
+                            <hr className="my-2" />
+                        </div>) || (<div className="mb-4">
+                            <Link to={`/categories`} className="text-blue-600 hover:text-blue-800">
+                                <span className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">Categories</span>
+                            </Link>
+                            <hr className="my-2" />
+                        </div>)
+                    }
+                    {
+                        category.children.map(child => (<div key={child.id} className="bg-white mt-2 shadow-lg p-4" style={{ backgroundImage: `url(${child.image_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
+                            <Link to={`/categories/${child.id}`} className="text-blue-600 hover:text-blue-800">
+                                <span className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">{child.name}</span>
+                            </Link>
+                        </div>))
+                    }
+                </div>
+            </div>
+            <div className="col-span-2">
+                <div className="grid grid-cols-3 gap-4">
+                    {
+                        products.map(product => (<div key={product.id} className="bg-white rounded-lg shadow-lg p-4">
+                            <img src={product.images[0]} alt={product.name} className="w-full h-32 object-cover" />
+                            <div className="mt-4">
+                                <span className="text-lg font-bold">{product.name}</span>
+                                <p className="mt-2 text-gray-600">{product.description}</p>
+                                <Link to={`/products/${product.id}`} className="block mt-2 text-blue-600 hover:text-blue-800">View product</Link>
+                            </div>
+                        </div>))
+                    }
+                </div>
+            </div>
         </div>
-        <h2 className="text-xl font-bold mt-4">Products</h2>
-        <div class="flex flex-wrap justify-center mt-10">
-            {
-                products.map(product => (
-                    // card with image, name, price, description
-                    <div key={product.id} class="max-w-sm rounded overflow-hidden shadow-lg m-4">
-                        <img class="w-full" src={product.images[0]} alt={product.name} />
-                        <div class="px-6 py-4">
-                            <div class="font-bold text-xl mb-2">{product.name}</div>
-                            <p class="text-gray-700 text-base">
-                                {product.description}
-                            </p>
-                        </div>
-                        <div class="px-6 pt-4 pb-2">
-                            <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2">${product.price}</span>
-                        </div>
-                    </div>
-                ))
-            }
-        </div>
-
-
-
-    </>);
+    </>)
 }
 
 export default Categories;

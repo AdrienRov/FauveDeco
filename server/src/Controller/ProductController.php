@@ -113,7 +113,8 @@ class ProductController extends AbstractController
             'description' => $product->getDescription(),
             'quantity' => $product->getQuantity(),
             'images' => $product->getImages()->map(fn ($image) => $image->getUrl())->toArray() ?? [],
-            'category' => $category
+            'category' => $category,
+            'date' => $product->getDate()
         ];
     }
 
@@ -131,6 +132,7 @@ class ProductController extends AbstractController
         $product->setPrice($price);
         $product->setDescription($description);
         $product->setQuantity($quantity);
+        $product->setDate(new \DateTime('now'));
         $product->setCategory($this->entityManager->getRepository(Category::class)->find($category));
 
         return $product;
