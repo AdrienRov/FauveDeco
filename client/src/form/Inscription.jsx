@@ -35,3 +35,5 @@ function Inscription() {
         </div>
     );
 }
+
+export default Inscription;
