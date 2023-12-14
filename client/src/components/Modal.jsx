@@ -16,7 +16,6 @@ export default function FormModal(props) {
 
     return (
         <Modal open={modalOpen}>
-            {/* <h1>{title}</h1> */}
             <center>{form}</center>
         </Modal>
     );
