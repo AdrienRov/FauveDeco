@@ -19,8 +19,13 @@ class ProductController extends AbstractController
         $order = $request->query->get('order', 'asc');
         $limit = $request->query->get('limit', 10);
         $start = $request->query->get('start', 0);
+        $category = $request->query->get('category', null);
 
-        $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
+        if ($category) {
+            $products = $entityManager->getRepository(Product::class)->findBy(['category' => $category], ['id' => $order], $limit, $start);
+        } else {
+            $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
+        }
 
         $arr = [];
         foreach ($products as $product) {
@@ -91,7 +96,7 @@ class ProductController extends AbstractController
             'description' => $product->getDescription(),
             'quantity' => $product->getQuantity(),
             'category' => $product->getCategory() ? $product->getCategory()->getId() : null,
-
+            'images' => $product->getImages()->map(fn ($image) => $image->getUrl())->toArray() ?? []
         ];
     }
 

@@ -20,8 +20,8 @@ import Footer from "./pages/commons/Footer";
 import Categories from "./pages/categories/Categories";
 
 function App() {
-
   const url = "http://127.0.0.1:8000/categories";
+
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
