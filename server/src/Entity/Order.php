@@ -22,9 +22,6 @@ class Order
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 3)]
-    private ?string $total = null;
-
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $type = null;
 
@@ -56,18 +53,6 @@ class Order
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getTotal(): ?string
-    {
-        return $this->total;
-    }
-
-    public function setTotal(string $total): static
-    {
-        $this->total = $total;
 
         return $this;
     }

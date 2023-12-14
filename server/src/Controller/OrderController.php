@@ -30,6 +30,7 @@ class OrderController extends AbstractController
         foreach ($orders as $order) {
 
             $products = [];
+            $total = 0;
             foreach ($order->getProductOrders() as $productOrder) {
                 $products[] = [
                     'id' => $productOrder->getProduct()->getId(),
@@ -37,11 +38,12 @@ class OrderController extends AbstractController
                     'price' => $productOrder->getProduct()->getPrice(),
                     'quantity' => $productOrder->getQuantity()
                 ];
+                $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
             }
-
+            
             $arr[] = [
                 'id' => $order->getId(),
-                'total' => $order->getTotal(),
+                'total' => $total,
                 'date' => $order->getDate(),
                 'type' => $order->getType(),
                 'status' => $order->getStatus(),
@@ -62,6 +64,7 @@ class OrderController extends AbstractController
             return $this->json(['error' => 'Order not found']);
 
         $products = [];
+        $total = 0;
         foreach ($order->getProductOrders() as $productOrder) {
             $products[] = [
                 'id' => $productOrder->getProduct()->getId(),
@@ -69,11 +72,12 @@ class OrderController extends AbstractController
                 'price' => $productOrder->getProduct()->getPrice(),
                 'quantity' => $productOrder->getQuantity()
             ];
+            $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
         }
 
         return $this->json([
             'id' => $order->getId(),
-            'total' => $order->getTotal(),
+            'total' => $total,
             'date' => $order->getDate(),
             'type' => $order->getType(),
             'status' => $order->getStatus(),
@@ -94,7 +98,6 @@ class OrderController extends AbstractController
         $order->setStatus($data['status']);
         $order->setClient($entityManager->getRepository(User::class)->find($data['client']));
                 
-        $total = 0;
         // products contains an array of product id and quantity
         foreach ($data['products'] as $product_data) {
             $product = $entityManager->getRepository(Product::class)->find($product_data['id']);
@@ -105,10 +108,8 @@ class OrderController extends AbstractController
                 $productOrder->setQuantity($quantity);
                 $productOrder->setInOrder($order);
                 $order->addProductOrder($productOrder);
-                $total += $product->getPrice() * $quantity;
             }
         }
-        $order->setTotal($total);        
 
         $errors = $validator->validate($order);
 
@@ -119,6 +120,7 @@ class OrderController extends AbstractController
         $entityManager->flush();
 
         $products = [];
+        $total = 0;
         foreach ($order->getProductOrders() as $productOrder) {
             $products[] = [
                 'id' => $productOrder->getProduct()->getId(),
@@ -126,11 +128,12 @@ class OrderController extends AbstractController
                 'price' => $productOrder->getProduct()->getPrice(),
                 'quantity' => $productOrder->getQuantity()
             ];
+            $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
         }
 
         return $this->json([
             'id' => $order->getId(),
-            'total' => $order->getTotal(),
+            'total' => $total,
             'date' => $order->getDate(),
             'type' => $order->getType(),
             'status' => $order->getStatus(),
@@ -156,7 +159,6 @@ class OrderController extends AbstractController
         if (isset($data['status']))
             $order->setStatus($data['status']);
         if (isset($data['products'])) {
-            $total = 0;
 
             foreach ($order->getProductOrders() as $productOrder) {
                 $order->removeProductOrder($productOrder);
@@ -171,11 +173,9 @@ class OrderController extends AbstractController
                     $productOrder->setQuantity($quantity);
                     $productOrder->setInOrder($order);
                     $order->addProductOrder($productOrder);
-                    $total += $product->getPrice() * $quantity;
                 }
             }
 
-            $order->setTotal($total);
         }
 
         $errors = $validator->validate($order);
@@ -187,6 +187,7 @@ class OrderController extends AbstractController
         $entityManager->flush();
 
         $products = [];
+        $total = 0;
         foreach ($order->getProductOrders() as $productOrder) {
             $products[] = [
                 'id' => $productOrder->getProduct()->getId(),
@@ -194,11 +195,12 @@ class OrderController extends AbstractController
                 'price' => $productOrder->getProduct()->getPrice(),
                 'quantity' => $productOrder->getQuantity()
             ];
+            $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
         }
 
         return $this->json([
             'id' => $order->getId(),
-            'total' => $order->getTotal(),
+            'total' => $total,
             'date' => $order->getDate(),
             'type' => $order->getType(),
             'status' => $order->getStatus(),

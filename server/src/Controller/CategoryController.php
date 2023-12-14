@@ -23,7 +23,8 @@ class CategoryController extends AbstractController
             $arr[] = [
                 'id' => $category->getId(),
                 'name' => $category->getName(),
-                'parent' => $category->getParent() ? $category->getParent()->getId() : null
+                'parent' => $category->getParent() ? $category->getParent()->getId() : null,
+                'image_url' => $category->getImageUrl() ?? '',
             ];
         }
         return $this->json($arr);
@@ -47,6 +48,7 @@ class CategoryController extends AbstractController
             'name' => $category->getName(),
             'parent' => $category->getParent() ? $category->getParent()->getId() : null,
             'sub_categories' => $category->getSubCategories()->map(fn($category) => $category->getId())->toArray(),
+            'image_url' => $category->getImageUrl() ?? '',
         ]);
     }
 
@@ -60,10 +62,12 @@ class CategoryController extends AbstractController
 
         $name = $data['name'] ?? null;
         $parent = $data['parent'] ?? null;
+        $image_url = $data['image_url'] ?? null;
 
         // create new category
         $category = new Category();
         $category->setName($name);
+        $category->setImageUrl($image_url);
 
         if (!empty($parent))
         {
@@ -142,10 +146,14 @@ class CategoryController extends AbstractController
 
         $name = $data['name'] ?? null;
         $parent = $data['parent'] ?? null;
+        $image_url = $data['image_url'] ?? null;
 
         // check if set to update
         if (!empty($name)) {
             $category->setName($name);
+        }
+        if (!empty($image_url)) {
+            $category->setImageUrl($image_url);
         }
         if (!empty($parent))
         {

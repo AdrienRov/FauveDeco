@@ -31,6 +31,9 @@ class Category
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
     private Collection $products;
 
+    #[ORM\Column(length: 1024, nullable: true)]
+    private ?string $image_url = null;
+
     public function __construct()
     {
         $this->products = new ArrayCollection();
@@ -121,6 +124,18 @@ class Category
                 $product->setCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->image_url;
+    }
+
+    public function setImageUrl(?string $image_url): static
+    {
+        $this->image_url = $image_url;
 
         return $this;
     }

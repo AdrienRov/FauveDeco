@@ -37,9 +37,13 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOrder::class, cascade: ['persist'])]
     private Collection $productOrders;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeInterface $date = null;
+
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->productOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,6 +137,48 @@ class Product
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductOrder>
+     */
+    public function getProductOrders(): Collection
+    {
+        return $this->productOrders;
+    }
+
+    public function addProductOrder(ProductOrder $productOrder): static
+    {
+        if (!$this->productOrders->contains($productOrder)) {
+            $this->productOrders->add($productOrder);
+            $productOrder->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductOrder(ProductOrder $productOrder): static
+    {
+        if ($this->productOrders->removeElement($productOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($productOrder->getProduct() === $this) {
+                $productOrder->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): static
+    {
+        $this->date = $date;
 
         return $this;
     }

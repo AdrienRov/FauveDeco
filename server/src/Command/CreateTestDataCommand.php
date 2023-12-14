@@ -77,7 +77,8 @@ class CreateTestDataCommand extends Command
         foreach ($categories as $category) {
             $categoryEntity = new Category();
             $categoryEntity->setName($category["name"]);
-            $categoryEntity->setParent($categoryEntities[$category["parent"]] ?? null); // $categoryEntities[null] = null, $categoryEntities[0] = null, $categoryEntities[1] = $categoryEntities[0
+            $categoryEntity->setParent($categoryEntities[$category["parent"]] ?? null);
+            $categoryEntity->setImageUrl("https://picsum.photos/seed/" . rand(1, 100000) . "/400/400");
             $entityManager->persist($categoryEntity);
             $categoryEntities[] = $categoryEntity;
         }
@@ -98,6 +99,7 @@ class CreateTestDataCommand extends Command
         $productEntities = [];
         foreach ($products as $product) {
             $productEntity = new Product();
+            $productEntity->setDate(new \DateTime('now'));
             $productEntity->setName($product["name"]);
             $productEntity->setPrice($product["price"]);
             $productEntity->setDescription($product["description"]);
@@ -155,7 +157,6 @@ class CreateTestDataCommand extends Command
             $order->setStatus(rand(0, 1));
             $order->setClient($userEntities[rand(0, count($userEntities) - 1)]);
 
-            $total = 0;
 
             for ($j = 0; $j < rand(1, 5); $j++) {
                 $productOrder = new ProductOrder();
@@ -163,11 +164,8 @@ class CreateTestDataCommand extends Command
                 $productOrder->setQuantity(rand(1, 5));
                 $productOrder->setInOrder($order);
                 $order->addProductOrder($productOrder);
-                $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
             }
            
-            $order->setTotal($total);
-
             $entityManager->persist($order);
         }
 
