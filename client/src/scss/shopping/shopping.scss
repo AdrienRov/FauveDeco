@@ -7,6 +7,11 @@
 }
 
 .btn-panier{
-    background-color: $vert-fonce;
-    color: $blanc;
+    background-color: $rose;
+    color: $vert-fonce;
+    border-radius: 0;
+
+    &:hover{
+        background-color: $rose-fonce;
+    }
 }
