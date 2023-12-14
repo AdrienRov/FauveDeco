@@ -1,0 +1,25 @@
+button[type="submit"] {
+	background-color: $rose;
+	color: black;
+	transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+	background-color: darken($rose, 10%);
+}
+
+button[type="submit"]:active {
+	background-color: lighten($rose, 1%);
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+.modal {
+	color: black;
+}
+
+.modal-box {
+	background-color: unset;
+	box-shadow: unset;
+	padding: 0;
+}

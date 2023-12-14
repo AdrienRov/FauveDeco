@@ -3,21 +3,28 @@ import { Link, useLocation } from "react-router-dom";
 import { Button } from "react-daisyui";
 import Modal from "../../components/Modal";
 import Connexion from "../../form/Connexion";
+import Inscription from "../../form/Inscription";
 
 
 function NavBar() {
 	const [visible, setVisible] = useState(false);
-	const [formConnexion, setFormConnexion] = useState(<Connexion  />);
+	const [form, setForm] = useState(<Connexion  />);
 	const [formKey, setFormKey] = useState(10);
 	const handleCallback = (data) => {
         setVisible(data);
         setFormKey(formKey + 1);
     };
 	const handleConnexion = () => {
-		setFormConnexion(<Connexion parentCallback={handleCallback} />);
+		setForm(<Connexion parentCallback={handleCallback} handleSwitch={handleInscription} />);
 		setVisible(true);
 		setFormKey(formKey + 1);
-	}
+	}	
+	const handleInscription = () => {
+		console.log("Inscription");
+		setForm(<Inscription parentCallback={handleCallback} handleSwitch={handleConnexion} />);
+		setVisible(true);
+		setFormKey(formKey + 1);
+	  };
 
 	return (
 		<div>
@@ -44,7 +51,7 @@ function NavBar() {
 							<path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"></path>
 						</svg>
 					</Button>
-					<Modal key={formKey} parentCallback={handleCallback} open={visible} form={formConnexion} title="Connexion" />
+					<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
 					<a className="btn btn-ghost">
 						<svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
 					</a>

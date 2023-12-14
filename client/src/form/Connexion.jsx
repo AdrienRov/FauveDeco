@@ -5,8 +5,8 @@ function Connexion(props) {
 		let visible = false;
 		props.parentCallback(visible);
 	}
-	const handleChangeModal = () => {
-		props.parentCallback(false);
+	const handleSwitch = () => {
+		props.handleSwitch();
 	}
 
 	return (
@@ -33,7 +33,7 @@ function Connexion(props) {
 					<input type="password" id="password" class="form-input w-full px-4 py-2 border rounded-lg text-gray-700" required placeholder="••••••••" />
 				</div>
 				<button type="submit" class="w-full text-white px-4 py-2 rounded-lg focus:outline-none">Se connecter</button>
-				<button class="w-full text-white px-4 py-2 rounded-lg focus:outline-none" onClick={handleChangeModal}>Inscription</button>
+				<button class="w-full px-4 py-2 rounded-lg focus:outline-none text-sm underline" onClick={handleSwitch}>Pas de compte</button>
 			</form>
 		</div>
 	);

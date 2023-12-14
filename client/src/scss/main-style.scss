@@ -2,17 +2,3 @@
 @import './commons/main-style';
 @import './contact/main-style';
 @import './produit/main-style';
-
-button[type="submit"] {
-	background-color: $rose;
-	color: black;
-}
-
-.modal {
-	color: black;
-}
-
-.modal-box {
-	background-color: unset;
-	box-shadow: unset;
-}
