@@ -10,7 +10,6 @@ function NavBar() {
 	const [formConnexion, setFormConnexion] = useState(<Connexion  />);
 	const [formKey, setFormKey] = useState(10);
 	const handleCallback = (data) => {
-		console.log(data);
         setVisible(data);
         setFormKey(formKey + 1);
     };

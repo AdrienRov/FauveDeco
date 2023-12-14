@@ -11,6 +11,21 @@ export default function FormModal(props) {
 
 	useEffect(() => {
 		setModalOpen(open);
+
+        const handleKeyDown = (e) => {
+            // Si la touche pressée est "Escape", fermez la modal
+            if (e.key === 'Escape') {
+                props.parentCallback(false);
+            }
+        };
+
+        // Ajoutez un gestionnaire d'événements au niveau du document
+        document.addEventListener('keydown', handleKeyDown);
+
+        // Nettoyez le gestionnaire d'événements lorsque le composant est démonté
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+        };
 	}, [open]);
 
 	const handleModalClick = (e) => {
