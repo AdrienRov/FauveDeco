@@ -6,7 +6,7 @@ function Footer() {
         <footer className="footer footer-center p-10 text-base-content rounded">
             <div className="flex justify-between">
                 <nav className="">
-
+                    
                     <Link to="/apropos" className="link link-hover pr-3">A Propos</Link>
                     <Link to="/contact" className="link link-hover pr-3">Contact</Link>
                     <Link to="/shopping" className="link link-hover pr-3">Shopping</Link>

@@ -132,5 +132,36 @@ class Category
         $metadata->addPropertyConstraint('name', new Assert\Length(['min' => 3, 'max' => 255]));
     }
 
+    private function serializeParent(?Category $parent): ?array
+    {
+        if ($parent === null) {
+            return null;
+        }
 
+        return [
+            'id' => $parent->getId(),
+            'name' => $parent->getName(),
+        ];
+    }
+
+    private function serializeSubCategories(iterable $subCategories): array
+    {
+        $result = [];
+
+        foreach ($subCategories as $subCategory) {
+            $result[] = $this->serialize($subCategory);
+        }
+
+        return $result;
+    }
+    
+    public function serialize(Category $category): array
+    {
+        return [
+            'id' => $category->getId(),
+            'name' => $category->getName(),
+            'parent' => $this->serializeParent($category->getParent()),
+            'sub_categories' => $this->serializeSubCategories($category->getSubCategories())
+        ];
+    }
 }
