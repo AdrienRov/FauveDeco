@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import { Link, useLocation } from "react-router-dom";
 
 function Accueil(props) {
     //recuperation des categories depuis le props
@@ -35,12 +36,12 @@ function Accueil(props) {
             <div className="flex justify-center">
                 <div className="grid grid-cols-2 gap-8 p-10 h-3/5 w-3/5">
                     {categories?.map(categ => (
-                       <div className="relative overflow-hidden bg-gray-100 p-1 categorie">
+                       <Link to={`/categories/${categ.id}`} className="relative overflow-hidden bg-gray-100 p-1 categorie">
                        <img src="https://i.goopics.net/8dmjcn.jpg" alt="car!" className="w-full h-full object-cover" />
                        <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
-                           <button className="btn btn-ghost categorie-title">{categ.name}</button>
+                           <p className="font-bold categorie-title">{categ.name}</p>
                        </div>
-                   </div>
+                   </Link>
                     ))}
                 </div>
             </div>
