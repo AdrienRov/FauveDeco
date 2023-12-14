@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import { Link, useLocation } from "react-router-dom";
 
 function Produit(props) {
 
@@ -24,31 +25,17 @@ function Produit(props) {
         <div className="container">
             <div className="row">
                 {produits.map((produit) => (
-                    <div className="col-md-6 mb-4" key={produit.id}>
-                        <div className="card">
-                            <div className="row no-gutters">
-                                <div className="col-md-6">
-                                    <img
-                                        src=""
-                                        className="card-img"
-                                        alt={produit.name}
-                                    />
-                                </div>
-                                <div className="col-md-6">
-                                    <div className="card-body">
-                                        <h5 className="card-title">
-                                            {produit.name}
-                                        </h5>
-                                        <p className="card-text">
-                                            {produit.description}
-                                        </p>
-                                        <p className="card-text">{produit.price}€</p>
-                                        <a
-                                            href="#"
-                                            className="btn btn-primary"
-                                        >
-                                            Ajouter au panier
-                                        </a>
+                    <div className="col-lg-4 col-md-6 mb-4 mx-7 mt-7 p-3" key={produit.id}>
+                        <div class="mx-auto px-5">
+                            <div class="w-full rounded-lg bg-white p-2 shadow duration-150">
+                                <Link to={`/produit/${produit.id}`}><img class="w-full h-56 rounded-lg object-cover object-center" src={produit.images[0]} alt="product" /></Link>
+                                <div className='row'>
+                                    <div>
+                                        <p class="mt-4 font-bold text-center">{produit.name}</p>
+                                        <p class="mb-4 text-gray-800 text-center">{produit.price}€</p>    
+                                    </div>
+                                    <div>
+                                        <button class="mt-4 p-4 btn-panier text-center py-2 rounded-lg hover:bg-gray-700 hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">Ajouter au panier</button>
                                     </div>
                                 </div>
                             </div>
