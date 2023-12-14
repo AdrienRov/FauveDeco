@@ -26,15 +26,19 @@ class ProductController extends AbstractController
     #[Route('/products', name: 'app_products', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $products = $this->entityManager->getRepository(Product::class)->findAll();
-        $productArray = array();
-
         $request = Request::createFromGlobals();
         $order = $request->query->get('order', 'asc');
         $limit = $request->query->get('limit', 10);
         $start = $request->query->get('start', 0);
+        $category = $request->query->get('category', null);
 
-        $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
+        if ($category) {
+            $products = $this->entityManager->getRepository(Product::class)->findBy(['category' => $category], ['id' => $order], $limit, $start);
+        } else {
+            $products = $this->entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
+        }
+
+        $productArray = [];
 
         foreach ($products as $product) {
             $productArray[] = $this->serializeProduct($product);
@@ -108,7 +112,9 @@ class ProductController extends AbstractController
             'price' => $product->getPrice(),
             'description' => $product->getDescription(),
             'quantity' => $product->getQuantity(),
-            'category' => $category
+            'images' => $product->getImages()->map(fn ($image) => $image->getUrl())->toArray() ?? [],
+            'category' => $category,
+            'date' => $product->getDate()
         ];
     }
 
@@ -126,7 +132,8 @@ class ProductController extends AbstractController
         $product->setPrice($price);
         $product->setDescription($description);
         $product->setQuantity($quantity);
-        $product->setCategory($this->entityManager->getRepository(Category::class)->find($category)->getId());
+        $product->setDate(new \DateTime('now'));
+        $product->setCategory($this->entityManager->getRepository(Category::class)->find($category));
 
         return $product;
     }
@@ -153,7 +160,7 @@ class ProductController extends AbstractController
             $product->setQuantity($quantity);
         }
         if (!empty($category)) {
-            $product->setCategory($this->entityManager->getRepository(Category::class)->find($category->getId()));
+            $product->setCategory($this->entityManager->getRepository(Category::class)->find($category));
         }
 
         return $product;
