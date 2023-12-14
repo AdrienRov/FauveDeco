@@ -26,9 +26,6 @@ class ProductController extends AbstractController
     #[Route('/products', name: 'app_products', methods: ['GET'])]
     public function index(): JsonResponse
     {
-        $products = $this->entityManager->getRepository(Product::class)->findAll();
-        $productArray = array();
-
         $request = Request::createFromGlobals();
         $order = $request->query->get('order', 'asc');
         $limit = $request->query->get('limit', 10);
@@ -36,10 +33,12 @@ class ProductController extends AbstractController
         $category = $request->query->get('category', null);
 
         if ($category) {
-            $products = $entityManager->getRepository(Product::class)->findBy(['category' => $category], ['id' => $order], $limit, $start);
+            $products = $this->entityManager->getRepository(Product::class)->findBy(['category' => $category], ['id' => $order], $limit, $start);
         } else {
-            $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
+            $products = $this->entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
         }
+
+        $productArray = [];
 
         foreach ($products as $product) {
             $productArray[] = $this->serializeProduct($product);
@@ -113,7 +112,7 @@ class ProductController extends AbstractController
             'price' => $product->getPrice(),
             'description' => $product->getDescription(),
             'quantity' => $product->getQuantity(),
-            'images' => $product->getImages()->map(fn ($image) => $image->getUrl())->toArray() ?? []
+            'images' => $product->getImages()->map(fn ($image) => $image->getUrl())->toArray() ?? [],
             'category' => $category
         ];
     }
