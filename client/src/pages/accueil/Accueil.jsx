@@ -138,8 +138,8 @@ function Accueil(props) {
             <div class="flex items-center justify-center pb-5 pt-5">
 
                 <div class="mx-auto px-5">
-                    <div class="max-w-xs cursor-pointer rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                        <img class="w-full h-56 rounded-lg object-cover object-center" src="https://voisla.fr/1778-large_default/serviettes-de-table-lot-de-2-alsace-pop.jpg" alt="product" />
+                    <div class="max-w-xs cursor-pointer back-rose-clair p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
+                        <img class="w-full h-56 object-cover object-center" src="https://voisla.fr/1778-large_default/serviettes-de-table-lot-de-2-alsace-pop.jpg" alt="product" />
                         <p class="mt-4 font-bold text-center">Product Name</p>
                         <p class="mb-4 text-gray-800 text-center">79€</p>
                     </div>
