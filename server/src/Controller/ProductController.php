@@ -34,7 +34,7 @@ class ProductController extends AbstractController
         $limit = $request->query->get('limit', 10);
         $start = $request->query->get('start', 0);
 
-        $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
+        $products = $this->entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
 
         foreach ($products as $product) {
             $productArray[] = $this->serializeProduct($product);
@@ -126,7 +126,7 @@ class ProductController extends AbstractController
         $product->setPrice($price);
         $product->setDescription($description);
         $product->setQuantity($quantity);
-        $product->setCategory($this->entityManager->getRepository(Category::class)->find($category)->getId());
+        $product->setCategory($this->entityManager->getRepository(Category::class)->find($category));
 
         return $product;
     }
@@ -153,7 +153,7 @@ class ProductController extends AbstractController
             $product->setQuantity($quantity);
         }
         if (!empty($category)) {
-            $product->setCategory($this->entityManager->getRepository(Category::class)->find($category->getId()));
+            $product->setCategory($this->entityManager->getRepository(Category::class)->find($category));
         }
 
         return $product;
