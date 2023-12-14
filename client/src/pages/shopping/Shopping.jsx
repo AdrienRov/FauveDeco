@@ -35,7 +35,7 @@ function Produit(props) {
                                         <p class="mb-4 text-gray-800 text-center">{produit.price}€</p>    
                                     </div>
                                     <div>
-                                        <button class="mt-4 p-4 bg-gray-800 text-white text-center py-2 rounded-lg hover:bg-gray-700 hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">Ajouter au panier</button>
+                                        <button class="mt-4 p-4 btn-panier text-center py-2 rounded-lg hover:bg-gray-700 hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-opacity-75">Ajouter au panier</button>
                                     </div>
                                 </div>
                             </div>
