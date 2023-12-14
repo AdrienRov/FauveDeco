@@ -22,8 +22,8 @@ import Connexion from "./form/Connexion";
 import Inscription from "./form/Inscription";
 
 function App() {
-
   const url = "http://127.0.0.1:8000/categories";
+
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {

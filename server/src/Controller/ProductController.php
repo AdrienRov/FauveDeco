@@ -33,8 +33,13 @@ class ProductController extends AbstractController
         $order = $request->query->get('order', 'asc');
         $limit = $request->query->get('limit', 10);
         $start = $request->query->get('start', 0);
+        $category = $request->query->get('category', null);
 
-        $products = $this->entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
+        if ($category) {
+            $products = $entityManager->getRepository(Product::class)->findBy(['category' => $category], ['id' => $order], $limit, $start);
+        } else {
+            $products = $entityManager->getRepository(Product::class)->findBy([], ['id' => $order], $limit, $start);
+        }
 
         foreach ($products as $product) {
             $productArray[] = $this->serializeProduct($product);
@@ -108,6 +113,7 @@ class ProductController extends AbstractController
             'price' => $product->getPrice(),
             'description' => $product->getDescription(),
             'quantity' => $product->getQuantity(),
+            'images' => $product->getImages()->map(fn ($image) => $image->getUrl())->toArray() ?? []
             'category' => $category
         ];
     }
