@@ -1,48 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
 
-function Produit() {
-    // Exemple de données statiques
-    const produits = [
-        {
-            _id: 1,
-            nom: 'Produit 1',
-            description: 'Description du produit 1',
-            prix: 19.99,
-            image: 'https://www.drageesanahita.com/21233-thickbox_default/bougie-colombe-blanche.jpg',
-        },
-        {
-            _id: 2,
-            nom: 'Produit 2',
-            description: 'Description du produit 2',
-            prix: 29.99,
-            image: 'https://www.dekodacc.fr/wp-content/uploads/2020/06/bougie-tiare-2.png',
-        },
-        // Ajoutez d'autres produits si nécessaire
-    ];
+function Produit(props) {
+
+    const urlProduits = "http://127.0.0.1:8000/products";
+    const [produits, setProduits] = useState([]);
+
+    useEffect(() => {
+        axios.get(urlProduits)
+            .then((response) => {
+                setProduits(response.data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    useEffect(() => {
+        console.log(produits);
+    }, []);
 
     return (
         <div className="container">
             <div className="row">
                 {produits.map((produit) => (
-                    <div className="col-md-6 mb-4" key={produit._id}>
+                    <div className="col-md-6 mb-4" key={produit.id}>
                         <div className="card">
                             <div className="row no-gutters">
                                 <div className="col-md-6">
                                     <img
-                                        src={produit.image}
+                                        src=""
                                         className="card-img"
-                                        alt={produit.nom}
+                                        alt={produit.name}
                                     />
                                 </div>
                                 <div className="col-md-6">
                                     <div className="card-body">
                                         <h5 className="card-title">
-                                            {produit.nom}
+                                            {produit.name}
                                         </h5>
                                         <p className="card-text">
                                             {produit.description}
                                         </p>
-                                        <p className="card-text">{produit.prix}€</p>
+                                        <p className="card-text">{produit.price}€</p>
                                         <a
                                             href="#"
                                             className="btn btn-primary"
