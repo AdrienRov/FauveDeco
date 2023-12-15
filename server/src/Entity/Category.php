@@ -164,19 +164,40 @@ class Category
         $result = [];
 
         foreach ($subCategories as $subCategory) {
-            $result[] = $this->serialize($subCategory);
+            $result[] = $subCategory->serialize();
         }
 
         return $result;
     }
     
-    public function serialize(Category $category): array
+    public function serialize(): array
     {
         return [
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'parent' => $this->serializeParent($category->getParent()),
-            'sub_categories' => $this->serializeSubCategories($category->getSubCategories())
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'parent' => $this->serializeParent($this->getParent()),
+            'subCategories' => $this->serializeSubCategories($this->getSubCategories()),
+            'imageUrl' => $this->getImageUrl(),
         ];
+    }
+    
+    public function serializeProducts(): array
+    {
+        $result = [];
+
+        foreach ($this->getProducts() as $product) {
+            $result[] = $product->serialize();
+        }
+
+        return $result;
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['products'] = $this->serializeProducts();
+    
+        return $data;
     }
 }

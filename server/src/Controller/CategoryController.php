@@ -20,12 +20,7 @@ class CategoryController extends AbstractController
 
         $arr = [];
         foreach ($categories as $category) {
-            $arr[] = [
-                'id' => $category->getId(),
-                'name' => $category->getName(),
-                'parent' => $category->getParent() ? $category->getParent()->getId() : null,
-                'image_url' => $category->getImageUrl() ?? '',
-            ];
+            $arr[] = $category->serializeAll();
         }
         return $this->json($arr);
     }
@@ -43,13 +38,7 @@ class CategoryController extends AbstractController
             ]);
         }
         
-        return $this->json([
-            'id' => $category->getId(),
-            'name' => $category->getName(),
-            'parent' => $category->getParent() ? $category->getParent()->getId() : null,
-            'sub_categories' => $category->getSubCategories()->map(fn($category) => $category->getId())->toArray(),
-            'image_url' => $category->getImageUrl() ?? '',
-        ]);
+        return $this->json($category->serializeAll());
     }
 
     // Post to create new category

@@ -48,4 +48,27 @@ class Image
 
         return $this;
     }
+
+    public function serialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'url' => $this->getUrl(),
+        ];
+    }
+
+    public function serializeProduct(): array
+    {
+        return $this->getProduct()->serialize();
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['product'] = $this->serializeProduct();
+
+        return $data;
+    }
+
 }
