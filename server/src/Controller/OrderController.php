@@ -28,28 +28,7 @@ class OrderController extends AbstractController
         $arr = [];
 
         foreach ($orders as $order) {
-
-            $products = [];
-            $total = 0;
-            foreach ($order->getProductOrders() as $productOrder) {
-                $products[] = [
-                    'id' => $productOrder->getProduct()->getId(),
-                    'name' => $productOrder->getProduct()->getName(),
-                    'price' => $productOrder->getProduct()->getPrice(),
-                    'quantity' => $productOrder->getQuantity()
-                ];
-                $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
-            }
-            
-            $arr[] = [
-                'id' => $order->getId(),
-                'total' => $total,
-                'date' => $order->getDate(),
-                'type' => $order->getType(),
-                'status' => $order->getStatus(),
-                'client' => $order->getClient()->getId(),
-                'products' => $products
-            ];
+            $arr[] = [$order->serializeAll()];
         }
 
         return $this->json($arr);
@@ -63,27 +42,7 @@ class OrderController extends AbstractController
         if (!$order)
             return $this->json(['error' => 'Order not found']);
 
-        $products = [];
-        $total = 0;
-        foreach ($order->getProductOrders() as $productOrder) {
-            $products[] = [
-                'id' => $productOrder->getProduct()->getId(),
-                'name' => $productOrder->getProduct()->getName(),
-                'price' => $productOrder->getProduct()->getPrice(),
-                'quantity' => $productOrder->getQuantity()
-            ];
-            $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
-        }
-
-        return $this->json([
-            'id' => $order->getId(),
-            'total' => $total,
-            'date' => $order->getDate(),
-            'type' => $order->getType(),
-            'status' => $order->getStatus(),
-            'client' => $order->getClient()->getId(),
-            'products' => $products
-        ]);
+        return $this->json($order->serializeAll());
     }
 
     #[Route('/order', name: 'app_order_create', methods: ['POST'])]
@@ -119,27 +78,7 @@ class OrderController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
 
-        $products = [];
-        $total = 0;
-        foreach ($order->getProductOrders() as $productOrder) {
-            $products[] = [
-                'id' => $productOrder->getProduct()->getId(),
-                'name' => $productOrder->getProduct()->getName(),
-                'price' => $productOrder->getProduct()->getPrice(),
-                'quantity' => $productOrder->getQuantity()
-            ];
-            $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
-        }
-
-        return $this->json([
-            'id' => $order->getId(),
-            'total' => $total,
-            'date' => $order->getDate(),
-            'type' => $order->getType(),
-            'status' => $order->getStatus(),
-            'client' => $order->getClient()->getId(),
-            'products' => $products
-        ]);
+        return $this->json($order->serializeAll());
     }
 
     // patch
@@ -186,27 +125,7 @@ class OrderController extends AbstractController
         $entityManager->persist($order);
         $entityManager->flush();
 
-        $products = [];
-        $total = 0;
-        foreach ($order->getProductOrders() as $productOrder) {
-            $products[] = [
-                'id' => $productOrder->getProduct()->getId(),
-                'name' => $productOrder->getProduct()->getName(),
-                'price' => $productOrder->getProduct()->getPrice(),
-                'quantity' => $productOrder->getQuantity()
-            ];
-            $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
-        }
-
-        return $this->json([
-            'id' => $order->getId(),
-            'total' => $total,
-            'date' => $order->getDate(),
-            'type' => $order->getType(),
-            'status' => $order->getStatus(),
-            'client' => $order->getClient()->getId(),
-            'products' => $products
-        ]);
+        return $this->json($order->serializeAll());
     }
 
     #[Route('/order/{id}', name: 'app_order_delete', methods: ['DELETE'])]

@@ -18,17 +18,7 @@ class UserController extends AbstractController
 	{
 		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-		return $this->json([
-			'status' => true,
-			'id' => $user->getId(),
-			'email' => $user->getEmail(),
-			'firstName' => $user->getFirstName(),
-			'lastName' => $user->getLastName(),
-			'role' => $user->getRole(),
-			'phone' => $user->getPhone(),
-			'address' => $user->getAddress(),
-			'country' => $user->getCountry()
-		]);
+		return $this->json($user->serializeAll());
 	}
 
     #[Route('/users', name: 'app_users')]
@@ -38,16 +28,7 @@ class UserController extends AbstractController
 
 		$arr = [];
 		foreach ($user as $user) {
-			$arr[] = [
-				'id' => $user->getId(),
-				'email' => $user->getEmail(),
-				'firstName' => $user->getFirstName(),
-				'lastName' => $user->getLastName(),
-				'role' => $user->getRole(),
-				'phone' => $user->getPhone(),
-				'address' => $user->getaddress(),
-				'country' => $user->getCountry()
-			];
+			$arr[] = $user->serializeAll();
 		}
 
 		return $this->json($arr);
@@ -66,16 +47,7 @@ class UserController extends AbstractController
 			]);
 		}
 
-		return $this->json([
-			'id' => $user->getId(),
-			'email' => $user->getEmail(),
-			'firstName' => $user->getFirstName(),
-			'lastName' => $user->getLastName(),
-			'role' => $user->getRole(),
-			'phone' => $user->getPhone(),
-			'address' => $user->getAddress(),
-			'country' => $user->getCountry()
-		]);
+		return $this->json($user->serializeAll());
 	}
 
 	// Authentification
@@ -130,17 +102,7 @@ class UserController extends AbstractController
 		$entityManager->persist($user);
 		$entityManager->flush();
 
-		return $this->json([
-			'id' => $user->getId(),
-			'email' => $user->getEmail(),
-			'firstName' => $user->getFirstName(),
-			'lastName' => $user->getLastName(),
-			'role' => $user->getRole(),
-			'password' => $user->getPassword(),
-			'phone' => $user->getPhone(),
-			'address' => $user->getAddress(),
-			'country' => $user->getCountry()
-		]);
+		return $this->json($user->serializeAll());
 	}
 
 	// Delete a user
@@ -214,18 +176,6 @@ class UserController extends AbstractController
 		$entityManager->persist($user);
 		$entityManager->flush();
 
-		return $this->json([
-			'id' => $user->getId(),
-			'email' => $user->getEmail(),
-			'firstName' => $user->getFirstName(),
-			'lastName' => $user->getLastName(),
-			'role' => $user->getRole(),
-			'password' => $user->getPassword(),
-			'phone' => $user->getPhone(),
-			'address' => $user->getAddress(),
-			'country' => $user->getCountry()
-		]);
+		return $this->json($user->serializeAll());
 	}
-
-	
 }
