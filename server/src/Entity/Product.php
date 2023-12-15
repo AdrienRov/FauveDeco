@@ -192,7 +192,6 @@ class Product
             'description' => $this->getDescription(),
             'quantity' => $this->getQuantity(),
             'date' => $this->getDate()->format('Y-m-d H:i:s'),
-
         ];
     }
 
