@@ -192,6 +192,7 @@ class Product
             'description' => $this->getDescription(),
             'quantity' => $this->getQuantity(),
             'date' => $this->getDate()->format('Y-m-d H:i:s'),
+            'images' => $this->serializeImages(),
         ];
     }
 
@@ -220,8 +221,7 @@ class Product
     public function serializeAll(): array
     {
         $data = $this->serialize();
-
-        $data['images'] = $this->serializeImages();
+        
         $data['category'] = $this->getCategory()->serialize();
         $data['productOrders'] = $this->serializeProductOrders();
         
