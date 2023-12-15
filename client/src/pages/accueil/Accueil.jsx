@@ -36,22 +36,22 @@ function Accueil(props) {
             <div className="flex justify-center">
                 <div className="grid grid-cols-2 gap-8 p-10 h-3/5 w-3/5">
                     {categories?.filter(c => !c.parent).map(categ => (
-                       <Link to={`/categories/${categ.id}`} className="relative overflow-hidden bg-gray-100 p-1 categorie">
-                       <img src={categ.image_url} alt="car!" className="w-full h-full object-cover" />
-                       <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
-                           <p className="font-bold categorie-title">{categ.name}</p>
-                       </div>
-                   </Link>
+                        <Link to={`/categories/${categ.id}`} className="relative overflow-hidden bg-gray-100 p-1 categorie">
+                            <img src={categ.image_url} alt="car!" className="w-full h-full object-cover" />
+                            <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
+                                <p className="font-bold categorie-title">{categ.name}</p>
+                            </div>
+                        </Link>
                     ))}
                 </div>
             </div>
 
-            <hr className="my-10" />
+            <div className="divider my-12" />
 
             <div className="flex justify-center px-20">
                 <div className="flex ligne items-center">
                     <div className="mr-16">
-                        <img src="https://lh3.googleusercontent.com/p/AF1QipOu_F6OZUWjNWWRAUVw-M2yavpyJ9Rex9mf98OR=s1360-w1360-h1020" alt="Boutique" className="rounded-xl" />
+                        <img src="https://lh3.googleusercontent.com/p/AF1QipOu_F6OZUWjNWWRAUVw-M2yavpyJ9Rex9mf98OR=s1360-w1360-h1020" alt="Boutique" className="" />
                     </div>
 
                     <div className="flex flex-col justify-center">
@@ -62,78 +62,80 @@ function Accueil(props) {
                 </div>
             </div>
 
-            <hr className="my-10" />
+
+            <div className="flex justify-center items-center divider my-12">
+                <div className="titre-background titre-50 p-3 text-center">
+                    <h2 className="text-2xl font-bold">
+                        Produit du mois
+                    </h2>
+                </div>
+            </div>
 
             <div className="flex justify-center items-center">
-                <div className="max-w-3xl">
-                    <div className="rounded-xl titre-background p-3 text-center">
-                        <h2 className="text-2xl font-bold">
-                            Produit du mois
-                        </h2>
-                    </div>
+                <div class="flex mt-5 items-center justify-center">
+                    <div class="relative flex w-full max-w-[48rem] flex-row bg-white bg-clip-border text-gray-700 shadow-md">
+                        <div class="relative m-0 w-2/5 shrink-0 overflow-hidden bg-white bg-clip-border text-gray-700">
+                            <img
+                                src="https://deconordsud.com/cdn/shop/files/71094820_01_1_720x.jpg?v=1695653873"
+                                alt="image"
+                                class="h-full w-full object-cover"
+                            />
+                        </div>
+                        <div class="p-6">
+                            <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
+                                Bougie antique
+                            </h4>
+                            <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
+                                Plongez dans une ambiance empreinte d'élégance avec notre Bougie Décorative Antique.
+                            </p>
 
-                    <div class="flex mt-5 items-center justify-center">
-                        <div class="relative flex w-full max-w-[48rem] flex-row rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-                            <div class="relative m-0 w-2/5 shrink-0 overflow-hidden rounded-xl rounded-r-none bg-white bg-clip-border text-gray-700">
-                                <img
-                                    src="https://deconordsud.com/cdn/shop/files/71094820_01_1_720x.jpg?v=1695653873"
-                                    alt="image"
-                                    class="h-full w-full object-cover"
-                                />
-                            </div>
-                            <div class="p-6">
-                                <h6 class="mb-4 block font-sans text-base font-semibold uppercase leading-relaxed tracking-normal vert-color antialiased">
-                                    10 000€
-                                </h6>
-                                <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-                                    Bougie antique
-                                </h4>
-                                <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
-                                    Plongez dans une ambiance empreinte d'élégance avec notre Bougie Décorative Antique.
-                                </p>
+                            <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
+                                Soigneusement conçue pour évoquer le charme du passé, cette bougie enchanteresse illumine votre espace avec une lueur chaleureuse.
+                            </p>
 
-                                <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
-                                    Soigneusement conçue pour évoquer le charme du passé, cette bougie enchanteresse illumine votre espace avec une lueur chaleureuse.
-                                </p>
-
-                                <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
-                                    Fabriquée avec une attention méticuleuse aux détails, elle ajoute une touche sophistiquée à votre décor, diffusant un parfum subtil qui transporte vos sens vers une époque révolue.
-                                </p>
-                                <a class="inline-block" href="#">
-                                    <button
-                                        class="flex select-none items-center gap-2 rounded-lg py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase titre-color transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                        type="button"
+                            <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
+                                Fabriquée avec une attention méticuleuse aux détails, elle ajoute une touche sophistiquée à votre décor, diffusant un parfum subtil qui transporte vos sens vers une époque révolue.
+                            </p>
+                            <h6 class="mb-4 block font-sans text-base font-semibold uppercase leading-relaxed tracking-normal vert-color antialiased">
+                                10 000€
+                            </h6>
+                            <a class="inline-block" href="#">
+                                <button
+                                    class="flex select-none items-center gap-2 rounded-lg py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase titre-color transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                    type="button"
+                                >
+                                    Regarder
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="2"
+                                        stroke="currentColor"
+                                        aria-hidden="true"
+                                        class="h-4 w-4"
                                     >
-                                        Regarder
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="2"
-                                            stroke="currentColor"
-                                            aria-hidden="true"
-                                            class="h-4 w-4"
-                                        >
-                                            <path
-                                                stroke-linecap="round"
-                                                stroke-linejoin="round"
-                                                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                                            ></path>
-                                        </svg>
-                                    </button>
-                                </a>
-                            </div>
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                                        ></path>
+                                    </svg>
+                                </button>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            <hr className="my-10" />
+            
 
-            <div class="text-center mt-8 rounded-xl titre-background p-3 text-center">
-                <h2 class="text-2xl font-bold">Nouveaux arrivages</h2>
+            <div className="divider flex justify-center items-center my-12">
+                <div class="text-center  titre-background titre-50 p-3 text-center">
+                    <h2 class="text-2xl font-bold">Nouveaux arrivages</h2>
+                </div>
             </div>
+
 
             <div class="flex items-center justify-center pb-5 pt-5">
 
@@ -169,7 +171,7 @@ function Accueil(props) {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
 
     )
 }

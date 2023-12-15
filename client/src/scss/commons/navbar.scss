@@ -38,6 +38,7 @@
     color: $blanc;
     margin-left: 5%;
     margin-right: 5%;
+    font-size: large;
     // Lorsqu'on passe la souris sur les boutons, ils deviennent vert foncé
     &:hover{
         background-color: $vert-fonce;
