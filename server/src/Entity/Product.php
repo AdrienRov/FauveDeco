@@ -32,11 +32,18 @@ class Product
     private Collection $images;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
-    private ?category $category = null;
+    private ?Category $category = null;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOrder::class, cascade: ['persist'])]
+    private Collection $productOrders;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private ?\DateTimeInterface $date = null;
 
     public function __construct()
     {
         $this->images = new ArrayCollection();
+        $this->productOrders = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -122,15 +129,102 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ?category
+    public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    public function setCategory(?category $category): static
+    public function setCategory(?Category $category): static
     {
         $this->category = $category;
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductOrder>
+     */
+    public function getProductOrders(): Collection
+    {
+        return $this->productOrders;
+    }
+
+    public function addProductOrder(ProductOrder $productOrder): static
+    {
+        if (!$this->productOrders->contains($productOrder)) {
+            $this->productOrders->add($productOrder);
+            $productOrder->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductOrder(ProductOrder $productOrder): static
+    {
+        if ($this->productOrders->removeElement($productOrder)) {
+            // set the owning side to null (unless already changed)
+            if ($productOrder->getProduct() === $this) {
+                $productOrder->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDate(): ?\DateTimeInterface
+    {
+        return $this->date;
+    }
+
+    public function setDate(\DateTimeInterface $date): static
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+    
+    public function serialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+            'description' => $this->getDescription(),
+            'quantity' => $this->getQuantity(),
+            'date' => $this->getDate()->format('Y-m-d H:i:s'),
+            'images' => $this->serializeImages(),
+        ];
+    }
+
+    public function serializeImages(): array
+    {
+        $result = [];
+
+        foreach ($this->getImages() as $image) {
+            $result[] = $image->serialize();
+        }
+
+        return $result;
+    }
+
+    public function serializeProductOrders(): array
+    {
+        $result = [];
+
+        foreach ($this->getProductOrders() as $productOrder) {
+            $result[] = $productOrder->serialize();
+        }
+
+        return $result;
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+        
+        $data['category'] = $this->getCategory()->serialize();
+        $data['productOrders'] = $this->serializeProductOrders();
+        
+        return $data;
     }
 }

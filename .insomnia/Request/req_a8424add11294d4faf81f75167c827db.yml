@@ -1,0 +1,24 @@
+_id: req_a8424add11294d4faf81f75167c827db
+type: Request
+parentId: wrk_9b90cd6c3d064bb2bf727bab7348303e
+modified: 1702390096277
+created: 1702389638955
+url: http://127.0.0.1:8000/category/{% response 'body',
+  'req_ca394b21002c4b02bde938b6d44fed74', 'b64::JC5pZA==::46b', 'never', 60 %}
+name: Get category
+description: ""
+method: GET
+body: {}
+parameters: []
+headers:
+  - name: User-Agent
+    value: Insomnia/2023.5.6
+authentication: {}
+metaSortKey: -1702389638955
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
@@ -20,16 +22,13 @@ class Order
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $date = null;
 
-    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 3)]
-    private ?string $total = null;
-
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $type = null;
 
     #[ORM\Column(type: Types::SMALLINT)]
     private ?int $status = null;
 
-    #[ORM\OneToMany(mappedBy: 'in_order', targetEntity: ProductOrder::class)]
+    #[ORM\OneToMany(mappedBy: 'in_order', targetEntity: ProductOrder::class, cascade: ['persist'], orphanRemoval: true)]
     private Collection $productOrders;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
@@ -54,18 +53,6 @@ class Order
     public function setDate(\DateTimeInterface $date): static
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getTotal(): ?string
-    {
-        return $this->total;
-    }
-
-    public function setTotal(string $total): static
-    {
-        $this->total = $total;
 
         return $this;
     }
@@ -134,5 +121,63 @@ class Order
         $this->client = $client;
 
         return $this;
+    }
+
+    public static function loadValidatorMetadata(ClassMetadata $metadata): void
+    {
+        $metadata->addPropertyConstraint('date', new Assert\NotNull());
+        //$metadata->addPropertyConstraint('date', new Assert\DateTime());
+
+        $metadata->addPropertyConstraint('total', new Assert\NotNull());
+        $metadata->addPropertyConstraint('total', new Assert\PositiveOrZero());
+
+        $metadata->addPropertyConstraint('type', new Assert\NotNull());
+        $metadata->addPropertyConstraint('type', new Assert\Positive());
+
+        $metadata->addPropertyConstraint('status', new Assert\NotNull());
+        $metadata->addPropertyConstraint('status', new Assert\Positive());
+
+        $metadata->addPropertyConstraint('client', new Assert\NotNull());
+
+        $metadata->addPropertyConstraint('productOrders', new Assert\NotNull());
+        $metadata->addPropertyConstraint('productOrders', new Assert\Count(min: 1));
+    }
+
+    public function serialize(): array
+    {
+        $total = 0;
+
+        foreach ($this->getProductOrders() as $productOrder) {
+            $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
+        }
+
+        return [
+            'id' => $this->getId(),
+            'date' => $this->getDate()->format('Y-m-d H:i:s'),
+            'type' => $this->getType(),
+            'status' => $this->getStatus(),
+            'productOrders' => $this->serializeProductOrders(),
+            'total' => $total,
+        ];
+    }
+
+    public function serializeProductOrders(): array
+    {
+        $result = [];
+
+        foreach ($this->getProductOrders() as $productOrder) {
+            $result[] = $productOrder->serialize();
+        }
+
+        return $result;
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['client'] = $this->getClient()->serialize();
+        
+        return $data;
     }
 }

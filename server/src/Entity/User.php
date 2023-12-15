@@ -7,10 +7,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
-class User
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -178,5 +180,80 @@ class User
         }
 
         return $this;
+    }
+
+    // PasswordAuthenticatedUserInterface
+    public function getPasswordHash(): ?string
+    {
+        return $this->password;
+    }
+
+    // UserInterface
+    public function getRoles(): array
+    {
+        return $this->role == 2 ? ['ROLE_ADMIN'] : ['ROLE_USER'];
+    }
+
+    // UserInterface
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    // UserInterface
+    public function getUsername(): string
+    {
+        return $this->email;
+    }
+
+    // UserInterface
+    public function eraseCredentials(): void
+    {
+    }
+
+    // UserInterface
+    public function getUserIdentifier(): string
+    {
+        return $this->email;
+    }
+
+    // UserInterface
+    public function getUserIdentifierField(): string
+    {
+        return 'email';
+    }
+
+    public function serialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'role' => $this->getRole(),
+            'phone' => $this->getPhone(),
+            'address' => $this->getAddress(),
+            'country' => $this->getCountry(),
+        ];
+    }
+
+    public function serializeOrders(): array
+    {
+        $result = [];
+
+        foreach ($this->getOrders() as $order) {
+            $result[] = $order->serialize();
+        }
+
+        return $result;
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['orders'] = $this->serializeOrders();
+
+        return $data;
     }
 }

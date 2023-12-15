@@ -16,11 +16,11 @@ class ProductOrder
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(inversedBy: 'productOrders', targetEntity: Product::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
-    #[ORM\ManyToOne(inversedBy: 'productOrders')]
+    #[ORM\ManyToOne(inversedBy: 'productOrders', targetEntity: Order::class, cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Order $in_order = null;
 
@@ -63,5 +63,23 @@ class ProductOrder
         $this->in_order = $in_order;
 
         return $this;
+    }
+
+    public function serialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'quantity' => $this->getQuantity(),
+            'product' => $this->getProduct()->serialize(),
+        ];
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['inOrder'] = $this->getInOrder()->serialize();
+
+        return $data;
     }
 }

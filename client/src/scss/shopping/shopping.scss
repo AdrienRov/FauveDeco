@@ -1,0 +1,17 @@
+@import '../commons/colors.scss';
+
+.row{
+    display: grid;
+    // grid de deux colonnes
+    grid-template-columns: 1fr 1fr; 
+}
+
+.btn-panier{
+    background-color: $rose;
+    color: $vert-fonce;
+    border-radius: 0;
+
+    &:hover{
+        background-color: $rose-fonce;
+    }
+}
