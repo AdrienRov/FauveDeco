@@ -145,12 +145,19 @@ class Order
 
     public function serialize(): array
     {
+        $total = 0;
+
+        foreach ($this->getProductOrders() as $productOrder) {
+            $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
+        }
+
         return [
             'id' => $this->getId(),
             'date' => $this->getDate()->format('Y-m-d H:i:s'),
             'type' => $this->getType(),
             'status' => $this->getStatus(),
-            'productOrders' => $this->serializeProductOrders()
+            'productOrders' => $this->serializeProductOrders(),
+            'total' => $total,
         ];
     }
 
