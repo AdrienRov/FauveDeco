@@ -222,4 +222,38 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return 'email';
     }
+
+    public function serialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'firstName' => $this->getFirstName(),
+            'lastName' => $this->getLastName(),
+            'role' => $this->getRole(),
+            'phone' => $this->getPhone(),
+            'address' => $this->getAddress(),
+            'country' => $this->getCountry(),
+        ];
+    }
+
+    public function serializeOrders(): array
+    {
+        $result = [];
+
+        foreach ($this->getOrders() as $order) {
+            $result[] = $order->serialize();
+        }
+
+        return $result;
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['orders'] = $this->serializeOrders();
+
+        return $data;
+    }
 }
