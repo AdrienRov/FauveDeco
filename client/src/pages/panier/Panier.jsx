@@ -1,16 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import * as ReactDom from "react-dom";
 
-function Panier() {
+function Panier(props) {
 
-    const [cart, setCart] = useState(() => localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : []);
-
-    useEffect(() => {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }, [cart]);
+    const { cart, setCart } = props;
 
     const fixPrice = (price) => {
-        // "price.toFixed is not a function"
         if (typeof price !== "number") {
             price = parseFloat(price);
         }
