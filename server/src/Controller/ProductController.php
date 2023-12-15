@@ -41,7 +41,7 @@ class ProductController extends AbstractController
         $productArray = [];
 
         foreach ($products as $product) {
-            $productArray[] = $this->serializeProduct($product);
+            $productArray[] = $product->serializeAll();
         }
         return $this->json($productArray);
     }
@@ -49,7 +49,7 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'app_product', methods: ['GET'])]
     public function show(Product $product): JsonResponse
     {
-        return $this->json($this->serializeProduct($product));
+        return $this->json($product->serializeAll());
     }
 
     #[Route('/product', name: 'app_product_create', methods: ['POST'])]
@@ -96,28 +96,6 @@ class ProductController extends AbstractController
 
         return $this->json(['status' => true]);
     }
-
-
-    private function serializeProduct(Product $product): array
-    {
-        $category = null;
-        if ($product->getCategory() != null) {
-            $category = $this->entityManager->getRepository(Category::class)->find($product->getCategory()->getId());
-            $category = $category->serialize($category);
-        }
-
-        return [
-            'id' => $product->getId(),
-            'name' => $product->getName(),
-            'price' => $product->getPrice(),
-            'description' => $product->getDescription(),
-            'quantity' => $product->getQuantity(),
-            'images' => $product->getImages()->map(fn ($image) => $image->getUrl())->toArray() ?? [],
-            'category' => $category,
-            'date' => $product->getDate()
-        ];
-    }
-
 
     private function createProductFromRequest(array $data): Product
     {

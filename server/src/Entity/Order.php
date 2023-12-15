@@ -142,4 +142,35 @@ class Order
         $metadata->addPropertyConstraint('productOrders', new Assert\NotNull());
         $metadata->addPropertyConstraint('productOrders', new Assert\Count(min: 1));
     }
+
+    public function serialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'date' => $this->getDate()->format('Y-m-d H:i:s'),
+            'type' => $this->getType(),
+            'status' => $this->getStatus(),
+            'productOrders' => $this->serializeProductOrders()
+        ];
+    }
+
+    public function serializeProductOrders(): array
+    {
+        $result = [];
+
+        foreach ($this->getProductOrders() as $productOrder) {
+            $result[] = $productOrder->serialize();
+        }
+
+        return $result;
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['client'] = $this->getClient()->serialize();
+        
+        return $data;
+    }
 }

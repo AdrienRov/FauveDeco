@@ -182,32 +182,50 @@ class Product
 
         return $this;
     }
-
-    public function serialize(Product $product): array
+    
+    public function serialize(): array
     {
         return [
-            'id' => $product->getId(),
-            'name' => $product->getName(),
-            'price' => $product->getPrice(),
-            'description' => $product->getDescription(),
-            'quantity' => $product->getQuantity(),
-            'category' => $product->getCategory()->serialize($product->getCategory()),
-            'images' => $this->serializeImages($product->getImages()),
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'price' => $this->getPrice(),
+            'description' => $this->getDescription(),
+            'quantity' => $this->getQuantity(),
+            'date' => $this->getDate()->format('Y-m-d H:i:s'),
+
         ];
     }
 
-    private function serializeImages(iterable $images): array
+    public function serializeImages(): array
     {
         $result = [];
 
-        foreach ($images as $image) {
-            $result[] = [
-                'id' => $image->getId(),
-                // Add other image properties as needed
-            ];
+        foreach ($this->getImages() as $image) {
+            $result[] = $image->serialize();
         }
 
         return $result;
     }
-    
+
+    public function serializeProductOrders(): array
+    {
+        $result = [];
+
+        foreach ($this->getProductOrders() as $productOrder) {
+            $result[] = $productOrder->serialize();
+        }
+
+        return $result;
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['images'] = $this->serializeImages();
+        $data['category'] = $this->getCategory()->serialize();
+        $data['productOrders'] = $this->serializeProductOrders();
+        
+        return $data;
+    }
 }
