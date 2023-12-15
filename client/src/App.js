@@ -16,6 +16,7 @@ import Produit from "./pages/produit/Produit";
 import Panier from "./pages/panier/Panier";
 import Contact from "./pages/contact/Contact";
 import NavBar from "./pages/commons/NavBar";
+import Burger from "./pages/commons/Burger";
 import Footer from "./pages/commons/Footer";
 import Categories from "./pages/categories/Categories";
 import Connexion from "./form/Connexion";
@@ -41,6 +42,7 @@ function App() {
   return (
     <Router>
       <NavBar />
+      <Burger />
       <div>
         <Routes>
 
