@@ -20,7 +20,6 @@ import Footer from "./pages/commons/Footer";
 import Categories from "./pages/categories/Categories";
 import Connexion from "./form/Connexion";
 import Inscription from "./form/Inscription";
-import Account from './pages/account/Account';
 import Admin from './pages/admin/Admin';
 import User from './pages/user/User';
 
@@ -60,7 +59,6 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/categories/:id" element={<Categories categories={categories} />} />
             <Route path="/categories" element={<Categories categories={categories} />} />
-            <Route path="/account" element={<Account />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/produit/:id" element={<Produit cart={cart} setCart={setCart} />} />
             <Route path="/user" element={<User />} />
