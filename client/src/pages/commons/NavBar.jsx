@@ -63,18 +63,6 @@ function NavBar() {
                     </Link>
                 </div>
             </div>
-            
-            <div className="navbar pt-0">
-                <div className="navbar-start flex justify-center">
-                    <Link to="/categories/0" className="btn btn-nav back-vert duration-150">Maison et objets</Link>
-                    <Link to="/categories/1" className="btn btn-nav back-vert duration-150">Fragrances</Link>
-                    <Link to="/categories/2" className="btn btn-nav back-vert duration-150">Lifestyle</Link>
-                </div>
-                <div className="navbar-end flex justify-center">
-                    <Link className="btn btn-nav back-vert duration-150">Décorations murales</Link>
-                    <Link className="btn btn-nav back-vert duration-150">Idées cadeaux</Link>
-                </div>
-            </div>
         </div>
 	)
 }
