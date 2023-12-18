@@ -64,4 +64,22 @@ class ProductOrder
 
         return $this;
     }
+
+    public function serialize(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'quantity' => $this->getQuantity(),
+            'product' => $this->getProduct()->serialize(),
+        ];
+    }
+
+    public function serializeAll(): array
+    {
+        $data = $this->serialize();
+
+        $data['inOrder'] = $this->getInOrder()->serialize();
+
+        return $data;
+    }
 }
