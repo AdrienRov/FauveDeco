@@ -24,7 +24,7 @@ import Inscription from "./form/Inscription";
 import User from './pages/user/User';
 
 function App() {
-
+  axios.defaults.withCredentials = true
   const urlCategories = "http://127.0.0.1:8000/categories";
 
   const [categories, setCategories] = useState([]);
@@ -46,7 +46,11 @@ function App() {
 
   return (
     <Router>
-      <NavBar />
+
+
+      <NavBar cart={cart} />
+      <Burger categories={categories} />
+
       <div>
         <Routes>
 

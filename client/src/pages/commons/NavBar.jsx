@@ -6,11 +6,15 @@ import Connexion from "../../form/Connexion";
 import Inscription from "../../form/Inscription";
 
 
-function NavBar() {
-    const [visible, setVisible] = useState(false);
-    const [form, setForm] = useState(<Connexion />);
-    const [formKey, setFormKey] = useState(10);
-    const handleCallback = (data) => {
+
+function NavBar(props) {
+	const [visible, setVisible] = useState(false);
+	const [form, setForm] = useState(<Connexion  />);
+	const [formKey, setFormKey] = useState(10);
+
+    const loggedIn = localStorage.getItem("user") !== null;
+
+	const handleCallback = (data) => {
         setVisible(data);
         setFormKey(formKey + 1);
     };
@@ -69,17 +73,39 @@ function NavBar() {
                 </Link>
 
                 <div className="navbar-end divider divider-neutral">
-                    <Button className="btn btn-ghost" onClick={() => handleConnexion()}>
-                        <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"></path>
-                        </svg>
-                    </Button>
+
+                    
+                    {
+                        loggedIn ? (
+                            <Link to="/user" className="btn btn-ghost">
+                                <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M224 288c70.7 0 128-57.3 128-128S294.7 32 224 32S96 89.3 96 160s57.3 128 128 128zm0 32c-88.4 0-176 43.52-176 128v32h352v-32c0-84.48-87.6-128-176-128zm224 128c0-53.02-43-96-96-96H96c-53 0-96 42.98-96 96v96c0 53 43 96 96 96h256c53 0 96-43 96-96v-96z"></path>
+                                </svg>
+                            </Link>
+                                ) : (
+                            <Button className="btn btn-ghost" onClick={() => handleConnexion()}>
+                            <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"></path>
+                            </svg>
+                            </Button>
+                                )
+
+                    }
 
                     <Link to="/shopping" className="btn btn-ghost">
                         <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
                     </Link>
                     <Link to="/panier" className="btn btn-ghost">
+                        <div class="relative flex items-center justify-center">
                         <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg"><path d="M0 24C0 10.7 10.7 0 24 0H69.5c22 0 41.5 12.8 50.6 32h411c26.3 0 45.5 25 38.6 50.4l-41 152.3c-8.5 31.4-37 53.3-69.5 53.3H170.7l5.4 28.5c2.2 11.3 12.1 19.5 23.6 19.5H488c13.3 0 24 10.7 24 24s-10.7 24-24 24H199.7c-34.6 0-64.3-24.6-70.7-58.5L77.4 54.5c-.7-3.8-4-6.5-7.9-6.5H24C10.7 48 0 37.3 0 24zM128 464a48 48 0 1 1 96 0 48 48 0 1 1 -96 0zm336-48a48 48 0 1 1 0 96 48 48 0 1 1 0-96z"></path></svg>
+                        {
+                            props.cart.length > 0 && (
+                                <div className="absolute top-0 right-0 w-4 h-4 bg-red-500 rounded-full flex items-center justify-center text-white text-xs">
+                                    {props.cart.length}
+                                </div>
+                            )
+                        }
+                        </div>
                     </Link>
                 </div>
             </div>

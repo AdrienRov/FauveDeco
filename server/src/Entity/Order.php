@@ -151,6 +151,8 @@ class Order
             $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
         }
 
+        $total = round($total, 2);
+
         return [
             'id' => $this->getId(),
             'date' => $this->getDate()->format('Y-m-d H:i:s'),
