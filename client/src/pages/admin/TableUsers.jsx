@@ -8,7 +8,6 @@ function TableUsers() {
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/users')
             .then((response) => {
-                console.log(response.data);
                 setUsers(response.data);
             })
             .catch((error) => {

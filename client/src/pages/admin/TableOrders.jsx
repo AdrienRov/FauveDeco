@@ -1,20 +1,20 @@
 import axios from 'axios';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState } from 'react';
 
 function TableOrders() {
-
-    const [users, setUsers] = useState([]);
+    const [orders, setOrders] = useState([]);
 
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/orders')
             .then((response) => {
-                console.log(response.data);
-                setUsers(response.data);
+                const ordersArray = [response.data[0][0]];
+                setOrders(ordersArray);
             })
             .catch((error) => {
                 console.log(error);
             });
     }, []);
+
     return (
         <>
             <div className="overflow-x-auto">
@@ -27,25 +27,26 @@ function TableOrders() {
                             <th>Email</th>
                             <th>Adresse</th>
                             <th>Pays</th>
+                            <th>Date</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {users.map((user, i) => (
+                        {Array.isArray(orders) && orders.map((order, i) => (
                             <tr key={i}>
-                                <td>{user.lastName}</td>
-                                <td>{user.firstName}</td>
-                                <td>{user.phone}</td>
-                                <td>{user.email}</td>
-                                <td>{user.address}</td>
-                                <td>{user.country}</td>
+                                <td>{order.client.lastName}</td>
+                                <td>{order.client.firstName}</td>
+                                <td>{order.client.phone}</td>
+                                <td>{order.client.email}</td>
+                                <td>{order.client.address}</td>
+                                <td>{order.client.country}</td>
+                                <td>{new Date(order.date).toLocaleDateString('fr-FR')}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
         </>
-
-    )
+    );
 }
 
 export default TableOrders;

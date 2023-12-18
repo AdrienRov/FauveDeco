@@ -24,16 +24,14 @@ import Admin from './pages/admin/Admin';
 import User from './pages/user/User';
 
 function App() {
-
   const urlCategories = "http://127.0.0.1:8000/categories";
-
   const [categories, setCategories] = useState([]);
-  const [isAdmin, setIsAdmin] = useState(false);
 
 	useEffect(() => {
 		axios.get(urlCategories)
 			.then((response) => {
 				setCategories(response.data);
+        console.log(window.location.pathname)
 			})
 			.catch((error) => {
 				console.log(error);
@@ -47,10 +45,9 @@ function App() {
 
   return (
     <Router>
-      {!true && (<NavBar />)}
+      {window.location.pathname !== "/admin/" && (<NavBar />)}
         <div>
           <Routes>
-
             <Route path='/' element={<Accueil categories={categories} />} />
             <Route path="/accueil" element={<Accueil categories={categories} />} />
             <Route path="/shopping" element={<Shopping />} />
@@ -63,10 +60,9 @@ function App() {
             <Route path="/produit/:id" element={<Produit cart={cart} setCart={setCart} />} />
             <Route path="/user" element={<User />} />
             <Route path="*" element={<Accueil />} />
-
           </Routes>
         </div>
-      {!true && (<Footer />)}
+      {window.location.pathname !== "/admin/" && (<Footer />)}
     </Router>
     
   );
