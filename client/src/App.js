@@ -1,5 +1,4 @@
 import './App.css';
-
 import React, { useEffect, useState, useContext } from 'react';
 import {
   BrowserRouter as Router,
@@ -21,12 +20,14 @@ import Categories from "./pages/categories/Categories";
 import Connexion from "./form/Connexion";
 import Inscription from "./form/Inscription";
 import Account from './pages/account/Account';
+import Admin from './pages/admin/Admin';
 
 function App() {
 
   const urlCategories = "http://127.0.0.1:8000/categories";
 
   const [categories, setCategories] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
       axios.get(urlCategories)
@@ -40,25 +41,27 @@ function App() {
 
   return (
     <Router>
-      <NavBar />
-      <div>
-        <Routes>
+      {!true && (<NavBar />)}
+        <div>
+          <Routes>
 
-          <Route path='/' element={<Accueil categories={categories} />} />
-          <Route path="/accueil" element={<Accueil categories={categories} />} />
-          <Route path="/shopping" element={<Shopping />} />
-          <Route path="/produit" element={<Produit />} />
-          <Route path="/panier" element={<Panier />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/categories/:id" element={<Categories categories={categories} />} />
-          <Route path="/categories" element={<Categories categories={categories} />} />
-          <Route path="/account" element={<Account />} />
-          <Route path="*" element={<Accueil />} />
+            <Route path='/' element={<Accueil categories={categories} />} />
+            <Route path="/accueil" element={<Accueil categories={categories} />} />
+            <Route path="/shopping" element={<Shopping />} />
+            <Route path="/produit" element={<Produit />} />
+            <Route path="/panier" element={<Panier />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/categories/:id" element={<Categories categories={categories} />} />
+            <Route path="/categories" element={<Categories categories={categories} />} />
+            <Route path="/account" element={<Account />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="*" element={<Accueil />} />
 
-        </Routes>
-      </div>
-      <Footer />
+          </Routes>
+        </div>
+      {!true && (<Footer />)}
     </Router>
+    
   );
 }
 
