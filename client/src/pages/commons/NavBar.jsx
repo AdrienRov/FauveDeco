@@ -1,9 +1,34 @@
-import * as React from "react";
+import React, { useEffect, useState, useContext } from 'react';
 import { Link, useLocation } from "react-router-dom";
+import { Button } from "react-daisyui";
+import Modal from "../../components/Modal";
+import Connexion from "../../form/Connexion";
+import Inscription from "../../form/Inscription";
+
 
 function NavBar() {
+	const [visible, setVisible] = useState(false);
+	const [form, setForm] = useState(<Connexion  />);
+	const [formKey, setFormKey] = useState(10);
+	const handleCallback = (data) => {
+        setVisible(data);
+        setFormKey(formKey + 1);
+    };
+	const handleConnexion = () => {
+		setForm(<Connexion parentCallback={handleCallback} handleSwitch={handleInscription} />);
+		setVisible(true);
+		setFormKey(formKey + 1);
+	}	
+	const handleInscription = () => {
+		console.log("Inscription");
+		setForm(<Inscription parentCallback={handleCallback} handleSwitch={handleConnexion} />);
+		setVisible(true);
+		setFormKey(formKey + 1);
+	  };
     return (
-        <div>
+        <div>			
+			<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
+
             <div className="navbar">
                 <div className="navbar-start divider divider-neutral">
                     <Link to="https://www.instagram.com/fauve.lh/" className="mr-5">
@@ -22,11 +47,14 @@ function NavBar() {
                     <p className="text-4xl text-white">fauve</p>
                     <p className="text-white">DECORATION</p>
                 </Link>
-                
+
                 <div className="navbar-end divider divider-neutral">
-                    <Link to="/compte" className="btn btn-ghost">
-                        <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"></path></svg>
-                    </Link>
+                    <Button className="btn btn-ghost" onClick={() => handleConnexion()}>
+                      <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"></path>
+                      </svg>
+                    </Button>
+
                     <Link to="/shopping" className="btn btn-ghost">
                         <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
                     </Link>
@@ -35,9 +63,20 @@ function NavBar() {
                     </Link>
                 </div>
             </div>
+            
+            <div className="navbar pt-0">
+                <div className="navbar-start flex justify-center">
+                    <Link to="/categories/0" className="btn btn-nav back-vert duration-150">Maison et objets</Link>
+                    <Link to="/categories/1" className="btn btn-nav back-vert duration-150">Fragrances</Link>
+                    <Link to="/categories/2" className="btn btn-nav back-vert duration-150">Lifestyle</Link>
+                </div>
+                <div className="navbar-end flex justify-center">
+                    <Link className="btn btn-nav back-vert duration-150">Décorations murales</Link>
+                    <Link className="btn btn-nav back-vert duration-150">Idées cadeaux</Link>
+                </div>
+            </div>
         </div>
-
-    )
+	)
 }
 
 export default NavBar;
