@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
+import axios from 'axios';
 
 function Connexion(props) {
 	const handleCancel = () => {
@@ -7,6 +8,29 @@ function Connexion(props) {
 	}
 	const handleSwitch = () => {
 		props.handleSwitch();
+	}
+
+	const formSubmit = (e) => {
+		e.preventDefault();
+		let email = e.target.email.value;
+		let password = e.target.password.value;
+
+		axios.post('http://localhost:8000/login', {
+			username: email,
+			password: password
+		}).then(async (response) => {
+			console.log(response);
+			if (response.status === 200) {
+				let user = await axios.get('http://localhost:8000/user/self');
+				console.log(user);
+				localStorage.setItem('user', JSON.stringify(user.data));
+				window.location.href = '/user';
+				
+			}
+		}).catch((error) => {
+			console.log(error);
+		})
+
 	}
 
 	return (
@@ -23,7 +47,7 @@ function Connexion(props) {
 			</div>
 			<h2 class="text-2xl font-semibold text-center mb-4">Se connecter</h2>
 			<p class="text-gray-600 text-center mb-6">Entrez votre Email pour vous connecter.</p>
-			<form>
+			<form onSubmit={formSubmit}>
 				<div class="mb-4">
 					<label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Adresse Email *</label>
 					<input type="email" id="email" class="form-input w-full px-4 py-2 border rounded-lg text-gray-700" required placeholder="hello@alignui.com" />

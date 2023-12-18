@@ -4,8 +4,8 @@ import UserInfoField from './UserInfoField';
 import OrderField from './OrderField';
 
 const User = () => {
-  const urlUser = "http://127.0.0.1:8000/user/1";
-  const id = 1;
+  const urlUser = "http://localhost:8000/user/self";
+  const id = 33;
   const [ user , setUser ] = useState([]);
 
   useEffect(() => {
@@ -15,7 +15,7 @@ const User = () => {
     axios.get(`${urlUser}?category=${id}`).then(response => {
         setUser(response.data);
         console.log(response.data);
-    });
+    })
 }, [id]);
 
   // Vérifier si user n'est pas vide

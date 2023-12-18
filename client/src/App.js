@@ -24,6 +24,7 @@ import Admin from './pages/admin/Admin';
 import User from './pages/user/User';
 
 function App() {
+  axios.defaults.withCredentials = true
   const urlCategories = "http://127.0.0.1:8000/categories";
   const [categories, setCategories] = useState([]);
 
