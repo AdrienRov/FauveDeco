@@ -41,7 +41,7 @@ const User = () => {
       </div>
 
       <h2 className="text-2xl font-bold my-4">Historique des commandes</h2>
-      {user.orders.map(order => (
+      {user.orders?.map(order => (
         <OrderField order={order} />
       ))}
     </div>
