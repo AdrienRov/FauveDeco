@@ -6,6 +6,7 @@ import Connexion from "../../form/Connexion";
 import Inscription from "../../form/Inscription";
 
 
+
 function NavBar(props) {
 	const [visible, setVisible] = useState(false);
 	const [form, setForm] = useState(<Connexion  />);
@@ -17,23 +18,43 @@ function NavBar(props) {
         setVisible(data);
         setFormKey(formKey + 1);
     };
-	const handleConnexion = () => {
-		setForm(<Connexion parentCallback={handleCallback} handleSwitch={handleInscription} />);
-		setVisible(true);
-		setFormKey(formKey + 1);
-	}	
-	const handleInscription = () => {
-		console.log("Inscription");
-		setForm(<Inscription parentCallback={handleCallback} handleSwitch={handleConnexion} />);
-		setVisible(true);
-		setFormKey(formKey + 1);
-	  };
+    const handleConnexion = () => {
+        setForm(<Connexion parentCallback={handleCallback} handleSwitch={handleInscription} />);
+        setVisible(true);
+        setFormKey(formKey + 1);
+    }
+    const handleInscription = () => {
+        console.log("Inscription");
+        setForm(<Inscription parentCallback={handleCallback} handleSwitch={handleConnexion} />);
+        setVisible(true);
+        setFormKey(formKey + 1);
+    };
     return (
-        <div>			
-			<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
+        <div>
+            <Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
 
             <div className="navbar">
                 <div className="navbar-start divider divider-neutral">
+                    <div className="dropdown px-15">
+                        <div tabIndex={0} role="button" className="btn btn-nav back-vert duration-150">Catégories<svg class="w-[15px] h-[15px] fill-[#ffffff]" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"></path></svg></div>
+                        <ul className="back-vert dropdown-content z-[1] menu shadow bg-base-100 w-60">
+                            <li><Link to="/categories/0" className="back-vert btn-nav dropdown-item text-black">
+                                Maison et objets
+                            </Link></li>
+                            <li><Link to="/categories/1" className="back-vert btn-nav dropdown-item text-black">
+                                Fragrances
+                            </Link></li>
+                            <li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
+                                Lifestyle
+                            </Link></li>
+                            <li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
+                                Décorations murales
+                            </Link></li>
+                            <li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
+                                Idées cadeaux
+                            </Link></li>
+                        </ul>
+                    </div>
                     <Link to="https://www.instagram.com/fauve.lh/" className="mr-5">
                         <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
                             <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path>
@@ -45,13 +66,14 @@ function NavBar(props) {
                         </svg>
                     </Link>
                 </div>
-                
+
                 <Link to="/accueil" className="navbar-center hidden lg:flex mx-5 mb-0">
                     <p className="text-4xl text-white">fauve</p>
                     <p className="text-white">DECORATION</p>
                 </Link>
 
                 <div className="navbar-end divider divider-neutral">
+
                     
                     {
                         loggedIn ? (
@@ -69,7 +91,6 @@ function NavBar(props) {
                                 )
 
                     }
-                    
 
                     <Link to="/shopping" className="btn btn-ghost">
                         <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"></path></svg>
@@ -89,7 +110,7 @@ function NavBar(props) {
                 </div>
             </div>
         </div>
-	)
+    )
 }
 
 export default NavBar;

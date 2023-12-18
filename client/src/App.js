@@ -46,8 +46,11 @@ function App() {
 
   return (
     <Router>
+
+
       <NavBar cart={cart} />
       <Burger categories={categories} />
+
       <div>
         <Routes>
 
