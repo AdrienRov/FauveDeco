@@ -27,15 +27,15 @@ const User = () => {
     <div className="container mx-auto my-8 p-4 px-10 bg-white shadow-lg rounded-lg">
       <h2 className="text-2xl font-bold mb-4">Informations de l'utilisateur</h2>
 
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 gap-5">
         <UserInfoField label="Nom" value={user.firstName} />
         <UserInfoField label="Prénom" value={user.lastName} />
       </div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 gap-5">
         <UserInfoField label="Email" value={user.email} />
         <UserInfoField label="Téléphone" value={user.phone} />
       </div>
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-4 gap-5">
         <UserInfoField label="Adresse" value={user.address} />
         <UserInfoField label="Pays" value={user.country} />
       </div>

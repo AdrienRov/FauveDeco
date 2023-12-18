@@ -16,29 +16,27 @@ const OrderField = ({ order }) => (
           </div>
           <span className="text-xl font-semibold text-blue-600">{order.total} €</span>
         </section>
-		<ul className="flex space-x-2">
-			{order.productOrders.length <= 3 ? (
-				order.productOrders.map((productOrder, index) => (
-				<li key={index}>
-					<img
-					src={productOrder.product.images[0].url}
-					className="w-12 h-full object-cover rounded"
-					alt={`Product ${index + 1}`}
-					/>
-				</li>
-				))
-			) : (
-				order.productOrders.slice(0, 3).map((productOrder, index) => (
-				<li key={index}>
-					<img
-					src={productOrder.product.images[0].url}
-					className="w-12 h-full object-cover rounded"
-					alt={`Product ${index + 1}`}
-					/>
-				</li>
-				))
-			)}
-			</ul>
+		<ul className="flex gap-2 items-center	">
+		{order.productOrders.slice(0, 3).map((productOrder, index) => (
+			<li key={index}>
+			<img
+				src={productOrder.product.images[0].url}
+				className="w-32 h-full object-cover rounded"
+				alt={`Product ${index + 1}`}
+			/>
+			</li>
+		))}
+		{order.productOrders.length > 3 && (
+			<li className="flex items-center justify-center p-1 h-full rounded">
+			+{order.productOrders.length - 3}
+			</li>
+		)}
+		{order.productOrders.length <= 3 && (
+			<li className="flex items-center justify-center ml-6 h-full rounded">
+				&nbsp;
+			</li>
+		)}
+		</ul>
       </article>
     </a>
   </div>
