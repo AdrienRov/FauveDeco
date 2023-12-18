@@ -7,30 +7,50 @@ import Inscription from "../../form/Inscription";
 
 
 function NavBar() {
-	const [visible, setVisible] = useState(false);
-	const [form, setForm] = useState(<Connexion  />);
-	const [formKey, setFormKey] = useState(10);
-	const handleCallback = (data) => {
+    const [visible, setVisible] = useState(false);
+    const [form, setForm] = useState(<Connexion />);
+    const [formKey, setFormKey] = useState(10);
+    const handleCallback = (data) => {
         setVisible(data);
         setFormKey(formKey + 1);
     };
-	const handleConnexion = () => {
-		setForm(<Connexion parentCallback={handleCallback} handleSwitch={handleInscription} />);
-		setVisible(true);
-		setFormKey(formKey + 1);
-	}	
-	const handleInscription = () => {
-		console.log("Inscription");
-		setForm(<Inscription parentCallback={handleCallback} handleSwitch={handleConnexion} />);
-		setVisible(true);
-		setFormKey(formKey + 1);
-	  };
+    const handleConnexion = () => {
+        setForm(<Connexion parentCallback={handleCallback} handleSwitch={handleInscription} />);
+        setVisible(true);
+        setFormKey(formKey + 1);
+    }
+    const handleInscription = () => {
+        console.log("Inscription");
+        setForm(<Inscription parentCallback={handleCallback} handleSwitch={handleConnexion} />);
+        setVisible(true);
+        setFormKey(formKey + 1);
+    };
     return (
-        <div>			
-			<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
+        <div>
+            <Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
 
             <div className="navbar">
                 <div className="navbar-start divider divider-neutral">
+                    <div className="dropdown px-15">
+                        <div tabIndex={0} role="button" className="btn btn-nav back-vert duration-150">Catégories<svg class="w-[15px] h-[15px] fill-[#ffffff]" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"></path></svg></div>
+                        <ul className="back-vert dropdown-content z-[1] menu shadow bg-base-100 w-60">
+                            <li><Link to="/categories/0" className="back-vert btn-nav dropdown-item text-black">
+                                Maison et objets
+                            </Link></li>
+                            <li><Link to="/categories/1" className="back-vert btn-nav dropdown-item text-black">
+                                Fragrances
+                            </Link></li>
+                            <li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
+                                Lifestyle
+                            </Link></li>
+                            <li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
+                                Décorations murales
+                            </Link></li>
+                            <li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
+                                Idées cadeaux
+                            </Link></li>
+                        </ul>
+                    </div>
                     <Link to="https://www.instagram.com/fauve.lh/" className="mr-5">
                         <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
                             <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path>
@@ -42,7 +62,7 @@ function NavBar() {
                         </svg>
                     </Link>
                 </div>
-                
+
                 <Link to="/accueil" className="navbar-center hidden lg:flex mx-5 mb-0">
                     <p className="text-4xl text-white">fauve</p>
                     <p className="text-white">DECORATION</p>
@@ -50,9 +70,9 @@ function NavBar() {
 
                 <div className="navbar-end divider divider-neutral">
                     <Button className="btn btn-ghost" onClick={() => handleConnexion()}>
-                      <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"></path>
-                      </svg>
+                        <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"></path>
+                        </svg>
                     </Button>
 
                     <Link to="/shopping" className="btn btn-ghost">
@@ -63,20 +83,8 @@ function NavBar() {
                     </Link>
                 </div>
             </div>
-            
-            <div className="navbar pt-0">
-                <div className="navbar-start flex justify-center">
-                    <Link to="/categories/0" className="btn btn-nav back-vert duration-150">Maison et objets</Link>
-                    <Link to="/categories/1" className="btn btn-nav back-vert duration-150">Fragrances</Link>
-                    <Link to="/categories/2" className="btn btn-nav back-vert duration-150">Lifestyle</Link>
-                </div>
-                <div className="navbar-end flex justify-center">
-                    <Link className="btn btn-nav back-vert duration-150">Décorations murales</Link>
-                    <Link className="btn btn-nav back-vert duration-150">Idées cadeaux</Link>
-                </div>
-            </div>
         </div>
-	)
+    )
 }
 
 export default NavBar;

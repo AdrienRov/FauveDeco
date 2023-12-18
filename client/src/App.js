@@ -47,7 +47,6 @@ function App() {
   return (
     <Router>
       <NavBar />
-      <Burger />
       <div>
         <Routes>
 
