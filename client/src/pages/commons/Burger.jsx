@@ -8,7 +8,7 @@ function Burger(props) {
 
     const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
     return (<>
-        <div className="relative">
+        <div className="burger-menu relative">
             <div className="burger-menu max-w-7xl mx-auto px-4 sm:px-6">
                 <div className="flex justify-between items-center py-6 md:justify-start md:space-x-10">
                     <div className="-mr-2 -my-2 md:hidden">
