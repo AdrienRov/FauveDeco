@@ -97,6 +97,8 @@ class OrderController extends AbstractController
             $order->setType($data['type']);
         if (isset($data['status']))
             $order->setStatus($data['status']);
+        if (isset($data['date']))
+            $order->setDate($data['date']);
         if (isset($data['products'])) {
 
             foreach ($order->getProductOrders() as $productOrder) {
