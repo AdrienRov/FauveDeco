@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import NavBarAdmin from './NavBarAdmin';
 import TableUsers from './TableUsers';
 import TableOrders from './TableOrders';
+import TableProducts from './TableProducts';
 
 function Admin(props) {
   const [table, setTable] = useState(<TableUsers />);
@@ -14,6 +15,9 @@ function Admin(props) {
         break;
       case 'orders':
         setTable(<TableOrders />);
+        break;
+        case 'products':
+        setTable(<TableProducts />);
         break;
       // Add cases for other tabs if needed
       default:

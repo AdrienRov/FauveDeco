@@ -47,6 +47,7 @@ function App() {
   return (
     <Router>
       {window.location.pathname !== "/admin/" && (<NavBar />)}
+      {window.location.pathname !== "/admin/" && (<Burger />)}
         <div>
           <Routes>
             <Route path='/' element={<Accueil categories={categories} />} />
