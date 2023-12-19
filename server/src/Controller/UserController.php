@@ -66,6 +66,54 @@ class UserController extends AbstractController
 		]);
 	}
 
+	#[Route('/register', name: 'app_register', methods: ['POST'])]
+	public function register(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+	{
+		// get name and parent from request
+		$request = Request::createFromGlobals();
+		$data = json_decode($request->getContent(), true);
+
+		$requiredKeys = ['email', 'firstName', 'lastName', 'password', 'phone', 'address', 'country'];
+
+		foreach ($requiredKeys as $key) {
+			if (!isset($data[$key])) {
+				return $this->json([
+					'status' => false,
+					'error' => "Missing or invalid key: $key",
+				]);
+			}
+		}
+
+		// if email already exists
+		$user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+		if ($user) {
+			return $this->json([
+				'status' => false,
+				'error' => 'Email already exists'
+			]);
+		}
+
+		$user = new User();
+		$user->setEmail($data['email']);
+		$user->setFirstName($data['firstName']);
+		$user->setLastName($data['lastName']);
+		$user->setRole(1);
+		$user->setPhone($data['phone']);
+		$user->setAddress($data['address']);
+		$user->setCountry($data['country']);
+
+		$hashed_password = $passwordHasher->hashPassword(
+			$user,
+			$data['password']
+		);
+		$user->setPassword($hashed_password);
+
+		$entityManager->persist($user);
+		$entityManager->flush();
+
+		return $this->json($user->serializeAll());
+	}
+
 	#[Route('/user', name: 'app_user_create', methods: ['POST'])]
 	public function create(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
 	{

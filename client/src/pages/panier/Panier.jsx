@@ -109,35 +109,32 @@ function Panier(props) {
 
                     return (<>
 
-                    <div class="mb-2 flex justify-between">
-                        <p class="text-gray-700">Adresse de livraison</p>
-                    </div>
+                        <div class="mb-2 flex justify-between">
+                            <p class="text-gray-700">Adresse de livraison</p>
+                        </div>
 
-                    <input type="text" placeholder="Prénom" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                    <input type="text" placeholder="Nom" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    <input type="text" placeholder="Adresse" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={address} onChange={(e) => setAddress(e.target.value)} />
-                    <input type="text" placeholder="Pays" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={country} onChange={(e) => setCountry(e.target.value)} />
+                        <input type="text" placeholder="Prénom" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                        <input type="text" placeholder="Nom" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                        <input type="text" placeholder="Adresse" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={address} onChange={(e) => setAddress(e.target.value)} />
+                        <input type="text" placeholder="Pays" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={country} onChange={(e) => setCountry(e.target.value)} />
 
-                    <hr class="my-4" />
+                        <hr class="my-4" />
 
-                    <div class="mb-2 flex justify-between">
-                        <p class="text-gray-700">Type de livraison</p>
-                    </div>
+                        <div class="mb-2 flex justify-between">
+                            <p class="text-gray-700">Type de livraison</p>
+                        </div>
 
-                    <div class="flex">
-                        <input type="radio" class="mx-4" id="click-collect" name="type-livraison" value="click-collect" {...typeLivraison === "click-collect" && "checked"} onChange={(e) => setTypeLivraison(e.target.value)} />
-                        <label for="click-collect">Click and collect</label>
-                    </div>
+                        <div class="flex">
+                            <input type="radio" class="mx-4" id="click-collect" name="type-livraison" value="click-collect" {...typeLivraison === "click-collect" && "checked"} onChange={(e) => setTypeLivraison(e.target.value)} checked />
+                            <label for="click-collect">Click and collect</label>
+                        </div>
 
-                    <div class="flex">
-                        <input type="radio" class="mx-4" id="livraison-domicile" name="type-livraison" value="livraison-domicile" {...typeLivraison === "livraison-domicile" && "checked"} onChange={(e) => setTypeLivraison(e.target.value)} />
-                        <label for="livraison-domicile">Livraison à domicile</label>
-                    </div>
+                        <div class="flex">
+                            <input type="radio" class="mx-4" id="livraison-domicile" name="type-livraison" value="livraison-domicile" {...typeLivraison === "livraison-domicile" && "checked"} onChange={(e) => setTypeLivraison(e.target.value)} />
+                            <label for="livraison-domicile">Livraison à domicile</label>
+                        </div>
 
-
-
-
-                    <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600" onClick={() => setStep(3)} disabled={!verifyStep()}>Continuer</button>
+                        <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600" onClick={() => setStep(3)} disabled={!verifyStep()}>Continuer</button>
 
                     </>)
                     
