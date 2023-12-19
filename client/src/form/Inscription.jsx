@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import LoadingSpinner from '../components/LoadingSpinner';
 function Inscription(props) {
 	const handleCancel = () => {
 		let visible = false;
@@ -10,9 +11,12 @@ function Inscription(props) {
 	}
 
 	const [error, setError] = useState(null);
+	const [spinner, setSpinner] = useState(false);
+
 
 	const formSubmit = (e) => {
 		e.preventDefault();
+		setSpinner(true);
 		let email = e.target.email.value;
 		let password = e.target.password.value;
 		let firstName = e.target.first_name.value;
@@ -38,22 +42,35 @@ function Inscription(props) {
 				}).then(async (response) => {
 					console.log(response);
 					if (response.status === 200) {
-						let user = await axios.get('http://localhost:8000/user/self');
+						let user = await axios.get('http://localhost:8000/user/self').catch((error) => {
+							console.log(error);
+							setSpinner(false);
+						});
+						if (!user) {
+							return;
+						}
 						console.log(user);
 						localStorage.setItem('user', JSON.stringify(user.data));
 						window.location.href = '/user';
-						
 					}
 				}).catch((error) => {
 					console.log(error);
+					setSpinner(false);
 				})
 			} else {
 				setError(response.data.message);
+				setSpinner(false);
 			}
 		}).catch((error) => {
 			console.log(error);
 		})
 
+	}
+
+	if (spinner) {
+		return (
+			<LoadingSpinner	/>
+		);
 	}
 
 	return (
