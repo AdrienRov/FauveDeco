@@ -1,7 +1,11 @@
 import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 function Connexion(props) {
+
+	const [spinner, setSpinner] = useState(false);
+
 	const handleCancel = () => {
 		let visible = false;
 		props.parentCallback(visible);
@@ -14,6 +18,7 @@ function Connexion(props) {
 		e.preventDefault();
 		let email = e.target.email.value;
 		let password = e.target.password.value;
+		setSpinner(true);
 
 		axios.post('http://localhost:8000/login', {
 			username: email,
@@ -21,7 +26,13 @@ function Connexion(props) {
 		}).then(async (response) => {
 			console.log(response);
 			if (response.status === 200) {
-				let user = await axios.get('http://localhost:8000/user/self');
+				let user = await axios.get('http://localhost:8000/user/self').catch((error) => {
+					console.log(error);
+					setSpinner(false);
+				});
+				if (!user) {
+					return;
+				}
 				console.log(user);
 				localStorage.setItem('user', JSON.stringify(user.data));
 				window.location.href = '/user';
@@ -29,8 +40,15 @@ function Connexion(props) {
 			}
 		}).catch((error) => {
 			console.log(error);
+			setSpinner(false);
 		})
 
+	}
+
+	if (spinner) {
+		return (
+			<LoadingSpinner />
+		);
 	}
 
 	return (

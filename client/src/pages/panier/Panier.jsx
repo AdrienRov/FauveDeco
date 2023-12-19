@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import * as ReactDom from "react-dom";
+import LoadingSpinner from "../../components/LoadingSpinner";
 function Panier(props) {
 
     const { cart, setCart } = props;
     const [step, setStep] = useState(1);
 
-    const user = JSON.parse(localStorage.getItem('user'));
+    const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
 
     const fixPrice = (price) => {
         if (typeof price !== "number") {
@@ -46,6 +47,7 @@ function Panier(props) {
 
     const SidePanel = () => {
         
+        const [email, setEmail] = useState(user?.email ?? "");
         const [firstName, setFirstName] = useState(user?.firstName ?? "");
         const [lastName, setLastName] = useState(user?.lastName ?? "");
         const [address, setAddress] = useState(user?.address ?? "");
@@ -62,6 +64,10 @@ function Panier(props) {
                     return true;
                     break;
                 case 2:
+                    if (user !== null)
+                        return true;
+                    if (email.length < 2)
+                        return false;
                     if (firstName.length < 2)
                         return false;
                     if (lastName.length < 2)
@@ -104,19 +110,18 @@ function Panier(props) {
 
                 break;
             case 2:
-                    // Adresse de livraison
-                    // Fields: firstName, lastName, address, country
-
+                const isLogged = user !== null;
                     return (<>
 
                         <div class="mb-2 flex justify-between">
                             <p class="text-gray-700">Adresse de livraison</p>
                         </div>
-
-                        <input type="text" placeholder="Prénom" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                        <input type="text" placeholder="Nom" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                        <input type="text" placeholder="Adresse" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={address} onChange={(e) => setAddress(e.target.value)} />
-                        <input type="text" placeholder="Pays" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={country} onChange={(e) => setCountry(e.target.value)} />
+                        
+                        <input type="text" placeholder="Email" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLogged} />
+                        <input type="text" placeholder="Prénom" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={firstName} onChange={(e) => setFirstName(e.target.value)} disabled={isLogged} />
+                        <input type="text" placeholder="Nom" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={lastName} onChange={(e) => setLastName(e.target.value)} disabled={isLogged} />
+                        <input type="text" placeholder="Adresse" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={address} onChange={(e) => setAddress(e.target.value)} disabled={isLogged} />
+                        <input type="text" placeholder="Pays" class="my-2 w-full rounded-md bg-gray-100 py-1.5 px-2 font-medium text-gray-700 hover:bg-gray-200" value={country} onChange={(e) => setCountry(e.target.value)} disabled={isLogged} />
 
                         <hr class="my-4" />
 
@@ -135,9 +140,17 @@ function Panier(props) {
                         </div>
 
                         <button class="mt-6 w-full rounded-md bg-blue-500 py-1.5 font-medium text-blue-50 hover:bg-blue-600" onClick={() => setStep(3)} disabled={!verifyStep()}>Continuer</button>
-
                     </>)
-                    
+                
+                break;
+            case 3:
+
+                
+
+                return (
+                    <LoadingSpinner />
+                )
+                break;
 
 
             default:
