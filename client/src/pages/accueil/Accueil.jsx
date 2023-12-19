@@ -14,6 +14,13 @@ const Accueil = (props) => {
 
     const [current, setCurrent] = useState(0);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setCurrent(current => (current + 1) % carouselItems.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [carouselItems.length]);
+
 
     return (
 
@@ -38,9 +45,6 @@ const Accueil = (props) => {
                     }
                 </div>
             </div>
-
-
-
             <div className="flex justify-center">
                 <div className="grid grid-cols-2 gap-8 p-10 h-3/5 w-3/5">
                     {categories?.filter(c => !c.parent && c.imageUrl).map(categ => (
