@@ -67,10 +67,17 @@ class ProductOrder
 
     public function serialize(): array
     {
+        $total = 0;
+
+        $total += $this->getProduct()->getPrice() * $this->getQuantity();
+
+        $total = round($total, 2);
+        
         return [
             'id' => $this->getId(),
             'quantity' => $this->getQuantity(),
             'product' => $this->getProduct()->serialize(),
+            'total' => $total,
         ];
     }
 

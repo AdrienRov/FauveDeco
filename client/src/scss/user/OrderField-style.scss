@@ -1,0 +1,14 @@
+input.order_checkbox:checked {
+
+	~ article .order_preview {
+		display: none;
+	}
+  
+	~ article .order_detail {
+		display: flex;
+	}
+  }
+
+  article .order_detail {
+	display: none;
+  }
