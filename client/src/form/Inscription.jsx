@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-
+import axios from 'axios';
 function Inscription(props) {
 	const handleCancel = () => {
 		let visible = false;
@@ -8,6 +8,54 @@ function Inscription(props) {
 	const handleSwitch = () => {
 		props.handleSwitch();
 	}
+
+	const [error, setError] = useState(null);
+
+	const formSubmit = (e) => {
+		e.preventDefault();
+		let email = e.target.email.value;
+		let password = e.target.password.value;
+		let firstName = e.target.first_name.value;
+		let lastName = e.target.last_name.value;
+		let address = e.target.address.value;
+		let phone = e.target.phone.value;
+		
+
+		axios.post('http://localhost:8000/register', {
+			firstName: firstName,
+			lastName: lastName,
+			address: address,
+			phone: phone,
+			email: email,
+			password: password,
+			country: "France"
+		}).then(async (response) => {
+			if (response.data.status !== false) {
+				// login user
+				axios.post('http://localhost:8000/login', {
+					username: email,
+					password: password
+				}).then(async (response) => {
+					console.log(response);
+					if (response.status === 200) {
+						let user = await axios.get('http://localhost:8000/user/self');
+						console.log(user);
+						localStorage.setItem('user', JSON.stringify(user.data));
+						window.location.href = '/user';
+						
+					}
+				}).catch((error) => {
+					console.log(error);
+				})
+			} else {
+				setError(response.data.message);
+			}
+		}).catch((error) => {
+			console.log(error);
+		})
+
+	}
+
 	return (
 		<div class="relative bg-white p-4 rounded-lg shadow-lg max-w-sm w-full">
 			<button className="p-2 rounded-full hover:bg-gray-200 absolute top-0 right-0" onClick={handleCancel}>
@@ -22,10 +70,24 @@ function Inscription(props) {
 			</div>
 			<h2 class="text-2xl font-semibold text-center mb-4">Créer un nouveau compte</h2>
 			<p class="text-gray-600 text-center mb-6">Entrez vos informations pour vous inscrire.</p>
-			<form>
+			<form onSubmit={formSubmit}>
+				<div class="flex space-x-4 mb-2">
+					<div class="mb-4">
+						<label for="first_name" class="block text-gray-700 text-sm font-semibold mb-2">Prénom *</label>
+						<input type="text" id="first_name" class="form-input w-full px-4 py-2 border rounded-lg text-gray-700" required placeholder="John" />
+					</div>
+					<div class="mb-4">
+						<label for="last_name" class="block text-gray-700 text-sm font-semibold mb-2">Nom *</label>
+						<input type="text" id="last_name" class="form-input w-full px-4 py-2 border rounded-lg text-gray-700" required placeholder="Doe" />
+					</div>
+				</div>
 				<div class="mb-4">
-					<label for="fullName" class="block text-gray-700 text-sm font-semibold mb-2">Nom entier *</label>
-					<input type="text" id="fullName" className="form-input w-full px-4 py-2 border rounded-lg text-gray-700" required placeholder="James Brown" />
+					<label for="phone" class="block text-gray-700 text-sm font-semibold mb-2">Numéro de téléphone *</label>
+					<input type="tel" id="phone" class="form-input w-full px-4 py-2 border rounded-lg text-gray-700" required placeholder="06 12 34 56 78" />
+				</div>
+				<div class="mb-4">
+					<label for="address" class="block text-gray-700 text-sm font-semibold mb-2">Adresse *</label>
+					<input type="text" id="address" class="form-input w-full px-4 py-2 border rounded-lg text-gray-700" required placeholder="1 rue de la Paix" />
 				</div>
 				<div class="mb-4">
 					<label for="email" class="block text-gray-700 text-sm font-semibold mb-2">Adresse Email *</label>
@@ -42,6 +104,9 @@ function Inscription(props) {
 					<a href="#" class="text-blue-500 hover:underline"> Termes et Conditions</a>.
 				</p>
 			</form>
+			{
+				error && <p class="text-red-500 text-xs italic mt-4">{error}</p>
+			}
 			<button class="w-full px-4 py-2 rounded-lg focus:outline-none text-sm underline" onClick={handleSwitch}>Vous avez déjà un compte</button>
 		</div>
 	);
