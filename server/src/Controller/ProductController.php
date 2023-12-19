@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\Image;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -116,7 +117,6 @@ class ProductController extends AbstractController
         return $product;
     }
 
-
     private function updateProductFromRequest(Product $product, array $data): Product
     {
         $name = $data['name'] ?? null;
@@ -142,5 +142,56 @@ class ProductController extends AbstractController
         }
 
         return $product;
+    }
+
+    #[Route('/product/{id}/add-image', name: 'app_product_add_image', methods: ['POST'])]
+    public function addImage(Request $request, Product $product): JsonResponse
+    {
+        $uploadedFile = $request->files->get('image');
+    
+        // Handle file upload logic, move the file to the desired directory, etc.
+        // You may want to use a service or manager class for handling file uploads.
+    
+        // Move the uploaded file to a directory
+        $uploadsDirectory = $this->getParameter('images_directory'); // This parameter in services.yaml or config file
+        $fileName = md5(uniqid()) . '.' . $uploadedFile->getClientOriginalExtension();
+        $uploadedFile->move($uploadsDirectory, $fileName);
+    
+        $image = new Image();
+        $image->setUrl($fileName);
+        $image->setProduct($product);
+    
+        $this->entityManager->persist($product);
+        $this->entityManager->persist($image);
+        $this->entityManager->flush();
+    
+        return $this->json(['status' => true]);
+    }
+
+    #[Route('/product/{id}/remove-image/{imageId}', name: 'app_product_remove_image', methods: ['DELETE'])]
+    public function removeImage(Product $product, int $imageId): JsonResponse
+    {
+        $imageRepository = $this->entityManager->getRepository(Image::class);
+        $image = $imageRepository->find($imageId);
+
+        if (!$image) {
+            return $this->json(['status' => false, 'error' => 'Image not found.'], 404);
+        }
+
+        if ($image->getProduct()->getId() !== $product->getId()) {
+            return $this->json(['status' => false, 'error' => 'Image not found for the specified product.'], 404);
+        }
+
+        $uploadsDirectory = $this->getParameter('images_directory');
+        $imagePath = $uploadsDirectory . '/' . $image->getUrl();
+        if (file_exists($imagePath)) {
+            unlink($imagePath);
+        }
+
+        $product->removeImage($image);
+        $this->entityManager->remove($image);
+        $this->entityManager->flush();
+
+        return $this->json(['status' => true]);
     }
 }
