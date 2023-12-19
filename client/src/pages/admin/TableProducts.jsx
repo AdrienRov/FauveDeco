@@ -26,11 +26,11 @@ function TableProducts() {
             .then((response) => {
                 const productsArray = [response.data[0]];
                 setproducts(productsArray);
-                setLoading(false); // Mettre le chargement à false une fois les données chargées
+                setLoading(false); 
             })
             .catch((error) => {
                 console.log(error);
-                setLoading(false); // Mettre le chargement à false en cas d'erreur
+                setLoading(false); 
             });
     }, []);
 
