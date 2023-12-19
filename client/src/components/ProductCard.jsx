@@ -28,6 +28,9 @@ const ProductCard = (props) => {
     }
 
     const changeQuantity = (produit, quantity) => {
+        if (typeof quantity !== "number") {
+            quantity = parseInt(quantity);
+        }
         if (quantity < 1) {
             return;
         }
