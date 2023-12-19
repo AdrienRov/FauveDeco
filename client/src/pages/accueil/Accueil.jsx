@@ -1,58 +1,69 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import { Link, useLocation } from "react-router-dom";
+import $ from 'jquery';
 
-function Accueil(props) {
-    //recuperation des categories depuis le props
+const Accueil = (props) => {
     const { categories } = props;
+
+    const latestProducts = categories.flatMap(c => c.products).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 4);
+
+    const carouselItems = categories.filter(c => c.imageUrl).sort(c => c.products.length).slice(0, 4).map(p => ({
+        id: p.id,
+        image: p.imageUrl
+    }));
+
+    const [current, setCurrent] = useState(0);
+
     useEffect(() => {
-        console.log(categories);
-    }, []);
+        const interval = setInterval(() => {
+            setCurrent(current => (current + 1) % carouselItems.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [carouselItems.length]);
+
+
     return (
 
         <div className="container mx-auto">
-            <div className="carousel w-full h-96">
-                <div id="item1" className="carousel-item w-full">
-                    <img src="https://files.clemaroundthecorner.com/wp-content/uploads/2023/01/piece-de-vie-salon-lumineux-tapis-colore-canape-porte-fenetre-vitree.jpg" className="w-full object-cover" />
+            <div>
+                <div className="carousel w-full h-96">
+
+                    {
+                        carouselItems.map((item, index) => (
+                            index === current && (
+                                <Link to={`/categories/${item.id}`} key={item.id} id={`item${index + 1}`} className={`carousel-item w-full ${index === current ? 'active' : ''}`}>
+                                    <img src={item.image} className="w-full object-cover" alt={`Item ${index + 1}`} />
+                                </Link>)
+                        ))
+                    }
                 </div>
-                <div id="item2" className="carousel-item w-full">
-                    <img src="https://img-4.linternaute.com/M5Sk18UdXplN9AeXVOJoJdudja4=/fit-in/x630/smart/filters:fill(1D1D1B)/f614700fdda64d22be4722acd3912fef/ccmcms-linternaute/11577654.jpg" className="w-full object-cover" />
-                </div>
-                <div id="item3" className="carousel-item w-full">
-                    <img src="https://www.poulettemagique.com/wp-content/uploads/2015/02/salon-poulette-magique-deco-8.jpg" className="w-full object-cover" />
-                </div>
-                <div id="item4" className="carousel-item w-full">
-                    <img src="https://www.onedayevent.fr/uploads/files/url-t-site1media-6886.jpg" className="w-full object-cover" />
+                <div className="flex justify-center w-full py-2 gap-2">
+                    {
+                        carouselItems.map((item, index) => (
+                            <div key={item.id} className={`w-4 h-4 rounded-full bg-white cursor-pointer ${index === current ? 'bg-gray-900' : 'bg-gray-500'}`} onClick={() => setCurrent(index)}></div>
+                        ))
+                    }
                 </div>
             </div>
-            <div className="flex justify-center w-full py-2 gap-2">
-                <a href="#item1" className="btn btn-xs gris-background"></a>
-                <a href="#item2" className="btn btn-xs gris-background"></a>
-                <a href="#item3" className="btn btn-xs gris-background"></a>
-                <a href="#item4" className="btn btn-xs gris-background"></a>
-            </div>
-
-
-
             <div className="flex justify-center">
                 <div className="grid grid-cols-2 gap-8 p-10 h-3/5 w-3/5">
-                    {categories?.filter(c => !c.parent).map(categ => (
-
-                       <Link to={`/categories/${categ.id}`} className="relative overflow-hidden bg-gray-100 p-1 categorie">
-                       <img src={categ.imageUrl} alt="car!" className="w-full h-full object-cover" />
-                       <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
-                           <p className="font-bold categorie-title">{categ.name}</p>
-                       </div>
-                       </Link>
+                    {categories?.filter(c => !c.parent && c.imageUrl).map(categ => (
+                        <Link to={`/categories/${categ.id}`} className="relative overflow-hidden bg-gray-100 p-1 categorie">
+                            <img src={categ.imageUrl} alt="car!" className="w-full h-full object-cover" />
+                            <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
+                                <p className="font-bold categorie-title">{categ.name}</p>
+                            </div>
+                        </Link>
                     ))}
                 </div>
             </div>
 
-            <div className="divider my-12" />
+            <hr className="my-10" />
 
             <div className="flex justify-center px-20">
                 <div className="flex ligne items-center">
                     <div className="mr-16">
-                        <img src="https://lh3.googleusercontent.com/p/AF1QipOu_F6OZUWjNWWRAUVw-M2yavpyJ9Rex9mf98OR=s1360-w1360-h1020" alt="Boutique" className="" />
+                        <img src="https://lh3.googleusercontent.com/p/AF1QipOu_F6OZUWjNWWRAUVw-M2yavpyJ9Rex9mf98OR=s1360-w1360-h1020" alt="Boutique" className="rounded-xl" />
                     </div>
 
                     <div className="flex flex-col justify-center">
@@ -63,116 +74,96 @@ function Accueil(props) {
                 </div>
             </div>
 
-
-            <div className="flex justify-center items-center divider my-12">
-                <div className="titre-background titre-50 p-3 text-center">
-                    <h2 className="text-2xl font-bold">
-                        Produit du mois
-                    </h2>
-                </div>
-            </div>
+            <hr className="my-10" />
 
             <div className="flex justify-center items-center">
-                <div class="flex mt-5 items-center justify-center">
-                    <div class="relative flex w-full max-w-[48rem] flex-row bg-white bg-clip-border text-gray-700 shadow-md">
-                        <div class="relative m-0 w-2/5 shrink-0 overflow-hidden bg-white bg-clip-border text-gray-700">
-                            <img
-                                src="https://deconordsud.com/cdn/shop/files/71094820_01_1_720x.jpg?v=1695653873"
-                                alt="image"
-                                class="h-full w-full object-cover"
-                            />
-                        </div>
-                        <div class="p-6">
-                            <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
-                                Bougie antique
-                            </h4>
-                            <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
-                                Plongez dans une ambiance empreinte d'élégance avec notre Bougie Décorative Antique.
-                            </p>
+                <div className="max-w-3xl">
+                    <div className="rounded-xl titre-background p-3 text-center">
+                        <h2 className="text-2xl font-bold">
+                            Produit du mois
+                        </h2>
+                    </div>
 
-                            <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
-                                Soigneusement conçue pour évoquer le charme du passé, cette bougie enchanteresse illumine votre espace avec une lueur chaleureuse.
-                            </p>
+                    <div class="flex mt-5 items-center justify-center">
+                        <div class="relative flex w-full max-w-[48rem] flex-row rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+                            <div class="relative m-0 w-2/5 shrink-0 overflow-hidden rounded-xl rounded-r-none bg-white bg-clip-border text-gray-700">
+                                <img
+                                    src="https://deconordsud.com/cdn/shop/files/71094820_01_1_720x.jpg?v=1695653873"
+                                    alt="image"
+                                    class="h-full w-full object-cover"
+                                />
+                            </div>
+                            <div class="p-6">
+                                <h6 class="mb-4 block font-sans text-base font-semibold uppercase leading-relaxed tracking-normal vert-color antialiased">
+                                    10 000€
+                                </h6>
+                                <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
+                                    Bougie antique
+                                </h4>
+                                <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
+                                    Plongez dans une ambiance empreinte d'élégance avec notre Bougie Décorative Antique.
+                                </p>
 
-                            <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
-                                Fabriquée avec une attention méticuleuse aux détails, elle ajoute une touche sophistiquée à votre décor, diffusant un parfum subtil qui transporte vos sens vers une époque révolue.
-                            </p>
-                            <h6 class="mb-4 block font-sans text-base font-semibold uppercase leading-relaxed tracking-normal vert-color antialiased">
-                                10 000€
-                            </h6>
-                            <a class="inline-block" href="#">
-                                <button
-                                    class="flex select-none items-center gap-2 rounded-lg py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase titre-color transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                                    type="button"
-                                >
-                                    Regarder
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke-width="2"
-                                        stroke="currentColor"
-                                        aria-hidden="true"
-                                        class="h-4 w-4"
+                                <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
+                                    Soigneusement conçue pour évoquer le charme du passé, cette bougie enchanteresse illumine votre espace avec une lueur chaleureuse.
+                                </p>
+
+                                <p class="mb-8 block font-sans text-base font-normal leading-relaxed text-gray-700 antialiased">
+                                    Fabriquée avec une attention méticuleuse aux détails, elle ajoute une touche sophistiquée à votre décor, diffusant un parfum subtil qui transporte vos sens vers une époque révolue.
+                                </p>
+                                <a class="inline-block" href="#">
+                                    <button
+                                        class="flex select-none items-center gap-2 rounded-lg py-3 px-6 text-center align-middle font-sans text-xs font-bold uppercase titre-color transition-all hover:bg-pink-500/10 active:bg-pink-500/30 disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                                        type="button"
                                     >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
-                                        ></path>
-                                    </svg>
-                                </button>
-                            </a>
+                                        Regarder
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="2"
+                                            stroke="currentColor"
+                                            aria-hidden="true"
+                                            class="h-4 w-4"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
+                                            ></path>
+                                        </svg>
+                                    </button>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
 
-            
+            <hr className="my-10" />
 
-            <div className="divider flex justify-center items-center my-12">
-                <div class="text-center  titre-background titre-50 p-3 text-center">
-                    <h2 class="text-2xl font-bold">Nouveaux arrivages</h2>
-                </div>
+            <div class="text-center mt-8 rounded-xl titre-background p-3 text-center">
+                <h2 class="text-2xl font-bold">Nouveaux arrivages</h2>
             </div>
-
 
             <div class="flex items-center justify-center pb-5 pt-5">
+                {
+                    latestProducts.map(product => (
+                        <div class="mx-auto px-5">
+                            <Link to={`/produit/${product.id}`}>
+                                <div class="max-w-xs cursor-pointer rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
+                                    <img class="w-full h-56 rounded-lg object-cover object-center" src={product.images[0].url} alt="product" />
+                                    <p class="mt-4 font-bold text-center">{product.name}</p>
+                                    <p class="mb-4 text-gray-800 text-center">{product.price}€</p>
+                                </div>
+                            </Link>
+                        </div>
+                    ))
+                }
 
-                <div class="mx-auto px-5">
-                    <div class="max-w-xs cursor-pointer back-rose-clair p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                        <img class="w-full h-56 object-cover object-center" src="https://voisla.fr/1778-large_default/serviettes-de-table-lot-de-2-alsace-pop.jpg" alt="product" />
-                        <p class="mt-4 font-bold text-center">Product Name</p>
-                        <p class="mb-4 text-gray-800 text-center">79€</p>
-                    </div>
-                </div>
-
-                <div class="mx-auto px-5">
-                    <div class="max-w-xs cursor-pointer rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                        <img class="w-full h-56 rounded-lg object-cover object-center" src="https://www.guideastuces.com/image_upload/877a0a4d97cc1667e97e390086a7a3d0/1437473139_0.jpg" alt="product" />
-                        <p class="mt-4 font-bold text-center">Product Name</p>
-                        <p class="mb-4 text-gray-800 text-center">79€</p>
-                    </div>
-                </div>
-
-                <div class="mx-auto px-5">
-                    <div class="max-w-xs cursor-pointer rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                        <img class="w-full h-56 rounded-lg object-cover object-center" src="https://cdn.shopify.com/s/files/1/0622/5618/5533/files/lampe-de-chevet-design-colore-2.png?v=1664226346" alt="product" />
-                        <p class="mt-4 font-bold text-center">Product Name</p>
-                        <p class="mb-4 text-gray-800 text-center">79€</p>
-                    </div>
-                </div>
-
-                <div class="mx-auto px-5">
-                    <div class="max-w-xs cursor-pointer rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                        <img class="w-full h-56 rounded-lg object-cover object-center" src="https://maelacreations.fr/wp-content/uploads/2022/12/sac-original-vintage-colore-girly-orange-rose-vert-10.jpg" alt="product" />
-                        <p class="mt-4 font-bold text-center">Product Name</p>
-                        <p class="mb-4 text-gray-800 text-center">79€</p>
-                    </div>
-                </div>
             </div>
-        </div >
+        </div>
 
     )
 }

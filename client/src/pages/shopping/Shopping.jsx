@@ -12,7 +12,7 @@ function Produit(props) {
     const [loading, setLoading] = useState(true);
 
     const { cart, setCart } = props;
-    
+
 
     useEffect(() => {
         console.log("loading: " + loading)
@@ -33,17 +33,18 @@ function Produit(props) {
     }, [loading]);
 
     return (
-        <div className="container">
-            <InfiniteScroll pageStart={0} loadMore={() => setLoading(true)} hasMore={true} loader={<div className="loader" key={0}>Loading ...</div>}>
+        <div className="flex justify-center">
+            <div className="container">
+                <InfiniteScroll pageStart={0} loadMore={() => setLoading(true)} hasMore={true} loader={<div className="loader" key={0}>Loading ...</div>}>
 
-                <div className="row">
-                    {produits.map((produit) => (
-                        <ProductCard key={produit.id} product={produit} cart={cart} setCart={setCart} />
-                    ))}
+                    <div className="row">
+                        {produits.map((produit) => (
+                            <ProductCard key={produit.id} product={produit} cart={cart} setCart={setCart} />
+                        ))}
 
-                </div>
-            </InfiniteScroll>
-
+                    </div>
+                </InfiniteScroll>
+            </div>
         </div>
     );
 }

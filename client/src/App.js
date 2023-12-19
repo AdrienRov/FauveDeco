@@ -46,10 +46,11 @@ function App() {
 
   return (
     <Router>
-      {window.location.pathname !== "/admin/" && (<NavBar />)}
-      {window.location.pathname !== "/admin/" && (<Burger />)}
+      {window.location.pathname !== "/admin/" && (<NavBar cart={cart} />)}
+      {window.location.pathname !== "/admin/" && (<Burger categories={categories} />)}
         <div>
           <Routes>
+          
             <Route path='/' element={<Accueil categories={categories} />} />
             <Route path="/accueil" element={<Accueil categories={categories} />} />
             <Route path="/shopping" element={<Shopping />} />
@@ -62,6 +63,7 @@ function App() {
             <Route path="/produit/:id" element={<Produit cart={cart} setCart={setCart} />} />
             <Route path="/user" element={<User />} />
             <Route path="*" element={<Accueil />} />
+
           </Routes>
         </div>
       {window.location.pathname !== "/admin/" && (<Footer />)}
