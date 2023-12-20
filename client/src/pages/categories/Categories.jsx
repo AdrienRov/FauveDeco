@@ -9,6 +9,8 @@ function Categories(props) {
     let { id } = useParams();
     let { categories, cart, setCart } = props;
 
+    const [search, setSearch] = useState("");
+
 
     id = parseInt(id);
 
@@ -36,9 +38,16 @@ function Categories(props) {
     if (!category) {
         // Categories as square cards with image background 2 columns
         return (<>
+        {
+            // search bar
+        }
+            <div className="flex justify-center">
+                <input type="search" name="q" className="py-2 text-sm rounded-md pl-4 focus:text-gray-900 w-full m-5" placeholder="Rechercher..." autoComplete="off" value={search} onChange={(e) => setSearch(e.target.value)} />
+            </div>
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4 px-4">
                 {
-                    categories.map(category => (<Link key={category.id} to={`/categories/${category.id}`} className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">
+                    categories.map(category => (category.name.toLowerCase().includes(search.toLowerCase()) &&
+                    <Link key={category.id} to={`/categories/${category.id}`} className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">
                         <div className="aspect-square bg-white mt-2 shadow-lg p-4" style={{ backgroundImage: `url(${category.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
                             {category.name}
                         </div>
@@ -47,12 +56,23 @@ function Categories(props) {
             </div>
         </>)
     }
-
     
     return (<>
         <div className="grid grid-cols-10 gap-4 mt-4">
             <div className="col-span-10 md:col-span-3">
                 <div className="bg-white rounded-lg shadow-lg p-4">
+                    <Link to="/categories" className="text-blue-600 hover:text-blue-800">
+                        <div className="bg-white mt-2 shadow-lg p-4">
+                            <span className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">Retour au catégories</span>
+                        </div>
+                    </Link>
+                    {
+                        category.parent && (<Link to={`/categories/${category.parent}`} className="text-blue-600 hover:text-blue-800">
+                            <div className="bg-white mt-2 shadow-lg p-4">
+                                <span className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">Retour à la catégorie parente</span>
+                            </div>
+                        </Link>)
+                    }
                     {
                         category.subCategories.map(child => (<Link to={`/categories/${child.id}`} className="text-blue-600 hover:text-blue-800">
                             <div key={child.id} className="bg-white mt-2 shadow-lg p-4" style={{ backgroundImage: `url(${child.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
