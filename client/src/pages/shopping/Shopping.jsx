@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 
 import InfiniteScroll from 'react-infinite-scroller';
 import ProductCard from '../../components/ProductCard';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function Produit(props) {
 
@@ -35,9 +36,9 @@ function Produit(props) {
     return (
         <div className="flex justify-center">
             <div className="container">
-                <InfiniteScroll pageStart={0} loadMore={() => setLoading(true)} hasMore={true} loader={<div className="loader" key={0}>Loading ...</div>}>
+                <InfiniteScroll pageStart={0} loadMore={() => setLoading(true)} hasMore={true} loader={<LoadingSpinner />}>
 
-                    <div className="row">
+                    <div className="grid grid-cols-1 md:grid-cols-3">
                         {produits.map((produit) => (
                             <ProductCard key={produit.id} product={produit} cart={cart} setCart={setCart} />
                         ))}
