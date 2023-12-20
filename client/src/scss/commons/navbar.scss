@@ -1,7 +1,7 @@
 @import 'colors';
 
 .navbar {
-	background-color: $vert;
+	background-color: $vert-fonce;
 	color: $blanc;
 	padding: 0;
 	padding: 20px 10px 10px 10px;
@@ -26,13 +26,9 @@
 }
 
 .back-vert {
-	background-color: $vert;
+	background-color: $vert-fonce;
 	//on enlève les bords
 	border: none;
-}
-
-.back-vert-fonce {
-	background-color: $vert-fonce;
 }
 
 .btn-nav {

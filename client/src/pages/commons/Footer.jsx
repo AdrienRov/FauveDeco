@@ -7,7 +7,7 @@ function Footer() {
             <div className="flex justify-between">
                 <nav className="">
                     
-                    <Link to="/apropos" className="link link-hover pr-3">A Propos</Link>
+                    <Link to="/accueil" className="link link-hover pr-3">Accueil</Link>
                     <Link to="/contact" className="link link-hover pr-3">Contact</Link>
                     <Link to="/shopping" className="link link-hover pr-3">Shopping</Link>
 
