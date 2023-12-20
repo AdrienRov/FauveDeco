@@ -51,7 +51,7 @@ function Categories(props) {
     
     return (<>
         <div className="grid grid-cols-10 gap-4 mt-4">
-            <div className="col-span-3 hidden md:block">
+            <div className="col-span-10 md:col-span-3">
                 <div className="bg-white rounded-lg shadow-lg p-4">
                     {
                         category.subCategories.map(child => (<Link to={`/categories/${child.id}`} className="text-blue-600 hover:text-blue-800">
