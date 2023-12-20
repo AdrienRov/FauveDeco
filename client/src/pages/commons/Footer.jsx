@@ -2,6 +2,12 @@ import * as React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 function Footer() {
+    const location = useLocation()
+
+    if(location.pathname === "/admin") {
+        return null
+    }
+
     return (
         <footer className="footer footer-center p-10 text-base-content rounded">
             <div className="flex justify-between">

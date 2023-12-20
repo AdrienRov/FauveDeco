@@ -2,11 +2,8 @@ import './App.css';
 import React, { useEffect, useState, useContext } from 'react';
 import {
   BrowserRouter as Router,
-  Switch,
   Route,
-  Link,
-  Navigate,
-  Routes
+  Routes,
 } from "react-router-dom";
 import axios, { Axios } from 'axios';
 import Accueil from "./pages/accueil/Accueil";
@@ -62,7 +59,7 @@ function App() {
   return (
     <Router>
       
-      {window.location.pathname !== "/admin" && (<NavBar cart={cart} parentCallback={handleCallback} />)}
+      <NavBar cart={cart} parentCallback={handleCallback} />
         <div>
           <Routes>          
             <Route path='/' element={<Accueil categories={categories} />} />
@@ -82,7 +79,7 @@ function App() {
 
           </Routes>
         </div>
-      {window.location.pathname !== "/admin" && (<Footer />)}
+      <Footer />
     </Router>
     
   );

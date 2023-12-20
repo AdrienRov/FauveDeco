@@ -74,9 +74,16 @@ const AdminButton = (props) => {
 }
 
 function NavBar(props) {
+    
 	const [visible, setVisible] = useState(false);
 	const [form, setForm] = useState(<Connexion />);
 	const [formKey, setFormKey] = useState(10);
+
+    const location = useLocation()
+
+    if(location.pathname === "/admin") {
+        return null
+    }
 
     const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
 
