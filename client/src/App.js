@@ -1,5 +1,4 @@
 import './App.css';
-
 import React, { useEffect, useState, useContext } from 'react';
 import {
   BrowserRouter as Router,
@@ -21,18 +20,19 @@ import Footer from "./pages/commons/Footer";
 import Categories from "./pages/categories/Categories";
 import Connexion from "./form/Connexion";
 import Inscription from "./form/Inscription";
+import Admin from './pages/admin/Admin';
 import User from './pages/user/User';
 
 function App() {
   axios.defaults.withCredentials = true
   const urlCategories = "http://127.0.0.1:8000/categories";
-
   const [categories, setCategories] = useState([]);
 
 	useEffect(() => {
 		axios.get(urlCategories)
 			.then((response) => {
 				setCategories(response.data);
+        console.log(window.location.pathname)
 			})
 			.catch((error) => {
 				console.log(error);
@@ -46,30 +46,29 @@ function App() {
 
   return (
     <Router>
-
-
-      <NavBar cart={cart} />
-      <Burger categories={categories} />
-
-      <div>
-        <Routes>
-
-          <Route path='/' element={<Accueil categories={categories} />} />
-          <Route path="/accueil" element={<Accueil categories={categories} />} />
-          <Route path="/shopping" element={<Shopping cart={cart} setCart={setCart} />} />
-          <Route path="/panier" element={<Panier cart={cart} setCart={setCart} />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/categories/:id" element={<Categories categories={categories} cart={cart} setCart={setCart} />} />
-          <Route path="/categories" element={<Categories categories={categories} />} />
-          <Route path="/produit/:id" element={<Produit cart={cart} setCart={setCart} />} />
-          <Route path="/user" element={<User />} />
-          <Route path="*" element={<Accueil />} />
+      {window.location.pathname !== "/admin" && (<NavBar cart={cart} />)}
+      {window.location.pathname !== "/admin" && (<Burger categories={categories} />)}
+        <div>
+          <Routes>
           
+            <Route path='/' element={<Accueil categories={categories} />} />
+            <Route path="/accueil" element={<Accueil categories={categories} />} />
+            <Route path="/shopping" element={<Shopping />} />
+            <Route path="/produit" element={<Produit />} />
+            <Route path="/panier" element={<Panier />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/categories/:id" element={<Categories categories={categories} />} />
+            <Route path="/categories" element={<Categories categories={categories} />} />
+            <Route path="/admin" element={<Admin />} />
+            <Route path="/produit/:id" element={<Produit cart={cart} setCart={setCart} />} />
+            <Route path="/user" element={<User />} />
+            <Route path="*" element={<Accueil />} />
 
-        </Routes>
-      </div>
-      <Footer />
+          </Routes>
+        </div>
+      {window.location.pathname !== "/admin" && (<Footer />)}
     </Router>
+    
   );
 }
 
