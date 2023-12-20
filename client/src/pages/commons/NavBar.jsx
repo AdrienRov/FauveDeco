@@ -4,6 +4,7 @@ import { Button } from "react-daisyui";
 import Modal from "../../components/Modal";
 import Connexion from "../../form/Connexion";
 import Inscription from "../../form/Inscription";
+import axios from 'axios';
 
 
 const LoginButton = (props) => {
@@ -109,7 +110,11 @@ function NavBar(props) {
 	};
 	const handleLogout = () => {
 		localStorage.removeItem("user");
-		window.location.href = "/";
+        axios.get("http://localhost:8000/logout").then(() => {
+		    window.location.href = "/";
+        }).catch(err => {
+            window.location.href = "/";
+        });
 	}
 
     const handleDisplayAdmin = () => {

@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
@@ -60,6 +61,27 @@ class UserController extends AbstractController
 				'error' => 'User not found'
 			]);
 		}
+
+		return $this->json([
+			"status" => true
+		]);
+	}
+
+	#[Route('/logout', name: 'app_logout', methods: ['GET'])]
+	public function logout(#[CurrentUser] ?User $user, Security $security): Response
+	{
+		// $security->logout(false);
+		// fix Unable to logout as there is no logged-in user.
+
+
+		if (!$user) {
+			return $this->json([
+				'status' => false,
+				'error' => 'User not found'
+			]);
+		}
+
+
 
 		return $this->json([
 			"status" => true
