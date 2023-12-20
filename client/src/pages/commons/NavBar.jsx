@@ -29,6 +29,11 @@ function NavBar(props) {
 		setVisible(true);
 		setFormKey(formKey + 1);
 	};
+	const handleLogout = () => {
+		localStorage.removeItem("user");
+		window.location.href = "/";
+	}
+
 	return (
 		<div>
 			<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
@@ -75,11 +80,15 @@ function NavBar(props) {
 				<div className="navbar-end divider divider-white">
 					{
 						loggedIn ? (
-							<Link to="/user" className="btn btn-ghost">
+							<><Link to="/user" className="btn btn-ghost">
 								<svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
 									<path d="M224 288c70.7 0 128-57.3 128-128S294.7 32 224 32S96 89.3 96 160s57.3 128 128 128zm0 32c-88.4 0-176 43.52-176 128v32h352v-32c0-84.48-87.6-128-176-128zm224 128c0-53.02-43-96-96-96H96c-53 0-96 42.98-96 96v96c0 53 43 96 96 96h256c53 0 96-43 96-96v-96z"></path>
 								</svg>
-							</Link>
+							</Link><Button className="btn btn-ghost" onClick={() => handleLogout()}>
+									<svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+										<path d="M502.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-128-128c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L402.7 224 192 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l210.7 0-73.4 73.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l128-128zM160 96c17.7 0 32-14.3 32-32s-14.3-32-32-32L96 32C43 32 0 75 0 128L0 384c0 53 43 96 96 96l64 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-64 0c-17.7 0-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32l64 0z"></path>
+									</svg>
+								</Button></>
 						) : (
 							<Button className="btn btn-ghost" onClick={() => handleConnexion()}>
 								<svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
