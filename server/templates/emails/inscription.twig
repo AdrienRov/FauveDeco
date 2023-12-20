@@ -1,0 +1,24 @@
+{# templates/emails/inscription.twig #}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmation d'inscription</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-8 bg-white rounded-lg shadow-lg mt-16">
+        <h1 class="text-2xl font-semibold mb-6 text-center">Bienvenue, {{ firstname }} {{ lastname }} !</h1>
+        
+        <p class="text-base text-gray-700 mb-4">Votre inscription sur notre plateforme a été effectuée avec succès.</p>
+        
+        <p class="text-base text-gray-700 mb-6">Merci de votre confiance envers FauveDeco. Vous pouvez maintenant accéder à votre compte et profiter de nos services.</p>
+        
+        <footer class="text-center text-gray-600">
+            <p>Cordialement,</p>
+            <p class="font-semibold">L'équipe de FauveDeco</p>
+        </footer>
+    </div>
+</body>
+</html>

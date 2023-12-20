@@ -61,7 +61,7 @@ function App() {
     <Router>
       
       <NavBar cart={cart} parentCallback={handleCallback} categories={categories} />
-        <div>
+        <main>
           <Routes>          
             <Route path='/' element={<Accueil categories={categories} />} />
             <Route path="/accueil" element={<Accueil categories={categories} />} />
@@ -80,7 +80,7 @@ function App() {
             <Route path="*" element={<Accueil />} />
 
           </Routes>
-        </div>
+        </main>
       <Footer />
     </Router>
     
