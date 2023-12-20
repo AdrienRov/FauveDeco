@@ -50,7 +50,7 @@ const Accueil = (props) => {
                     {categories?.filter(c => !c.parent && c.imageUrl).map(categ => (
                         <Link to={`/categories/${categ.id}`} className="relative overflow-hidden bg-gray-100 p-1 categorie">
                             <img src={categ.imageUrl} alt="car!" className="w-full h-full object-cover" />
-                            <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-2 text-center">
+                            <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-5 text-center">
                                 <p className="font-bold categorie-title">{categ.name}</p>
                             </div>
                         </Link>
