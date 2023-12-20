@@ -8,8 +8,8 @@ const OrderField = ({ order }) => (
           type="checkbox"
           className="order_checkbox hidden"
         />
-      <article className="p-4 flex space-x-4">
-        <section className="flex-1">
+      <article className="p-4 flex flex-wrap md:flex-nowrap md:space-x-4">
+        <section className="flex-1 mb-5 md:mb-0">
           <div>
             <h3 className="text-xl font-semibold text-gray-800">
               Commande #{order.id}
@@ -54,7 +54,7 @@ const OrderField = ({ order }) => (
             </li>
           )}
         </ul>
-        <ul className="order_detail gap-6 flex flex-wrap justify-end">
+        <ul className="order_detail gap-6 flex flex-wrap justify-normal md:justify-end">
         {order.productOrders.map((productOrder, index) => (
           <li key={index} className="flex items-center space-x-2">
             <img
