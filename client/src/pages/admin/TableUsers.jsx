@@ -1,9 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
+import UserEditForm from './UserEditForm';
+import Modal from "../../components/Modal";
 
 function TableUsers() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [visible, setVisible] = useState(false);
+    const [formKey, setFormKey] = useState(10);
+    const [form, setForm] = useState(<UserEditForm />);
 
     const handleEdit = (id) => {
         setForm(<UserEditForm user={id} parentCallback={handleCallback} />);
@@ -13,6 +18,11 @@ function TableUsers() {
     const handleDelete = (id) => {
         console.log(`Delete user ${id}`);
     };
+
+    const handleCallback = (data) => {
+		setVisible(data);
+		setFormKey(formKey + 1);
+	};
 
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/users')
@@ -32,6 +42,14 @@ function TableUsers() {
                 <p>Chargement en cours...</p>
             ) : (
                 <div className="overflow-x-auto">
+                    <Modal
+						key={formKey}
+						parentCallback={handleCallback}
+						open={visible}
+						form={form}
+						title="Modifier l'utilisateur"
+					/>
+
                     <table className="table table-zebra">
                         <thead className="bg-accent-content text-white">
                             <tr>

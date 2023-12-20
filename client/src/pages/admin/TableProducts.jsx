@@ -2,13 +2,14 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import ModifImage from './ModifImages';
+import ProductEditForm from './ProductEditForm';
 
 function TableProducts() {
     const [products, setproducts] = useState([]);
-    const [form, setForm] = useState(<ModifImage />);
     const [loading, setLoading] = useState(true);
     const [visible, setVisible] = useState(false);
     const [formKey, setFormKey] = useState(10);
+    const [form, setForm] = useState(<ProductEditForm />);
 
     const handleEdit = (id) => {
         setForm(<ProductEditForm product={id} parentCallback={handleCallback} />);
@@ -48,9 +49,15 @@ function TableProducts() {
             {loading ? (
                 <p>Chargement en cours...</p>
             ) : (
-                <div className="overflow-x-auto">
-                    <Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
-
+				<div className="overflow-x-auto">
+					<Modal
+						key={formKey}
+						parentCallback={handleCallback}
+						open={visible}
+						form={form}
+						title="Modifier le produit"
+					/>
+                    
                     <table className="table table-zebra">
                         <thead className="bg-accent-content text-white">
                             <tr>

@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Select from 'react-select';
 
 function ProductEditForm(props) {
     const [editedProduct, setEditedProduct] = useState({});
+	const [categories, setCategories] = useState([]);
+    const [filteredCategories, setFilteredCategories] = useState([]);
+    const [selectedCategory, setSelectedCategory] = useState(null);
     const [loading, setLoading] = useState(true);
-    const { productId } = props;
-
-    const handleEditProduct = async () => {
-        // Logique pour éditer le produit
-    };
+    const { product } = props;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -19,17 +19,21 @@ function ProductEditForm(props) {
         }));
     };
 
-    const formatDate = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
+	const handleCategorySelect = (selectedOption) => {
+        setSelectedCategory(selectedOption);
     };
 
+    const handleCategorySearch = (query) => {
+        const filtered = categories.filter((category) =>
+            `${category.name}`.toLowerCase().includes(query.toLowerCase())
+        );
+        setFilteredCategories(filtered);
+    };
+	
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const productResponse = await axios.get(`http://127.0.0.1:8000/product/${productId}`);
+                const productResponse = await axios.get(`http://127.0.0.1:8000/product/${product}`);
                 setEditedProduct(productResponse.data);
                 setLoading(false);
             } catch (error) {
@@ -38,15 +42,17 @@ function ProductEditForm(props) {
         };
 
         fetchData();
-    }, [productId]);
+    }, [product]);
 
     const onTrigger = (event) => {
         const formData = new FormData();
         formData.append('name', editedProduct.name);
         formData.append('price', editedProduct.price);
         formData.append('description', editedProduct.description);
+		formData.append('quantity', editedProduct.quantity);
+		formData.append('category', editedProduct.category);
 
-        const url = `http://127.0.0.1:8000/product/${productId}`; // Assurez-vous d'avoir l'ID du produit ici
+        const url = `http://127.0.0.1:8000/product/${product}`; 
 
         axios.patch(url, formData)
             .then((response) => {
@@ -58,6 +64,7 @@ function ProductEditForm(props) {
 
         event.preventDefault();
     };
+    
 
     return (
         <>
@@ -102,6 +109,28 @@ function ProductEditForm(props) {
                                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                             />
                         </div>
+
+						<div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-600">Quantity :</label>
+                            <textarea
+                                name="quantity"
+                                value={editedProduct.quantity || ''}
+                                onChange={handleChange}
+                                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                            />
+                        </div>
+
+                        {/* Barre de recherche pour les catégories */}
+                        <Select
+                            value={selectedCategory ? { value: selectedCategory, label: `${selectedCategory.name}` } : null}
+                            options={filteredCategories.map((category) => ({
+                                value: category,
+                                label: `${category.name}`,
+                            }))}
+                            onInputChange={(value) => handleCategorySearch(value)}
+                            onChange={(selectedOption) => handleCategorySelect(selectedOption.value)}
+                            placeholder="Rechercher une category"
+                        />
 
                         <button
                             type="button"
