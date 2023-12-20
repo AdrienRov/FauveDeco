@@ -3,7 +3,7 @@ import * as React from 'react';
 function Contact() {
 	return (
 		<div className="container mx-auto">
-			<div className="grid grid-cols-2 gap-4">
+			<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div className="card">
 					<div className="card-body">
 						<h2 className="card-title">Nous contacter</h2>
