@@ -17,7 +17,15 @@ function TableProducts() {
     };
 
     const handleDelete = (id) => {
-        console.log(`Delete product ${id}`);
+        axios.delete(`http://127.0.0.1:8000/product/${id}`)
+			.then((response) => {
+				console.log(`Product ${id} deleted successfully`);
+				// Mettre à jour l'état local après la suppression
+				setproducts(prevProducts => prevProducts.filter(product => product.id !== id));
+			})
+			.catch((error) => {
+				console.log(`Error deleting product ${id}:`, error);
+			});
     };
 
     const handleCallback = (data) => {

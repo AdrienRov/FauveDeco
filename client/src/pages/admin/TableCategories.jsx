@@ -17,7 +17,15 @@ function TableCategorie() {
 	};
 
 	const handleDelete = (id) => {
-		console.log(`Delete product ${id}`);
+		axios.delete(`http://127.0.0.1:8000/category/${id}`)
+			.then((response) => {
+				console.log(`Categorie ${id} deleted successfully`);
+				// Mettre à jour l'état local après la suppression
+				setCategories(prevCategories => prevCategories.filter(categorie => categorie.id !== id));
+			})
+			.catch((error) => {
+				console.log(`Error deleting categorie ${id}:`, error);
+			});
 	};
 
 	const handleCallback = (data) => {

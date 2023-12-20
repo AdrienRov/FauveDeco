@@ -15,11 +15,20 @@ function TableUsers() {
         setVisible(true);
     };
 
-    const handleDelete = (id) => {
-        console.log(`Delete user ${id}`);
-    };
+	const handleDelete = (id) => {
+		axios.delete(`http://127.0.0.1:8000/user/${id}`)
+			.then((response) => {
+				console.log(`User ${id} deleted successfully`);
+				// Mettre à jour l'état local après la suppression
+				setUsers(prevUsers => prevUsers.filter(user => user.id !== id));
+			})
+			.catch((error) => {
+				// Handle error
+				console.log(error);
+			});
+	};
 
-    const handleCallback = (data) => {
+	const handleCallback = (data) => {
 		setVisible(data);
 		setFormKey(formKey + 1);
 	};
@@ -36,13 +45,13 @@ function TableUsers() {
             });
     }, []);
 
-    return (
-        <>
-            {loading ? (
-                <p>Chargement en cours...</p>
-            ) : (
-                <div className="overflow-x-auto">
-                    <Modal
+	return (
+		<>
+			{loading ? (
+				<p>Chargement en cours...</p>
+			) : (
+				<div className="overflow-x-auto">
+					<Modal
 						key={formKey}
 						parentCallback={handleCallback}
 						open={visible}
@@ -79,21 +88,21 @@ function TableUsers() {
                                             Edit
                                         </button>
 
-                                        <button
-                                            className="bg-red-500 text-white px-2 py-1 rounded"
-                                            onClick={() => handleDelete(user.id)}
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            )}
-        </>
-    );
+										<button
+											className="bg-red-500 text-white px-2 py-1 rounded"
+											onClick={() => handleDelete(user.id)}
+										>
+											Delete
+										</button>
+									</td>
+								</tr>
+							))}
+						</tbody>
+					</table>
+				</div>
+			)}
+		</>
+	);
 }
 
 export default TableUsers;
