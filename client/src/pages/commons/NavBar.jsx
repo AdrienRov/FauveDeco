@@ -85,6 +85,8 @@ function NavBar(props) {
         return null
     }
 
+    const { categories } = props;
+
     const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
 
 	const loggedIn = user !== null;
@@ -114,6 +116,8 @@ function NavBar(props) {
         props.parentCallback("admin");
     }
 
+    const bestCategories = categories.sort((a, b) => b.products.length - a.products.length).slice(0, 5);
+
 
 	return (
 		<div>
@@ -124,21 +128,19 @@ function NavBar(props) {
 					<div className="dropdown px-15 mb-1 hidden md:flex">
 						<div tabIndex={0} role="button" className="btn btn-nav back-vert duration-150">Catégories<svg class="w-[15px] h-[15px] fill-[#ffffff]" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"></path></svg></div>
 						<ul className="back-vert dropdown-content z-[1] menu shadow bg-base-100 w-60">
-							<li><Link to="/categories/0" className="back-vert btn-nav dropdown-item text-black">
-								Maison et objets
-							</Link></li>
-							<li><Link to="/categories/1" className="back-vert btn-nav dropdown-item text-black">
-								Fragrances
-							</Link></li>
-							<li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
-								Lifestyle
-							</Link></li>
-							<li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
-								Décorations murales
-							</Link></li>
-							<li><Link to="/categories/2" className="back-vert btn-nav dropdown-item text-black">
-								Idées cadeaux
-							</Link></li>
+                            <li>
+                                <Link to={`/categories`} className="back-vert btn-nav dropdown-item">
+                                    Toutes les catégories
+                                </Link>
+                            </li>
+                            <hr className="mx-4" />
+                            {
+                                bestCategories.map(category => (
+                                    <li key={category.id}><Link to={`/categories/${category.id}`} className="back-vert btn-nav dropdown-item">
+                                        {category.name}
+                                    </Link></li>
+                                ))
+                            }
 						</ul>
 					</div>
 					<Link to="https://www.instagram.com/fauve.lh/" className="mr-5 hidden md:flex">

@@ -59,7 +59,7 @@ function App() {
   return (
     <Router>
       
-      <NavBar cart={cart} parentCallback={handleCallback} />
+      <NavBar cart={cart} parentCallback={handleCallback} categories={categories} />
         <div>
           <Routes>          
             <Route path='/' element={<Accueil categories={categories} />} />
