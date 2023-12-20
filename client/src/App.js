@@ -63,7 +63,6 @@ function App() {
     <Router>
       
       {window.location.pathname !== "/admin" && (<NavBar cart={cart} parentCallback={handleCallback} />)}
-      {window.location.pathname !== "/admin" && (<Burger categories={categories} />)}
         <div>
           <Routes>          
             <Route path='/' element={<Accueil categories={categories} />} />
