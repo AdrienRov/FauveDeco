@@ -36,7 +36,7 @@ function Categories(props) {
     if (!category) {
         // Categories as square cards with image background 2 columns
         return (<>
-            <div className="grid grid-cols-5 gap-4 mt-4 px-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mt-4 px-4">
                 {
                     categories.map(category => (<Link key={category.id} to={`/categories/${category.id}`} className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">
                         <div className="aspect-square bg-white mt-2 shadow-lg p-4" style={{ backgroundImage: `url(${category.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -51,10 +51,8 @@ function Categories(props) {
     
     return (<>
         <div className="grid grid-cols-10 gap-4 mt-4">
-            <div className="col-span-3">
-
+            <div className="col-span-10 md:col-span-3">
                 <div className="bg-white rounded-lg shadow-lg p-4">
-                    
                     {
                         category.subCategories.map(child => (<Link to={`/categories/${child.id}`} className="text-blue-600 hover:text-blue-800">
                             <div key={child.id} className="bg-white mt-2 shadow-lg p-4" style={{ backgroundImage: `url(${child.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
@@ -64,8 +62,8 @@ function Categories(props) {
                     }
                 </div>
             </div>
-            <div className="col-span-7">
-                <div className="grid grid-cols-2 gap-4">
+            <div className="col-span-10 md:col-span-7">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {
                         products.map(product => (
                             <ProductCard key={product.id} product={product} cart={cart} setCart={setCart} />
