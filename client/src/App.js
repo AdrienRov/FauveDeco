@@ -46,8 +46,8 @@ function App() {
 
   return (
     <Router>
-      {window.location.pathname !== "/admin/" && (<NavBar cart={cart} />)}
-      {window.location.pathname !== "/admin/" && (<Burger categories={categories} />)}
+      {window.location.pathname !== "/admin" && (<NavBar cart={cart} />)}
+      {window.location.pathname !== "/admin" && (<Burger categories={categories} />)}
         <div>
           <Routes>
           
@@ -66,7 +66,7 @@ function App() {
 
           </Routes>
         </div>
-      {window.location.pathname !== "/admin/" && (<Footer />)}
+      {window.location.pathname !== "/admin" && (<Footer />)}
     </Router>
     
   );
