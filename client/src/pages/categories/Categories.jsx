@@ -64,7 +64,7 @@ function Categories(props) {
                         </div>
                     </Link>
                     {
-                        category.parent && (<Link to={`/categories/${category.parent}`} className="text-blue-600 hover:text-blue-800">
+                        category.parent && (<Link to={`/categories/${category.parent.id}`} className="text-blue-600 hover:text-blue-800">
                             <div className="bg-white mt-2 shadow-lg p-4">
                                 <span className="text-lg font-bold text-black bg-white bg-opacity-10 p-1">Retour à la catégorie parente</span>
                             </div>
