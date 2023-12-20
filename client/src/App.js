@@ -53,12 +53,12 @@ function App() {
           
             <Route path='/' element={<Accueil categories={categories} />} />
             <Route path="/accueil" element={<Accueil categories={categories} />} />
-            <Route path="/shopping" element={<Shopping />} />
+            <Route path="/shopping" element={<Shopping cart={cart} setCart={setCart} />} />
             <Route path="/produit" element={<Produit />} />
-            <Route path="/panier" element={<Panier />} />
+            <Route path="/panier" element={<Panier cart={cart} setCart={setCart} />} />
             <Route path="/contact" element={<Contact />} />
-            <Route path="/categories/:id" element={<Categories categories={categories} />} />
-            <Route path="/categories" element={<Categories categories={categories} />} />
+            <Route path="/categories/:id" element={<Categories categories={categories} cart={cart} setCart={setCart} />} />
+            <Route path="/categories" element={<Categories categories={categories} cart={cart} setCart={setCart} />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/produit/:id" element={<Produit cart={cart} setCart={setCart} />} />
             <Route path="/user" element={<User />} />
