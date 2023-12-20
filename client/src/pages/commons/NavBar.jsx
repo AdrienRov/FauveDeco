@@ -75,14 +75,14 @@ const AdminButton = (props) => {
 }
 
 function NavBar(props) {
-    
-	const [visible, setVisible] = useState(false);
-	const [form, setForm] = useState(<Connexion />);
-	const [formKey, setFormKey] = useState(10);
+
+    const [visible, setVisible] = useState(false);
+    const [form, setForm] = useState(<Connexion />);
+    const [formKey, setFormKey] = useState(10);
 
     const location = useLocation()
 
-    if(location.pathname === "/admin") {
+    if (location.pathname === "/admin") {
         return null
     }
 
@@ -90,32 +90,32 @@ function NavBar(props) {
 
     const user = localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : null;
 
-	const loggedIn = user !== null;
+    const loggedIn = user !== null;
     const isAdmin = user !== null && user.role === 2;
 
-	const handleCallback = (data) => {
-		setVisible(data);
-		setFormKey(formKey + 1);
-	};
-	const handleConnexion = () => {
-		setForm(<Connexion parentCallback={handleCallback} handleSwitch={handleInscription} />);
-		setVisible(true);
-		setFormKey(formKey + 1);
-	}
-	const handleInscription = () => {
-		console.log("Inscription");
-		setForm(<Inscription parentCallback={handleCallback} handleSwitch={handleConnexion} />);
-		setVisible(true);
-		setFormKey(formKey + 1);
-	};
-	const handleLogout = () => {
-		localStorage.removeItem("user");
+    const handleCallback = (data) => {
+        setVisible(data);
+        setFormKey(formKey + 1);
+    };
+    const handleConnexion = () => {
+        setForm(<Connexion parentCallback={handleCallback} handleSwitch={handleInscription} />);
+        setVisible(true);
+        setFormKey(formKey + 1);
+    }
+    const handleInscription = () => {
+        console.log("Inscription");
+        setForm(<Inscription parentCallback={handleCallback} handleSwitch={handleConnexion} />);
+        setVisible(true);
+        setFormKey(formKey + 1);
+    };
+    const handleLogout = () => {
+        localStorage.removeItem("user");
         axios.get("http://localhost:8000/logout").then(() => {
-		    window.location.href = "/";
+            window.location.href = "/";
         }).catch(err => {
             window.location.href = "/";
         });
-	}
+    }
 
     const handleDisplayAdmin = () => {
         props.parentCallback("admin");
@@ -124,15 +124,15 @@ function NavBar(props) {
     const bestCategories = categories.sort((a, b) => b.products.length - a.products.length).slice(0, 5);
 
 
-	return (
-		<div>
-			<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
+    return (
+        <div>
+            <Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
 
-			<div className="navbar">
-				<div className="navbar-start divider divider-white">
-					<div className="dropdown px-15 mb-1 hidden md:flex">
-						<div tabIndex={0} role="button" className="btn btn-nav back-vert duration-150">Catégories<svg class="w-[15px] h-[15px] fill-[#ffffff]" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"></path></svg></div>
-						<ul className="back-vert dropdown-content z-[1] menu shadow bg-base-100 w-60">
+            <div className="navbar">
+                <div className="navbar-start divider divider-white">
+                    <div className="dropdown px-15 mb-1 hidden md:flex">
+                        <div tabIndex={0} role="button" className="btn btn-nav back-vert duration-150">Catégories<svg class="w-[15px] h-[15px] fill-[#ffffff]" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"></path></svg></div>
+                        <ul className="back-vert dropdown-content z-[1] menu shadow bg-base-100 w-60">
                             <li>
                                 <Link to={`/categories`} className="back-vert btn-nav dropdown-item">
                                     Toutes les catégories
@@ -146,61 +146,65 @@ function NavBar(props) {
                                     </Link></li>
                                 ))
                             }
-						</ul>
-					</div>
-					<Link to="https://www.instagram.com/fauve.lh/" className="mr-5 hidden md:flex">
-						<svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-							<path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path>
-						</svg>
-					</Link>
-					<Link to="https://www.facebook.com/profile.php?id=100094723031338" class="hidden md:flex">
-						<svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
-							<path d="M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h137.25V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.27c-30.81 0-40.42 19.12-40.42 38.73V256h68.78l-11 71.69h-57.78V480H400a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48z"></path>
-						</svg>
-					</Link>
-				</div>
+                        </ul>
+                    </div>
+                    <Link to="https://www.instagram.com/fauve.lh/" className="mr-5 hidden md:flex">
+                        <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"></path>
+                        </svg>
+                    </Link>
+                    <Link to="https://www.facebook.com/profile.php?id=100094723031338" class="hidden md:flex">
+                        <svg class="w-[25px] h-[25px] fill-[#ffffff]" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M400 32H48A48 48 0 0 0 0 80v352a48 48 0 0 0 48 48h137.25V327.69h-63V256h63v-54.64c0-62.15 37-96.48 93.67-96.48 27.14 0 55.52 4.84 55.52 4.84v61h-31.27c-30.81 0-40.42 19.12-40.42 38.73V256h68.78l-11 71.69h-57.78V480H400a48 48 0 0 0 48-48V80a48 48 0 0 0-48-48z"></path>
+                        </svg>
+                    </Link>
+                </div>
 
-				<Link to="/accueil" className="navbar-center hidden lg:flex mx-5 mb-0">
-					<p className="text-4xl text-white">fauve</p>
-					<p className="text-white">DECORATION</p>
-				</Link>
+                <Link to="/accueil" className="navbar-center hidden lg:flex mx-5 mb-0">
+                    <p className="text-4xl text-white">fauve</p>
+                    <p className="text-white">DECORATION</p>
+                </Link>
 
-				<div className="navbar-end divider divider-white hidden md:flex">
-					{
-						loggedIn ? (
-							<>
+                <div className="navbar-end divider divider-white hidden md:flex">
+                    {
+                        loggedIn ? (
+                            <>
                                 <UserButton />
                                 <LogoutButton handleLogout={handleLogout} />
                             </>
-						) : (
-							<LoginButton handleConnexion={handleConnexion} />
-						)
-					}
+                        ) : (
+                            <LoginButton handleConnexion={handleConnexion} />
+                        )
+                    }
 
-					<ShoppingButton />
-					<ShoppingCartButton cart={props.cart} />
-                    { isAdmin && <AdminButton handleDisplayAdmin={handleDisplayAdmin} /> }
-				</div>
-			</div>
-            
-			<div className="navbar flex md:hidden">
+                    <ShoppingButton />
+                    <ShoppingCartButton cart={props.cart} />
+                    {isAdmin && <AdminButton handleDisplayAdmin={handleDisplayAdmin} />}
+                    
+                    <Link to="/admin" className="navbar-center hidden lg:flex mx-5 mb-0">
+                        <svg class="w-[23px] h-[23px] fill-[#ffffff]" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg"><path d="M495.9 166.6c3.2 8.7 .5 18.4-6.4 24.6l-43.3 39.4c1.1 8.3 1.7 16.8 1.7 25.4s-.6 17.1-1.7 25.4l43.3 39.4c6.9 6.2 9.6 15.9 6.4 24.6c-4.4 11.9-9.7 23.3-15.8 34.3l-4.7 8.1c-6.6 11-14 21.4-22.1 31.2c-5.9 7.2-15.7 9.6-24.5 6.8l-55.7-17.7c-13.4 10.3-28.2 18.9-44 25.4l-12.5 57.1c-2 9.1-9 16.3-18.2 17.8c-13.8 2.3-28 3.5-42.5 3.5s-28.7-1.2-42.5-3.5c-9.2-1.5-16.2-8.7-18.2-17.8l-12.5-57.1c-15.8-6.5-30.6-15.1-44-25.4L83.1 425.9c-8.8 2.8-18.6 .3-24.5-6.8c-8.1-9.8-15.5-20.2-22.1-31.2l-4.7-8.1c-6.1-11-11.4-22.4-15.8-34.3c-3.2-8.7-.5-18.4 6.4-24.6l43.3-39.4C64.6 273.1 64 264.6 64 256s.6-17.1 1.7-25.4L22.4 191.2c-6.9-6.2-9.6-15.9-6.4-24.6c4.4-11.9 9.7-23.3 15.8-34.3l4.7-8.1c6.6-11 14-21.4 22.1-31.2c5.9-7.2 15.7-9.6 24.5-6.8l55.7 17.7c13.4-10.3 28.2-18.9 44-25.4l12.5-57.1c2-9.1 9-16.3 18.2-17.8C227.3 1.2 241.5 0 256 0s28.7 1.2 42.5 3.5c9.2 1.5 16.2 8.7 18.2 17.8l12.5 57.1c15.8 6.5 30.6 15.1 44 25.4l55.7-17.7c8.8-2.8 18.6-.3 24.5 6.8c8.1 9.8 15.5 20.2 22.1 31.2l4.7 8.1c6.1 11 11.4 22.4 15.8 34.3zM256 336a80 80 0 1 0 0-160 80 80 0 1 0 0 160z"></path></svg>
+                    </Link>
+                </div>
+            </div>
+
+            <div className="navbar flex md:hidden">
                 {
-						loggedIn ? (
-							<>
-                                <UserButton />
-                                <LogoutButton handleLogout={handleLogout} />
-                            </>
-						) : (
-							<LoginButton handleConnexion={handleConnexion} />
-						)
-					}
+                    loggedIn ? (
+                        <>
+                            <UserButton />
+                            <LogoutButton handleLogout={handleLogout} />
+                        </>
+                    ) : (
+                        <LoginButton handleConnexion={handleConnexion} />
+                    )
+                }
 
                 <ShoppingButton />
                 <ShoppingCartButton cart={props.cart} />
-                { isAdmin && <AdminButton handleDisplayAdmin={handleDisplayAdmin} /> }
-			</div>
-		</div>
-	)
+                {isAdmin && <AdminButton handleDisplayAdmin={handleDisplayAdmin} />}
+            </div>
+        </div>
+    )
 }
 
 export default NavBar;
