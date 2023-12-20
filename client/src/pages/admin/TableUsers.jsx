@@ -5,6 +5,15 @@ function TableUsers() {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    const handleEdit = (id) => {
+        setForm(<UserEditForm user={id} parentCallback={handleCallback} />);
+        setVisible(true);
+    };
+
+    const handleDelete = (id) => {
+        console.log(`Delete user ${id}`);
+    };
+
     useEffect(() => {
         axios.get('http://127.0.0.1:8000/users')
             .then((response) => {
@@ -32,6 +41,7 @@ function TableUsers() {
                                 <th>Email</th>
                                 <th>Adresse</th>
                                 <th>Pays</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,6 +53,21 @@ function TableUsers() {
                                     <td>{user.email}</td>
                                     <td>{user.address}</td>
                                     <td>{user.country}</td>
+                                    <td>
+                                        <button
+                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            onClick={() => handleEdit(user.id)}
+                                        >
+                                            Edit
+                                        </button>
+
+                                        <button
+                                            className="bg-red-500 text-white px-2 py-1 rounded"
+                                            onClick={() => handleDelete(user.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>

@@ -10,6 +10,15 @@ function TableProducts() {
     const [visible, setVisible] = useState(false);
     const [formKey, setFormKey] = useState(10);
 
+    const handleEdit = (id) => {
+        setForm(<ProductEditForm product={id} parentCallback={handleCallback} />);
+        setVisible(true);
+    };
+
+    const handleDelete = (id) => {
+        console.log(`Delete product ${id}`);
+    };
+
     const handleCallback = (data) => {
         setVisible(data);
         setFormKey(formKey + 1);
@@ -49,7 +58,8 @@ function TableProducts() {
                                 <th>Nom</th>
                                 <th>Description</th>
                                 <th>Quantité</th>
-                                <th>Prix</th>
+                                <th>Prix</th>   
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -61,6 +71,21 @@ function TableProducts() {
                                     <td>{product.description}</td>
                                     <td>{product.quantity}</td>
                                     <td>{product.price}</td>
+                                    <td>
+                                        <button
+                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            onClick={() => handleEdit(product.id)}
+                                        >
+                                            Edit
+                                        </button>
+
+                                        <button
+                                            className="bg-red-500 text-white px-2 py-1 rounded"
+                                            onClick={() => handleDelete(product.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
