@@ -49,8 +49,7 @@ function App() {
       {window.location.pathname !== "/admin" && (<NavBar cart={cart} />)}
       {window.location.pathname !== "/admin" && (<Burger categories={categories} />)}
         <div>
-          <Routes>
-          
+          <Routes>          
             <Route path='/' element={<Accueil categories={categories} />} />
             <Route path="/accueil" element={<Accueil categories={categories} />} />
             <Route path="/shopping" element={<Shopping />} />

@@ -67,9 +67,13 @@ const Accueil = (props) => {
                     </div>
 
                     <div className="flex flex-col justify-center">
-                        <h3 className="pb-5 text-xl text-center">Making your favorite houseplant look pretty is what we do best</h3>
-                        <p className="pb-5 text-center">Lyss started Plantaby in early 2020. In the process of decorating her own indoor jungle, she found herself wanting pieces that reflect her love of color and spark joy in the home. It was during this time that she originally pivoted her art to focus on hand-painted pots, planters, and homewares. Through pairing an obsession with plants with a love of bright colors, the idea for Plantaby started to take root and grow.</p>
-                        <p className="pb-5 text-center">Today, Plantaby's signature hand painted pots and candles can be found in homes and select shops throughout the United States, Australia, and Canada. Lyss has a small studio based in Seattle, Washington, where she paints each and every item herself.</p>
+                        <h3 className="pb-5 text-xl text-center">Bienvenue chez Fauve !</h3>
+                        <p className="pb-5 text-center">Fauve, c'est tout d'abord une histoire de passion et de famille. De passion, car je rêvais de créer mon propre univers autour de la décoration. De famille, car "Fauve" fait référence à mon nom: FAUVEL, une sorte d'hommage à mon père et mon grand-père paternel.</p>
+                        <p className="pb-5 text-center">Ma volonté : créer une ambiance chaleureuse et électrique où se mélange produits coup de cœur, colorés, de styles et d'origines diverses.</p>
+                        <p className="pb-5 text-center">Chez Fauve, vous trouverez le cadeau idéal mais également de quoi vous faire plaisir: objets de décoration, vaisselle, bouquets de fumigation, bougies, linge de maison, produits "lifestyle"... De quoi faire rugir votre intérieur !</p>
+                        <p className="pb-5 text-center">Au plaisir de vous accueillir !</p>
+                        <p className="pb-5 text-center">Cécile.</p>
+
                     </div>
                 </div>
             </div>
@@ -77,7 +81,7 @@ const Accueil = (props) => {
             <hr className="my-10" />
 
             <div className="flex justify-center items-center">
-                <div className="max-w-3xl">
+                <div className="">
                     <div className="rounded-xl titre-background p-3 text-center">
                         <h2 className="text-2xl font-bold">
                             Produit du mois
@@ -85,8 +89,8 @@ const Accueil = (props) => {
                     </div>
 
                     <div class="flex mt-5 items-center justify-center">
-                        <div class="relative flex w-full max-w-[48rem] flex-row rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
-                            <div class="relative m-0 w-2/5 shrink-0 overflow-hidden rounded-xl rounded-r-none bg-white bg-clip-border text-gray-700">
+                        <div class="relative flex w-full mx-20 flex-row bg-white bg-clip-border text-gray-700 shadow-md">
+                            <div class="relative m-0 w-2/5 shrink-0 overflow-hidden bg-white bg-clip-border text-gray-700">
                                 <img
                                     src="https://deconordsud.com/cdn/shop/files/71094820_01_1_720x.jpg?v=1695653873"
                                     alt="image"
@@ -152,8 +156,8 @@ const Accueil = (props) => {
                     latestProducts.map(product => (
                         <div class="mx-auto px-5">
                             <Link to={`/produit/${product.id}`}>
-                                <div class="max-w-xs cursor-pointer rounded-lg bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                                    <img class="w-full h-56 rounded-lg object-cover object-center" src={product.images[0].url} alt="product" />
+                                <div class="max-w-xs cursor-pointer bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
+                                    <img class="w-full h-56 object-cover object-center" src={product.images[0].url} alt="product" />
                                     <p class="mt-4 font-bold text-center">{product.name}</p>
                                     <p class="mb-4 text-gray-800 text-center">{product.price}€</p>
                                 </div>
