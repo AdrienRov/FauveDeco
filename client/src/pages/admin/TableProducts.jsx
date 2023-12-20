@@ -2,13 +2,31 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import ModifImage from './ModifImages';
+import ProductEditForm from './ProductEditForm';
 
 function TableProducts() {
     const [products, setproducts] = useState([]);
-    const [form, setForm] = useState(<ModifImage />);
     const [loading, setLoading] = useState(true);
     const [visible, setVisible] = useState(false);
     const [formKey, setFormKey] = useState(10);
+    const [form, setForm] = useState(<ProductEditForm />);
+
+    const handleEdit = (id) => {
+        setForm(<ProductEditForm product={id} parentCallback={handleCallback} />);
+        setVisible(true);
+    };
+
+    const handleDelete = (id) => {
+        axios.delete(`http://127.0.0.1:8000/product/${id}`)
+			.then((response) => {
+				console.log(`Product ${id} deleted successfully`);
+				// Mettre à jour l'état local après la suppression
+				setproducts(prevProducts => prevProducts.filter(product => product.id !== id));
+			})
+			.catch((error) => {
+				console.log(`Error deleting product ${id}:`, error);
+			});
+    };
 
     const handleCallback = (data) => {
         setVisible(data);
@@ -22,10 +40,10 @@ function TableProducts() {
     }
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/products')
+        axios.get('http://127.0.0.1:8000/products?limit=99999999999999')
             .then((response) => {
                 const productsArray = [response.data[0]];
-                setproducts(productsArray);
+                setproducts(response.data);
                 setLoading(false); 
             })
             .catch((error) => {
@@ -39,17 +57,25 @@ function TableProducts() {
             {loading ? (
                 <p>Chargement en cours...</p>
             ) : (
-                <div className="overflow-x-auto">
-                    <Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
-
+				<div className="overflow-x-auto">
+					<Modal
+						key={formKey}
+						parentCallback={handleCallback}
+						open={visible}
+						form={form}
+						title="Modifier le produit"
+					/>
+                    
                     <table className="table table-zebra">
                         <thead className="bg-accent-content text-white">
                             <tr>
                                 <th>Images</th>
                                 <th>Nom</th>
                                 <th>Description</th>
+								<th>Catégories</th>
                                 <th>Quantité</th>
-                                <th>Prix</th>
+                                <th>Prix</th>   
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -59,8 +85,24 @@ function TableProducts() {
                                         <button onClick={() => handleModifImages(product.id)}>Edit Images</button>
                                     </td>                                    <td>{product.name}</td>
                                     <td>{product.description}</td>
+									<td>{product.category.name}</td>
                                     <td>{product.quantity}</td>
                                     <td>{product.price}</td>
+                                    <td>
+                                        <button
+                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            onClick={() => handleEdit(product.id)}
+                                        >
+                                            Edit
+                                        </button>
+
+                                        <button
+                                            className="bg-red-500 text-white px-2 py-1 rounded"
+                                            onClick={() => handleDelete(product.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    </td>
                                 </tr>
                             ))}
                         </tbody>
