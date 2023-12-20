@@ -19,6 +19,7 @@ import Connexion from "./form/Connexion";
 import Inscription from "./form/Inscription";
 import Admin from './pages/admin/Admin';
 import User from './pages/user/User';
+import Termes from './pages/termes/Termes';
 
 function App() {
   axios.defaults.withCredentials = true
@@ -68,6 +69,7 @@ function App() {
             <Route path="/produit" element={<Produit />} />
             <Route path="/panier" element={<Panier cart={cart} setCart={setCart} />} />
             <Route path="/contact" element={<Contact />} />
+            <Route path="/termes" element={<Termes />} />
 
             <Route path="/categories/:id" element={<Categories categories={categories} cart={cart} setCart={setCart} />} />
             <Route path="/categories" element={<Categories categories={categories} cart={cart} setCart={setCart} />} />
