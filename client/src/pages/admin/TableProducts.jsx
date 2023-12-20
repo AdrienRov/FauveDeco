@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import ModifImage from './ModifImages';
+import ProductEditForm from './ProductEditForm';
 
 function TableProducts() {
     const [products, setproducts] = useState([]);
@@ -57,6 +58,7 @@ function TableProducts() {
                                 <th>Images</th>
                                 <th>Nom</th>
                                 <th>Description</th>
+								<th>Catégories</th>
                                 <th>Quantité</th>
                                 <th>Prix</th>   
                                 <th>Actions</th>
@@ -69,6 +71,7 @@ function TableProducts() {
                                         <button onClick={() => handleModifImages(product.id)}>Edit Images</button>
                                     </td>                                    <td>{product.name}</td>
                                     <td>{product.description}</td>
+									<td>{product.category.name}</td>
                                     <td>{product.quantity}</td>
                                     <td>{product.price}</td>
                                     <td>
