@@ -1,0 +1,61 @@
+{# templates/emails/confirmation.twig #}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation de commande</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, p, ul {
+            margin-bottom: 20px;
+        }
+        ul {
+            padding-left: 40px;
+        }
+        li {
+            list-style-type: none;
+            margin-bottom: 10px;
+        }
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #333;">Bonjour {{ firstname }} {{ lastname }},</h1>
+        
+        <p style="font-size: 18px; color: #555; text-align: center;">Votre commande a bien été prise en compte. Merci de votre confiance !</p>
+        
+        <div>
+            <h2 style="margin-bottom: 20px; color: #333;">Détails de la commande :</h2>
+            <ul>
+                {% for product in products %}
+                    <li><strong>{{ product.name }}</strong> - Quantité: {{ product.quantity }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <footer>
+            <p>L'équipe de <strong style="color: #333;">FauveDeco</strong></p>
+        </footer>
+    </div>
+</body>
+</html>

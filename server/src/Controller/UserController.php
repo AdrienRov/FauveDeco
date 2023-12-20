@@ -11,6 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
 
 class UserController extends AbstractController
 {
@@ -89,7 +95,7 @@ class UserController extends AbstractController
 	}
 
 	#[Route('/register', name: 'app_register', methods: ['POST'])]
-	public function register(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+	public function register(MailerInterface $mailer,EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
 	{
 		// get name and parent from request
 		$request = Request::createFromGlobals();
@@ -133,12 +139,23 @@ class UserController extends AbstractController
 
 		$entityManager->persist($user);
 		$entityManager->flush();
+		$email = (new TemplatedEmail())
+        ->from(new Address('commandes@fauvedeco.fr', 'FauveDeco'))
+        ->to($user->getEmail())  // Utilisez l'email de l'utilisateur
+        ->subject('Confirmation de création de compte')
+        ->htmlTemplate('emails/inscription.twig')
+        ->context([
+            'firstname' => $user->getFirstName(),
+            'lastname' => $user->getLastName(),
+            // Vous pouvez ajouter d'autres détails si nécessaire
+        ]);
 
+    $mailer->send($email);
 		return $this->json($user->serializeAll());
 	}
 
 	#[Route('/user', name: 'app_user_create', methods: ['POST'])]
-	public function create(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+	public function create( EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
 	{
 		// get name and parent from request
 		$request = Request::createFromGlobals();
@@ -172,7 +189,6 @@ class UserController extends AbstractController
 
 		$entityManager->persist($user);
 		$entityManager->flush();
-
 		return $this->json($user->serializeAll());
 	}
 
