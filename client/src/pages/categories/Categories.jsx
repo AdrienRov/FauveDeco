@@ -38,9 +38,6 @@ function Categories(props) {
     if (!category) {
         // Categories as square cards with image background 2 columns
         return (<>
-        {
-            // search bar
-        }
             <div className="flex justify-center">
                 <input type="search" name="q" className="py-2 text-sm rounded-md pl-4 focus:text-gray-900 w-full m-5" placeholder="Rechercher..." autoComplete="off" value={search} onChange={(e) => setSearch(e.target.value)} />
             </div>
