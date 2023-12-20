@@ -22,10 +22,10 @@ function TableProducts() {
     }
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/products')
+        axios.get('http://127.0.0.1:8000/products?limit=99999999999999')
             .then((response) => {
                 const productsArray = [response.data[0]];
-                setproducts(productsArray);
+                setproducts(response.data);
                 setLoading(false); 
             })
             .catch((error) => {
