@@ -28,6 +28,21 @@ function App() {
   const urlCategories = "http://127.0.0.1:8000/categories";
   const [categories, setCategories] = useState([]);
 
+  const handleCallback = (data) => {
+    console.log(data);
+    if(data === true)
+    {
+      window.location = "/admin";
+      console.log("true admin");
+    }
+    if(data === "home")
+    {
+      window.location = "/";
+      console.log("false accueil");
+    }
+
+  };
+
 	useEffect(() => {
 		axios.get(urlCategories)
 			.then((response) => {
@@ -46,7 +61,8 @@ function App() {
 
   return (
     <Router>
-      {window.location.pathname !== "/admin" && (<NavBar cart={cart} />)}
+      
+      {window.location.pathname !== "/admin" && (<NavBar cart={cart} parentCallback={handleCallback} />)}
       {window.location.pathname !== "/admin" && (<Burger categories={categories} />)}
         <div>
           <Routes>          
@@ -56,9 +72,11 @@ function App() {
             <Route path="/produit" element={<Produit />} />
             <Route path="/panier" element={<Panier cart={cart} setCart={setCart} />} />
             <Route path="/contact" element={<Contact />} />
+
             <Route path="/categories/:id" element={<Categories categories={categories} cart={cart} setCart={setCart} />} />
             <Route path="/categories" element={<Categories categories={categories} cart={cart} setCart={setCart} />} />
             <Route path="/admin" element={<Admin />} />
+
             <Route path="/produit/:id" element={<Produit cart={cart} setCart={setCart} />} />
             <Route path="/user" element={<User />} />
             <Route path="*" element={<Accueil />} />

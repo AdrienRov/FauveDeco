@@ -19,6 +19,9 @@ function Admin(props) {
         case 'products':
         setTable(<TableProducts />);
         break;
+      case 'home':
+        props.parentCallback("home");
+        break;
       // Add cases for other tabs if needed
       default:
         // Handle default case
