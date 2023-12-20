@@ -49,7 +49,7 @@ function App() {
 
 
       <NavBar cart={cart} />
-      <Burger categories={categories} />
+      
 
       <div>
         <Routes>
