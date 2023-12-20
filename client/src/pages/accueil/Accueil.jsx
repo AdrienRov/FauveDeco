@@ -40,7 +40,7 @@ const Accueil = (props) => {
                 <div className="flex justify-center w-full py-2 gap-2">
                     {
                         carouselItems.map((item, index) => (
-                            <div key={item.id} className={`w-4 h-4 rounded-full bg-white cursor-pointer ${index === current ? 'bg-gray-900' : 'bg-gray-500'}`} onClick={() => setCurrent(index)}></div>
+                            <div key={item.id} className={`w-4 h-4 rounded-full cursor-pointer ${index === current ? 'vert-fonce-background' : 'vert-background'}`} onClick={() => setCurrent(index)}></div>
                         ))
                     }
                 </div>
