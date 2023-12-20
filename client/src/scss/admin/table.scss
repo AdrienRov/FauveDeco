@@ -1,3 +1,5 @@
+@import '../commons/colors';
+
 .divImage{
     display: flex;
     justify-content: center;
@@ -5,5 +7,22 @@
     img{
         width: 120px;
         border-radius: 100%;
+    }
+}
+
+
+.divider-white::before,
+.divider-white::after {
+	background-color: $blanc;
+}
+
+.btn-adm{
+    background-color: $vert-fonce;
+    color: $blanc;
+    border-radius: 0;
+    border-color: $vert-fonce;
+
+    &:hover{
+        background-color: $vert;
     }
 }
