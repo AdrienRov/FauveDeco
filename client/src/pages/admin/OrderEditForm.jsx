@@ -10,10 +10,6 @@ function OrderEditForm(props) {
     const [loading, setLoading] = useState(true);
     const { order } = props;
 
-    const handleEditOrder = async () => {
-        // Logique pour éditer la commande
-    };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
 
