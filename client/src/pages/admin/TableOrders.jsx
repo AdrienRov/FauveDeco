@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import OrderEditForm from './OrderEditForm'; // Assurez-vous d'importer correctement votre composant
+import OrderSendInvoice from './OrderSendInvoice';
 import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableOrders() {
@@ -17,6 +18,11 @@ function TableOrders() {
 		setForm(<OrderEditForm order={id} parentCallback={handleCallback} />);
 		setVisible(true);
 	};
+
+    const handleSendInvoice = (order) => {
+        setForm(<OrderSendInvoice order={order} parentCallback={handleCallback} />);
+		setVisible(true);
+    };
 
 	const handleDelete = (id) => {
 		axios.delete(`http://localhost:8000/order/${id}`)
@@ -86,7 +92,17 @@ function TableOrders() {
 								<tr key={i}>
 									<td>{order.client.lastName} {order.client.firstName}</td>
 									<td>{order.type == 1 ? "Livraison" : "Click and Collect"}</td>
-									<td>{status[order.status]}</td>
+									<td>
+                                        {status[order.status]}
+                                        {order.status == 1 && (
+                                            <button
+                                                className="bg-blue-500 text-white px-2 py-1 rounded ml-2"
+                                                onClick={() => handleSendInvoice(order)}
+                                            >
+                                                Envoyer facture
+                                            </button>
+                                        )}
+                                    </td>
 									<td>{order.client.address}, {order.client.country}</td>
 									<td>{new Date(order.date).toLocaleDateString('fr-FR')}</td>
 

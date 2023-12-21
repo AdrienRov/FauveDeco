@@ -10,7 +10,10 @@ const User = () => {
   useEffect(() => {
     axios.get(urlUser).then(response => {
         setUser(response.data);
-    })
+    }).catch((error) => {
+        localStorage.removeItem('user');
+        window.location.href = '/';
+    });
   }, []);
 
   const formSubmit = (e) => {
