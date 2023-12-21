@@ -94,7 +94,7 @@ function TableOrders() {
 									<td>{order.type == 1 ? "Livraison" : "Click and Collect"}</td>
 									<td>
                                         {status[order.status]}
-                                        {order.status == 1 && (
+                                        {order.status == 0 && (
                                             <button
                                                 className="bg-blue-500 text-white px-2 py-1 rounded ml-2"
                                                 onClick={() => handleSendInvoice(order)}
