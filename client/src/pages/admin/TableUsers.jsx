@@ -9,6 +9,7 @@ function TableUsers() {
     const [visible, setVisible] = useState(false);
     const [formKey, setFormKey] = useState(10);
     const [form, setForm] = useState(<UserEditForm />);
+    const [searchTerm, setSearchTerm] = useState("");
 
     const handleEdit = (id) => {
         setForm(<UserEditForm user={id} parentCallback={handleCallback} />);
@@ -58,9 +59,24 @@ function TableUsers() {
 						form={form}
 						title="Modifier l'utilisateur"
 					/>
+                    <div className="vert py-0 px-4 flex justify-between items-center font-bold text-xs">
+                        <div className="navbar-start flex items-center">
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="p-2 border border-gray-300 rounded-md"
+                            placeholder="Rechercher..."
+                        />
+                        </div>
+                        <label className="navbar-center text-base text-white">Liste des utilisateurs</label>
+                        <div className="navbar-end flex items-center">
+                        
+                        </div>
+                    </div>
 
                     <table className="table table-zebra">
-                        <thead className="bg-accent-content text-white">
+                        <thead className="vert bg-accent-content text-white">
                             <tr>
                                 <th>Nom</th>
                                 <th>Prénom</th>
@@ -72,7 +88,7 @@ function TableUsers() {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map((user, i) => (
+                            {users.filter((user) => (`${user.firstName} ${user.lastName}`).toLowerCase().includes(searchTerm.toLowerCase())).map((user, i) => (
                                 <tr key={i}>
                                     <td>{user.lastName}</td>
                                     <td>{user.firstName}</td>
