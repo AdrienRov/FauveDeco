@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <!-- ... (le reste du code reste inchangé) ... -->
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center; color: #333;">Facture pour {{ firstname }} {{ lastname }},</h1>
+        
+        <p style="font-size: 18px; color: #555; text-align: center;">Merci pour votre achat chez nous ! Veuillez trouver ci-dessous les détails de votre facture :</p>
+        
+        <div>
+            <h2 style="margin-bottom: 20px; color: #333;">Détails de la facture :</h2>
+            <ul>
+                {% for product in products %}
+                    <li><strong>{{ product.name }}</strong> - Quantité: {{ product.quantity }} - Prix unitaire: {{ product.price }} €</li>
+                {% endfor %}
+            </ul>
+            <p style="font-weight: bold; font-size: 18px; color: #333; text-align: right;">Total: {{ total_amount }} €</p>
+
+            <!-- Bouton pour finaliser la commande -->
+            <div style="text-align: center; margin-top: 30px;">
+                <a href="{{ url }}" style="display: inline-block; padding: 15px 30px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 5px;">Cliquez ici pour finaliser la commande</a>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Merci pour votre confiance !</p>
+        </footer>
+    </div>
+</body>
+</html>

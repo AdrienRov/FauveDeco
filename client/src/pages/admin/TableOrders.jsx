@@ -2,6 +2,8 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import OrderEditForm from './OrderEditForm'; // Assurez-vous d'importer correctement votre composant
+import OrderSendInvoice from './OrderSendInvoice';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableOrders() {
 	const [orders, setOrders] = useState([]);
@@ -10,15 +12,20 @@ function TableOrders() {
 	const [formKey, setFormKey] = useState(10);
 	const [form, setForm] = useState(<OrderEditForm />);
 
-    const [shownOrder, setShownOrder] = useState(null);
+	const [shownOrder, setShownOrder] = useState(null);
 
 	const handleEdit = (id) => {
 		setForm(<OrderEditForm order={id} parentCallback={handleCallback} />);
 		setVisible(true);
 	};
 
+    const handleSendInvoice = (order) => {
+        setForm(<OrderSendInvoice order={order} parentCallback={handleCallback} />);
+		setVisible(true);
+    };
+
 	const handleDelete = (id) => {
-		axios.delete(`http://127.0.0.1:8000/order/${id}`)
+		axios.delete(`http://localhost:8000/order/${id}`)
 			.then((response) => {
 				console.log(`Order ${id} deleted successfully`);
 				setOrders(prevOrders => prevOrders.filter(order => order.id !== id));
@@ -27,7 +34,7 @@ function TableOrders() {
 				console.log(`Error deleting order ${id}:`, error);
 			});
 	};
-	
+
 
 	const handleCallback = (data) => {
 		setVisible(data);
@@ -35,7 +42,7 @@ function TableOrders() {
 	};
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:8000/orders?limit=99999999999999&order=desc')
+		axios.get('http://localhost:8000/orders?limit=99999999999999&order=desc')
 			.then((response) => {
 				setOrders(response.data.map(order => order[0]));
 				setLoading(false);
@@ -44,20 +51,21 @@ function TableOrders() {
 				console.log(error);
 				setLoading(false);
 			});
-	}, []);
+	}, [visible]);
 
-    const status = {
-        0: "En attente",
-        1: "En préparation",
-        2: "Prêt",
-        3: "Terminé",
-        4: "Annulé"
-    };
+	const status = {
+		0: "En attente",
+        1: "Attente de paiement",
+		2: "En préparation",
+		3: "Prêt",
+		4: "Terminé",
+		5: "Annulé"
+	};
 
 	return (
 		<>
 			{loading ? (
-				<p>Chargement en cours...</p>
+				<LoadingSpinner />
 			) : (
 				<div className="overflow-x-auto">
 					<Modal
@@ -83,60 +91,68 @@ function TableOrders() {
 							{orders.map((order, i) => (<>
 								<tr key={i}>
 									<td>{order.client.lastName} {order.client.firstName}</td>
-									<td>{order.type == 1 ? "Click and Collect" : "Livraison"}</td>
-									<td>{status[order.status]}</td>
+									<td>{order.type == 1 ? "Livraison" : "Click and Collect"}</td>
+									<td>
+                                        {status[order.status]}
+                                        {order.status == 0 && (
+                                            <button
+                                                className="bg-blue-500 text-white px-2 py-1 rounded ml-2"
+                                                onClick={() => handleSendInvoice(order)}
+                                            >
+                                                Envoyer facture
+                                            </button>
+                                        )}
+                                    </td>
 									<td>{order.client.address}, {order.client.country}</td>
 									<td>{new Date(order.date).toLocaleDateString('fr-FR')}</td>
 
-									<td>
+									<td className='flex gap-2'>
 										<button
-											className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+											className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+											onClick={() => setShownOrder(order.id)}
+										>
+											Voir
+										</button>
+										<button
+											className="bg-blue-500 text-white px-2 py-1 rounded2"
 											onClick={() => handleEdit(order.id)}
 										>
 											Modifier
 										</button>
-
 										<button
-											className="bg-red-500 text-white px-2 py-1 rounded mr-2"
+											className="bg-red-500 text-white px-2 py-1 rounded"
 											onClick={() => handleDelete(order.id)}
 										>
 											Effacer
 										</button>
-
-                                        <button
-                                            className="bg-green-500 text-white px-2 py-1 rounded"
-                                            onClick={() => setShownOrder(order.id)}
-                                        >
-                                            Voir
-                                        </button>
 									</td>
 								</tr>
-                                {
-                                    shownOrder === order.id && (
-                                        <tr>
-                                            <td colSpan="7">
-                                                <table className="table table-zebra">
-                                                    <thead className="bg-accent-content text-white">
-                                                        <tr>
-                                                            <th>Produit</th>
-                                                            <th>Quantité</th>
-                                                            <th>Prix</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {order.productOrders.map((productOrder, i) => (
-                                                            <tr key={i}>
-                                                                <td>{productOrder.product.name}</td>
-                                                                <td>{productOrder.quantity}</td>
-                                                                <td>{productOrder.product.price}</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    )
-                                }
+								{
+									shownOrder === order.id && (
+										<tr>
+											<td colSpan="7">
+												<table className="table table-zebra">
+													<thead className="bg-accent-content text-white">
+														<tr>
+															<th>Produit</th>
+															<th>Quantité</th>
+															<th>Prix</th>
+														</tr>
+													</thead>
+													<tbody>
+														{order.productOrders.map((productOrder, i) => (
+															<tr key={i}>
+																<td>{productOrder.product.name}</td>
+																<td>{productOrder.quantity}</td>
+																<td>{productOrder.product.price}</td>
+															</tr>
+														))}
+													</tbody>
+												</table>
+											</td>
+										</tr>
+									)
+								}
 							</>))}
 						</tbody>
 					</table>

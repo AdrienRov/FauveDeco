@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import UserEditForm from './UserEditForm';
 import Modal from "../../components/Modal";
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableUsers() {
     const [users, setUsers] = useState([]);
@@ -16,7 +17,7 @@ function TableUsers() {
     };
 
 	const handleDelete = (id) => {
-		axios.delete(`http://127.0.0.1:8000/user/${id}`)
+		axios.delete(`http://localhost:8000/user/${id}`)
 			.then((response) => {
 				console.log(`User ${id} deleted successfully`);
 				// Mettre à jour l'état local après la suppression
@@ -34,7 +35,7 @@ function TableUsers() {
 	};
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/users')
+        axios.get('http://localhost:8000/users')
             .then((response) => {
                 setUsers(response.data);
                 setLoading(false); // Mettre le chargement à false une fois les données chargées
@@ -48,7 +49,7 @@ function TableUsers() {
 	return (
 		<>
 			{loading ? (
-				<p>Chargement en cours...</p>
+				<LoadingSpinner />
 			) : (
 				<div className="overflow-x-auto">
 					<Modal
@@ -80,9 +81,9 @@ function TableUsers() {
                                     <td>{user.email}</td>
                                     <td>{user.address}</td>
                                     <td>{user.country}</td>
-                                    <td>
+                                    <td className='flex gap-2'>
                                         <button
-                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            className="bg-blue-500 text-white px-2 py-1 rounded"
                                             onClick={() => handleEdit(user.id)}
                                         >
                                             Modifier

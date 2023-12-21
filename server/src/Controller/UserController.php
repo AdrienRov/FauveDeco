@@ -31,6 +31,8 @@ class UserController extends AbstractController
     #[Route('/users', name: 'app_users')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
 		$user = $entityManager->getRepository(User::class)->findall();
 
 		$arr = [];
@@ -76,10 +78,6 @@ class UserController extends AbstractController
 	#[Route('/logout', name: 'app_logout', methods: ['GET'])]
 	public function logout(#[CurrentUser] ?User $user, Security $security): Response
 	{
-		// $security->logout(false);
-		// fix Unable to logout as there is no logged-in user.
-
-
 		if (!$user) {
 			return $this->json([
 				'status' => false,
@@ -150,14 +148,15 @@ class UserController extends AbstractController
             // Vous pouvez ajouter d'autres détails si nécessaire
         ]);
 
-    $mailer->send($email);
+    	$mailer->send($email);
 		return $this->json($user->serializeAll());
 	}
 
 	#[Route('/user', name: 'app_user_create', methods: ['POST'])]
 	public function create( EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
 	{
-		// get name and parent from request
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
+
 		$request = Request::createFromGlobals();
 		$data = json_decode($request->getContent(), true);
 
@@ -196,6 +195,7 @@ class UserController extends AbstractController
 	#[Route('/user/{id}', name: 'app_user_delete', methods: ['DELETE'])]
 	public function delete(EntityManagerInterface $entityManager, int $id): Response
 	{
+		$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		$user = $entityManager->getRepository(User::class)->find($id);
 
 		if (!$user) {
@@ -218,6 +218,13 @@ class UserController extends AbstractController
 	#[Route('/user/{id}', name: 'app_user_update', methods: ['PATCH'])]
 	public function update(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, int $id): Response
 	{
+		$thisUser = $this->getUser();
+		if (!$thisUser) {
+			return $this->json([
+				'status' => false,
+				'error' => 'You can only update your own account'
+			]);
+		}
 		$user = $entityManager->getRepository(User::class)->find($id);
 
 		if (!$user) {
@@ -225,6 +232,10 @@ class UserController extends AbstractController
 				'status' => false,
 				'error' => 'User not found'
 			]);
+		}
+
+		if ($thisUser->getId() != $user->getId()) {
+			$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		}
 
 		// get name and parent from request
@@ -241,6 +252,7 @@ class UserController extends AbstractController
 			$user->setLastName($data['lastName']);
 		}
 		if (isset($data['role'])) {
+			$this->denyAccessUnlessGranted('ROLE_ADMIN');
 			$user->setRole($data['role']);
 		}
 		if (isset($data['phone'])) {

@@ -17,7 +17,7 @@ function ModifImage(props) {
         const fetchData = async () => {
             try {
                 // Faire une requête GET pour obtenir les informations du produit
-                const response = await axios.get(`http://127.0.0.1:8000/product/${productId}`);
+                const response = await axios.get(`http://localhost:8000/product/${productId}`);
                 setProduct(response.data);
             } catch (error) {
                 console.log(error);

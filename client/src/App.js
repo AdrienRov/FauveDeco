@@ -23,7 +23,7 @@ import Termes from './pages/termes/Termes';
 
 function App() {
   axios.defaults.withCredentials = true
-  const urlCategories = "http://127.0.0.1:8000/categories";
+  const urlCategories = "http://localhost:8000/categories";
   const [categories, setCategories] = useState([]);
 
   const handleCallback = (data) => {

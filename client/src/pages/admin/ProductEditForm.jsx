@@ -29,34 +29,52 @@ function ProductEditForm(props) {
         );
         setFilteredCategories(filtered);
     };
-	
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const productResponse = await axios.get(`http://127.0.0.1:8000/product/${product}`);
-                setEditedProduct(productResponse.data);
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-            }
-        };
 
-        fetchData();
+    useEffect(() => {
+        if (!product) {
+            return;
+        }
+
+        axios.get(`http://localhost:8000/product/${product}`).then((response) => {
+            setEditedProduct(response.data);
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error);
+        });
+
+        axios.get("http://localhost:8000/categories?limit=99999999999999").then((response) => {
+            setCategories(response.data);
+            setFilteredCategories(response.data);
+        }).catch((error) => {
+            console.log(error);
+        });
     }, [product]);
 
+    // set selected category when both categories and editedProduct are loaded
+    useEffect(() => {
+        if (!categories.length || !editedProduct.category) {
+            return;
+        }
+
+        const selected = categories.find((category) => category.id === editedProduct.category.id);
+        setSelectedCategory(selected);
+    }, [categories, editedProduct]);
+
+    
+
     const onTrigger = (event) => {
-        const formData = new FormData();
-        formData.append('name', editedProduct.name);
-        formData.append('price', editedProduct.price);
-        formData.append('description', editedProduct.description);
-		formData.append('quantity', editedProduct.quantity);
-		formData.append('category', editedProduct.category);
 
-        const url = `http://127.0.0.1:8000/product/${product}`; 
-
-        axios.patch(url, formData)
+        const url = `http://localhost:8000/product/${product}`; 
+        axios.patch(url, {
+            name: editedProduct.name,
+            price: editedProduct.price,
+            description: editedProduct.description,
+            quantity: editedProduct.quantity,
+            category: selectedCategory.id
+        })
             .then((response) => {
                 console.log('Mise à jour réussie !', response.data);
+                window.location.reload();
             })
             .catch((error) => {
                 console.error('Erreur lors de la mise à jour', error);
@@ -112,7 +130,8 @@ function ProductEditForm(props) {
 
 						<div className="mb-4">
                             <label className="block text-sm font-medium text-gray-600">Quantity :</label>
-                            <textarea
+                            <input
+                                type="number"
                                 name="quantity"
                                 value={editedProduct.quantity || ''}
                                 onChange={handleChange}
@@ -121,16 +140,20 @@ function ProductEditForm(props) {
                         </div>
 
                         {/* Barre de recherche pour les catégories */}
-                        <Select
-                            value={selectedCategory ? { value: selectedCategory, label: `${selectedCategory.name}` } : null}
-                            options={filteredCategories.map((category) => ({
-                                value: category,
-                                label: `${category.name}`,
-                            }))}
-                            onInputChange={(value) => handleCategorySearch(value)}
-                            onChange={(selectedOption) => handleCategorySelect(selectedOption.value)}
-                            placeholder="Rechercher une category"
-                        />
+                        <div className="mb-4">
+                            <label className="block text-sm font-medium text-gray-600">Catégorie :</label>
+                            <Select
+                                value={selectedCategory}
+                                onChange={handleCategorySelect}
+                                onInputChange={handleCategorySearch}
+                                options={filteredCategories}
+                                getOptionLabel={(category) => category.name}
+                                getOptionValue={(category) => category.id}
+                                placeholder="Rechercher une catégorie..."
+                                noOptionsMessage={() => 'Aucune catégorie'}
+                            />
+                        </div>
+
 
                         <button
                             type="button"

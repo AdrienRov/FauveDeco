@@ -17,34 +17,41 @@ function UserEditForm(props) {
     };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userResponse = await axios.get(`http://127.0.0.1:8000/user/${user}`);
-                setEditedUser(userResponse.data);
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+        if (!user) {
+            return;
+        }
 
-        fetchData();
+        axios.get(`http://localhost:8000/user/${user}`).then((response) => {
+            setEditedUser(response.data);
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error);
+        });
     }, [user]);
 
+    const roles = {
+        0: 'Annonyme',
+        1: 'Utilisateur',
+        2: 'Administrateur'
+    }
+
     const onTrigger = (event) => {
-        const formData = new FormData();
-        formData.append('firstName', editedUser.firstName);
-        formData.append('lastName', editedUser.lastName);
-        formData.append('email', editedUser.email);
-        formData.append('role', editedUser.role);
-        formData.append('phone', editedUser.phone);
-        formData.append('address', editedUser.address);
-        formData.append('country', editedUser.country);
+       
 
-        const url = `http://127.0.0.1:8000/user/${user}`;
+        const url = `http://localhost:8000/user/${user}`;
 
-        axios.patch(url, formData)
+        axios.patch(url, {
+            firstName: editedUser.firstName,
+            lastName: editedUser.lastName,
+            email: editedUser.email,
+            role: editedUser.role,
+            phone: editedUser.phone,
+            address: editedUser.address,
+            country: editedUser.country
+        })
             .then((response) => {
                 console.log('Mise à jour réussie !', response.data);
+                window.location.reload();
             })
             .catch((error) => {
                 console.error('Erreur lors de la mise à jour', error);
@@ -100,13 +107,19 @@ function UserEditForm(props) {
 
                         <div className="mb-4">
                             <label className="block text-sm font-medium text-gray-600">Rôle :</label>
-                            <input
-                                type="text"
+                            <select
                                 name="role"
-                                value={editedUser.role || ''}
+                                value={editedUser.role}
                                 onChange={handleChange}
                                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            />
+                            >
+                                {Object.keys(roles).map((key) => (
+                                    <option key={key} value={key}>
+                                        {roles[key]}
+                                    </option>
+                                ))}
+                            </select>
+
                         </div>
 
                         <div className="mb-4">

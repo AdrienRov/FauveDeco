@@ -24,14 +24,20 @@ class OrderController extends AbstractController
 {
 
     #[Route('/orders', name: 'app_orders')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, User $user): Response
     {
         $request = Request::createFromGlobals();
         $order = $request->query->get('order', 'asc');
         $limit = $request->query->get('limit', 10);
         $start = $request->query->get('start', 0);
         
-        $orders = $entityManager->getRepository(Order::class)->findBy([], ['id' => $order], $limit, $start);
+        $orders = [];
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $orders = $entityManager->getRepository(Order::class)->findBy(['client' => $user], ['id' => $order], $limit, $start);
+        } else {
+            $orders = $entityManager->getRepository(Order::class)->findBy([], ['id' => $order], $limit, $start);
+        }
 
         $arr = [];
 
@@ -46,6 +52,9 @@ class OrderController extends AbstractController
     {
         $order = $entityManager->getRepository(Order::class)->find($id);
 
+        if ($order->getClient() != $this->getUser())
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         if (!$order)
             return $this->json(['error' => 'Order not found']);
 
@@ -55,6 +64,8 @@ class OrderController extends AbstractController
     #[Route('/order', name: 'app_order_create', methods: ['POST'])]
     public function create(EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $request = Request::createFromGlobals();
         $data = json_decode($request->getContent(), true);
 
@@ -91,6 +102,8 @@ class OrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_update', methods: ['PATCH'])]
     public function update(EntityManagerInterface $entityManager, ValidatorInterface $validator, int $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $request = Request::createFromGlobals();
         $data = json_decode($request->getContent(), true);
 
@@ -139,6 +152,8 @@ class OrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_delete', methods: ['DELETE'])]
     public function delete(EntityManagerInterface $entityManager, int $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $order = $entityManager->getRepository(Order::class)->find($id);
 
         if (!$order)
@@ -209,6 +224,9 @@ class OrderController extends AbstractController
         // products contains an array of product id and quantity
         foreach ($products as $product_data) {
             $product = $entityManager->getRepository(Product::class)->find($product_data['id']);
+            if (!$product || $product->isDeleted()) {
+                return $this->json(['status' => false, 'error' => 'Product not found']);
+            }
             $quantity = $product_data['quantity'];
             if ($product && $quantity > 0 && $product->getQuantity() >= $quantity) {
                 $productOrder = new ProductOrder();
@@ -254,4 +272,58 @@ class OrderController extends AbstractController
         
         return $this->json(['status' => true]);
     }
+    #[Route('/send-invoice/{id}', name: 'app_invoice', methods: ['POST'])]
+    public function sendInvoice(int $id, MailerInterface $mailer, EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator): Response
+    {
+        $url = $data['url'] ?? null;
+        $order = $entityManager->getRepository(Order::class)->find($id);
+        if (!$order) {
+            return $this->json(['error' => 'Order not found']);
+        }
+    
+        $user = $order->getClient();
+        $email = $user->getEmail();
+        $firstname = $user->getFirstName();
+        $lastname = $user->getLastName();
+        $products = $order->getProductOrders();
+        
+        $productDetails = [];
+        $totalAmount = 0;  
+        
+        foreach ($products as $product) {
+            $productName = $product->getProduct()->getName();
+            $quantity = $product->getQuantity();
+            $price = $product->getProduct()->getPrice();  
+            
+            $productDetails[] = [
+                'name' => $productName,
+                'quantity' => $quantity,
+                'price' => $price  
+            ];
+    
+            $totalAmount += $price * $quantity;
+        }
+    
+        $email = (new TemplatedEmail())
+            ->from(new Address('commandes@fauvedeco.fr', 'FauveDeco'))
+            ->to($email)
+            ->subject('Facturation de commande')
+            ->htmlTemplate('emails/facturation.twig')
+            ->context([
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'products' => $productDetails,
+                'total_amount' => $totalAmount,
+                'url' => $url  
+            ]);
+        
+        $mailer->send($email);
+        
+        $order->setStatus(1);
+        $entityManager->persist($order);
+        $entityManager->flush();
+    
+        return $this->json(['status' => true]);
+    }
+    
 }
