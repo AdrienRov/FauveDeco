@@ -10,7 +10,7 @@ function TableOrders() {
 	const [formKey, setFormKey] = useState(10);
 	const [form, setForm] = useState(<OrderEditForm />);
 
-    const [shownOrder, setShownOrder] = useState(null);
+	const [shownOrder, setShownOrder] = useState(null);
 
 	const handleEdit = (id) => {
 		setForm(<OrderEditForm order={id} parentCallback={handleCallback} />);
@@ -27,7 +27,7 @@ function TableOrders() {
 				console.log(`Error deleting order ${id}:`, error);
 			});
 	};
-	
+
 
 	const handleCallback = (data) => {
 		setVisible(data);
@@ -46,13 +46,13 @@ function TableOrders() {
 			});
 	}, []);
 
-    const status = {
-        0: "En attente",
-        1: "En préparation",
-        2: "Prêt",
-        3: "Terminé",
-        4: "Annulé"
-    };
+	const status = {
+		0: "En attente",
+		1: "En préparation",
+		2: "Prêt",
+		3: "Terminé",
+		4: "Annulé"
+	};
 
 	return (
 		<>
@@ -90,53 +90,51 @@ function TableOrders() {
 
 									<td>
 										<button
+											className="bg-green-500 text-white px-2 py-1 rounded"
+											onClick={() => setShownOrder(order.id)}
+										>
+											Voir
+										</button>
+										<button
 											className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
 											onClick={() => handleEdit(order.id)}
 										>
 											Modifier
 										</button>
-
 										<button
 											className="bg-red-500 text-white px-2 py-1 rounded mr-2"
 											onClick={() => handleDelete(order.id)}
 										>
 											Effacer
 										</button>
-
-                                        <button
-                                            className="bg-green-500 text-white px-2 py-1 rounded"
-                                            onClick={() => setShownOrder(order.id)}
-                                        >
-                                            Voir
-                                        </button>
 									</td>
 								</tr>
-                                {
-                                    shownOrder === order.id && (
-                                        <tr>
-                                            <td colSpan="7">
-                                                <table className="table table-zebra">
-                                                    <thead className="bg-accent-content text-white">
-                                                        <tr>
-                                                            <th>Produit</th>
-                                                            <th>Quantité</th>
-                                                            <th>Prix</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {order.productOrders.map((productOrder, i) => (
-                                                            <tr key={i}>
-                                                                <td>{productOrder.product.name}</td>
-                                                                <td>{productOrder.quantity}</td>
-                                                                <td>{productOrder.product.price}</td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    )
-                                }
+								{
+									shownOrder === order.id && (
+										<tr>
+											<td colSpan="7">
+												<table className="table table-zebra">
+													<thead className="bg-accent-content text-white">
+														<tr>
+															<th>Produit</th>
+															<th>Quantité</th>
+															<th>Prix</th>
+														</tr>
+													</thead>
+													<tbody>
+														{order.productOrders.map((productOrder, i) => (
+															<tr key={i}>
+																<td>{productOrder.product.name}</td>
+																<td>{productOrder.quantity}</td>
+																<td>{productOrder.product.price}</td>
+															</tr>
+														))}
+													</tbody>
+												</table>
+											</td>
+										</tr>
+									)
+								}
 							</>))}
 						</tbody>
 					</table>
