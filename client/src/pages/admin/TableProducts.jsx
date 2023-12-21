@@ -70,7 +70,6 @@ function TableProducts() {
                     <table className="table table-zebra">
                         <thead className="bg-accent-content text-white">
                             <tr>
-                                <th>Images</th>
                                 <th>Nom</th>
                                 <th>Description</th>
 								<th>Catégories</th>
@@ -82,9 +81,7 @@ function TableProducts() {
                         <tbody>
                             {Array.isArray(products) && products.map((product, i) => (
                                 <tr key={i}>
-                                    <td>
-                                        <button onClick={() => handleModifImages(product.id)}>Modifier images</button>
-                                    </td>                                    <td>{product.name}</td>
+                                    <td>{product.name}</td>
                                     <td>{product.description}</td>
 									<td>{product.category.name}</td>
                                     <td>{product.quantity}</td>
@@ -102,6 +99,13 @@ function TableProducts() {
                                             onClick={() => handleDelete(product.id)}
                                         >
                                             Effacer
+                                        </button>
+
+                                        <button
+                                            className="bg-green-500 text-white px-2 py-1 rounded"
+                                            onClick={() => handleModifImages(product.id)}
+                                        >
+                                            Modifier images
                                         </button>
                                     </td>
                                 </tr>
