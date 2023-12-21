@@ -76,33 +76,40 @@ function Termes() {
                         </section>
 
                         <section class="mb-8">
-                            <h2 class="text-2xl font-bold mb-2">3. Prix</h2>
-                            <p>Les prix des produits sont indiqués en euros et sont susceptibles d'être modifiés à tout moment. Les frais de livraison ne sont pas inclus dans le prix affiché et sont précisés lors du processus de commande.</p>
+                            <h2 class="text-2xl font-bold mb-2">4. Commandes</h2>
+                            <p>4.1 Les commandes sont effectuées en ligne via le site internet. L'utilisateur doit créer un compte et fournir des informations exactes pour finaliser sa commande.</p>
+                            <p>4.2 <strong>fauve DECORATION</strong> se réserve le droit de refuser toute commande pour des motifs légitimes, notamment en cas de problème d'approvisionnement, de difficulté concernant la commande reçue ou de litige antérieur avec le client.</p>
                         </section>
 
                         <section class="mb-8">
-                            <h2 class="text-2xl font-bold mb-2">3. Prix</h2>
-                            <p>Les prix des produits sont indiqués en euros et sont susceptibles d'être modifiés à tout moment. Les frais de livraison ne sont pas inclus dans le prix affiché et sont précisés lors du processus de commande.</p>
+                            <h2 class="text-2xl font-bold mb-2">5. Paiement</h2>
+                            <p>5.1 Les paiements sont effectués en ligne par Up 2 Pay.</p>
+                            <p>5.2 La commande est considérée comme valide après confirmation du paiement.</p>
                         </section>
 
                         <section class="mb-8">
-                            <h2 class="text-2xl font-bold mb-2">3. Prix</h2>
-                            <p>Les prix des produits sont indiqués en euros et sont susceptibles d'être modifiés à tout moment. Les frais de livraison ne sont pas inclus dans le prix affiché et sont précisés lors du processus de commande.</p>
+                            <h2 class="text-2xl font-bold mb-2">6. Livraison</h2>
+                            <p>6.1 Les délais de livraison sont estimés et peuvent varier. <strong>fauve DECORATION</strong> ne peut être tenu responsable des retards indépendants de sa volonté.</p>
+                            <p>6.2 En cas de non-conformité d'un produit livré, le client dispose d'un délai de 180 jours à compter de la réception pour signaler le problème à <strong>fauve DECORATION</strong>.</p>
                         </section>
 
                         <section class="mb-8">
-                            <h2 class="text-2xl font-bold mb-2">3. Prix</h2>
-                            <p>Les prix des produits sont indiqués en euros et sont susceptibles d'être modifiés à tout moment. Les frais de livraison ne sont pas inclus dans le prix affiché et sont précisés lors du processus de commande.</p>
+                            <h2 class="text-2xl font-bold mb-2">7. Droit de rétractation</h2>
+                            <p>Le client dispose d'un délai de [nombre de jours] jours à compter de la réception des produits pour exercer son droit de rétractation, sans avoir à justifier de motifs ni à payer de pénalités.</p>
                         </section>
 
                         <section class="mb-8">
-                            <h2 class="text-2xl font-bold mb-2">3. Prix</h2>
-                            <p>Les prix des produits sont indiqués en euros et sont susceptibles d'être modifiés à tout moment. Les frais de livraison ne sont pas inclus dans le prix affiché et sont précisés lors du processus de commande.</p>
+                            <h2 class="text-2xl font-bold mb-2">8. Garanties</h2>
+                            <p>Les produits vendus sont garantis conformes aux dispositions légales en vigueur. <strong>fauve DECORATION</strong> ne saurait être tenu responsable des dommages résultant d'une utilisation inappropriée des produits.</p>
                         </section>
 
                         <section class="mb-8">
-                            <h2 class="text-2xl font-bold mb-2">3. Prix</h2>
-                            <p>Les prix des produits sont indiqués en euros et sont susceptibles d'être modifiés à tout moment. Les frais de livraison ne sont pas inclus dans le prix affiché et sont précisés lors du processus de commande.</p>
+                            <h2 class="text-2xl font-bold mb-2">9. Responsabilité</h2>
+                            <p>9.1 <strong>fauve DECORATION</strong> décline toute responsabilité en cas d'utilisation inappropriée des produits vendus sur le site.</p>
+                            <p>9.2 Les produits sont destinés à un usage conforme à leur description. <strong>fauve DECORATION</strong> ne peut être tenu responsable des dommages résultant d'une utilisation des produits contraire à leur destination ou en violation des instructions fournies.</p>
+                            <p>9.3 <strong>fauve DECORATION</strong> ne peut être tenu responsable des dommages indirects, consécutifs, spéciaux ou accidentels résultant de l'utilisation des produits, y compris, mais sans s'y limiter, la perte de profits, la perte de données ou tout autre préjudice financier ou commercial, même si <strong>fauve DECORATION</strong> a été informé de la possibilité de tels dommages.</p>
+                            <p>9.4 En tout état de cause, la responsabilité totale de <strong>fauve DECORATION</strong> envers le client, pour quelque réclamation que ce soit, ne dépassera en aucun cas le montant total payé par le client pour le produit en question.</p>
+                            <p>9.5 Les limitations de responsabilité énoncées dans les présentes conditions générales s'appliquent dans toute la mesure permise par la loi applicable.</p>
                         </section>
 
                         <section class="mb-8">
