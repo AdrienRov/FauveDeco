@@ -186,6 +186,9 @@ class Category
         $result = [];
 
         foreach ($this->getProducts() as $product) {
+            if ($product->getQuantity() <= 0) {
+                continue;
+            }
             $result[] = $product->serialize();
         }
 

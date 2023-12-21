@@ -45,6 +45,9 @@ class ProductController extends AbstractController
         $productArray = [];
 
         foreach ($products as $product) {
+            if ($product->isDeleted()) {
+                continue;
+            }
             $productArray[] = $product->serializeAll();
         }
         return $this->json($productArray);
@@ -53,6 +56,9 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'app_product', methods: ['GET'])]
     public function show(Product $product): JsonResponse
     {
+        if ($product->isDeleted()) {
+            return $this->json(['status' => false, 'error' => 'Product not found.'], 404);
+        }
         return $this->json($product->serializeAll());
     }
 
@@ -81,7 +87,8 @@ class ProductController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $this->entityManager->remove($product);
+        $product->setDeleted(true);
+        
         $this->entityManager->flush();
 
         return $this->json(['status' => true]);

@@ -31,6 +31,8 @@ class UserController extends AbstractController
     #[Route('/users', name: 'app_users')]
     public function index(EntityManagerInterface $entityManager): Response
     {
+		$this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
 		$user = $entityManager->getRepository(User::class)->findall();
 
 		$arr = [];
@@ -216,6 +218,13 @@ class UserController extends AbstractController
 	#[Route('/user/{id}', name: 'app_user_update', methods: ['PATCH'])]
 	public function update(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, int $id): Response
 	{
+		$thisUser = $this->getUser();
+		if (!$thisUser) {
+			return $this->json([
+				'status' => false,
+				'error' => 'You can only update your own account'
+			]);
+		}
 		$user = $entityManager->getRepository(User::class)->find($id);
 
 		if (!$user) {
@@ -225,7 +234,7 @@ class UserController extends AbstractController
 			]);
 		}
 
-		if ($this->getUser()->getId() != $user->getId()) {
+		if ($thisUser->getId() != $user->getId()) {
 			$this->denyAccessUnlessGranted('ROLE_ADMIN');
 		}
 
