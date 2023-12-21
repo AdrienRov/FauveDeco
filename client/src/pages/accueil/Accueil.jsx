@@ -150,7 +150,7 @@ const Accueil = (props) => {
                         <div class="mx-auto px-5">
                             <Link to={`/produit/${product.id}`}>
                                 <div class="max-w-xs cursor-pointer bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                                    <img class="w-full h-56 object-cover object-center" src={product.images[0]?.url} alt="product" />
+                                    <img class="w-full h-56 object-cover object-center" src={product.images[0]?.url || "https://cdn.discordapp.com/attachments/1183682581741437029/1187426923173920899/fr-default-large_default.jpg"} alt="product" />
                                     <p class="mt-4 font-bold text-center">{product.name}</p>
                                     <p class="mb-4 text-gray-800 text-center">{product.price}€</p>
                                 </div>
