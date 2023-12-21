@@ -73,7 +73,7 @@ function TableCategorie() {
 							{categories.map((category) => (
 								<tr key={category.id}>
 									<td>
-										<button onClick={() => handleModifImages(category.id)}>Edit Images</button>
+										<button onClick={() => handleModifImages(category.id)}>Modifier images</button>
 									</td>
 									<td>{category.name}</td>
 									<td>{category.parent && category.parent.name || ''}</td>
@@ -82,14 +82,14 @@ function TableCategorie() {
                                             className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
                                             onClick={() => handleEdit(category.id)}
                                         >
-                                            Edit
+                                            Modifier
                                         </button>
 
                                         <button
                                             className="bg-red-500 text-white px-2 py-1 rounded"
                                             onClick={() => handleDelete(category.id)}
                                         >
-                                            Delete
+                                            Effacer
                                         </button>
 									</td>
 								</tr>
