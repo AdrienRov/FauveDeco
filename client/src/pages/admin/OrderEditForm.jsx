@@ -51,7 +51,7 @@ function OrderEditForm(props) {
         })
             .then((response) => {
                 console.log('Mise à jour réussie !', response.data);
-                window.location.reload();
+                props.parentCallback(false);
             })
             .catch((error) => {
                 console.error('Erreur lors de la mise à jour', error);
