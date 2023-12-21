@@ -129,7 +129,7 @@ class Order
         //$metadata->addPropertyConstraint('date', new Assert\DateTime());
 
         $metadata->addPropertyConstraint('type', new Assert\NotNull());
-        $metadata->addPropertyConstraint('type', new Assert\Positive());
+        //$metadata->addPropertyConstraint('type', new Assert\Positive());
 
         $metadata->addPropertyConstraint('status', new Assert\NotNull());
 
