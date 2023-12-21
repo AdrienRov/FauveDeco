@@ -88,9 +88,9 @@ function TableProducts() {
 									<td>{product.category.name}</td>
                                     <td>{product.quantity}</td>
                                     <td>{product.price}</td>
-                                    <td>
+                                    <td className='flex gap-2'>
                                         <button
-                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            className="bg-blue-500 text-white px-2 py-1 rounded"
                                             onClick={() => handleEdit(product.id)}
                                         >
                                             Modifier

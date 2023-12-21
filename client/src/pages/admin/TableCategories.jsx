@@ -77,9 +77,9 @@ function TableCategorie() {
 									</td>
 									<td>{category.name}</td>
 									<td>{category.parent && category.parent.name || ''}</td>
-									<td>
+									<td className='flex gap-2'>
                                         <button
-                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            className="bg-blue-500 text-white px-2 py-1 rounded"
                                             onClick={() => handleEdit(category.id)}
                                         >
                                             Modifier
