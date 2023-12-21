@@ -27,12 +27,14 @@ function CategorieEditForm(props) {
 		setSelectedCategory(selectedOption);
 	};
 
-    const handleCategorySearch = (query) => {
+	const handleCategorySearch = (query) => {
+		console.log("HandleCategorySearch")
         const filtered = categories.filter((category) =>
             `${category.name}`.toLowerCase().includes(query.toLowerCase())
         );
         setFilteredCategories(filtered);
     };
+
 
 	useEffect(() => {
 		if (!categorieId) {
@@ -98,10 +100,10 @@ function CategorieEditForm(props) {
 						<div className="mb-4">
 							<label className="block text-sm font-medium text-gray-600">Catégorie parent :</label>
 							<Select
-								value={selectedCategory}
+								value={editedCategorie.parent}
 								onChange={handleCategorySelect}
 								onInputChange={handleCategorySearch}
-								options={filteredCategories}
+								options={filteredCategories.filter(category => category.id !== editedCategorie.id)}
 								getOptionLabel={(category) => category.name}
 								getOptionValue={(category) => category.id}
 								placeholder="Rechercher une catégorie..."
