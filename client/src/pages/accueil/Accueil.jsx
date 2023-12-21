@@ -95,7 +95,7 @@ const Accueil = (props) => {
                     <div class="relative flex w-full mx-2 md:mx-20 flex-row bg-white bg-clip-border text-gray-700 shadow-md">
                         <div class="relative m-0 w-2/5 shrink-0 overflow-hidden bg-white bg-clip-border text-gray-700 hidden md:block">
                             <img
-                                src={bestProduct?.images[0].url}
+                                src={bestProduct?.images[0]?.url}
                                 alt="image"
                                 class="h-full w-full object-cover block"
                             />
@@ -150,7 +150,7 @@ const Accueil = (props) => {
                         <div class="mx-auto px-5">
                             <Link to={`/produit/${product.id}`}>
                                 <div class="max-w-xs cursor-pointer bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                                    <img class="w-full h-56 object-cover object-center" src={product.images[0].url} alt="product" />
+                                    <img class="w-full h-56 object-cover object-center" src={product.images[0]?.url} alt="product" />
                                     <p class="mt-4 font-bold text-center">{product.name}</p>
                                     <p class="mb-4 text-gray-800 text-center">{product.price}€</p>
                                 </div>

@@ -42,7 +42,7 @@ const OrderField = ({ order }) => (
           {order.productOrders.slice(0, 3).map((productOrder, index) => (
             <li key={index}>
               <img
-                src={productOrder.product.images[0].url}
+                src={productOrder.product.images[0]?.url}
                 className="w-32 h-full object-cover rounded"
                 alt={`Product ${index + 1}`}
               />
@@ -63,7 +63,7 @@ const OrderField = ({ order }) => (
         {order.productOrders.map((productOrder, index) => (
           <li key={index} className="flex items-center space-x-2">
             <img
-              src={productOrder.product.images[0].url}
+              src={productOrder.product.images[0]?.url}
               className="w-32 h-full object-cover rounded"
               alt={`Product ${index + 1}`}
             />

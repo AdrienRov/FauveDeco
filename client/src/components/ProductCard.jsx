@@ -53,7 +53,7 @@ const ProductCard = (props) => {
         <div className="col-lg-4 col-md-6 mb-4 md:mx-7 mt-7 p-3" key={product.id}>
             <div class="mx-auto px-5">
                 <div class="w-full bg-white p-2 shadow duration-150">
-                    <Link to={`/produit/${product.id}`}><img class="w-full h-56 object-cover object-center" src={product.images[0].url} alt="product" /></Link>
+                    <Link to={`/produit/${product.id}`}><img class="w-full h-56 object-cover object-center" src={product.images[0]?.url} alt="product" /></Link>
                     <div className='row'>
                         <div>
                             <p class="mt-4 font-bold text-center">{product.name}</p>
