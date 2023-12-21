@@ -24,7 +24,7 @@ class OrderController extends AbstractController
 {
 
     #[Route('/orders', name: 'app_orders')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, User $user): Response
     {
         $request = Request::createFromGlobals();
         $order = $request->query->get('order', 'asc');
@@ -33,11 +33,8 @@ class OrderController extends AbstractController
         
         $orders = [];
 
-        $nowUser = $this->getUser();
-        if (!$nowUser)
-            return $this->json(['error' => 'User not found']);
-        if ($nowUser->getRole() == 0) {
-            $orders = $entityManager->getRepository(Order::class)->findBy(['client' => $nowUser], ['id' => $order], $limit, $start);
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $orders = $entityManager->getRepository(Order::class)->findBy(['client' => $user], ['id' => $order], $limit, $start);
         } else {
             $orders = $entityManager->getRepository(Order::class)->findBy([], ['id' => $order], $limit, $start);
         }
@@ -57,8 +54,6 @@ class OrderController extends AbstractController
 
         if ($order->getClient() != $this->getUser())
             $this->denyAccessUnlessGranted('ROLE_ADMIN');
-
-
 
         if (!$order)
             return $this->json(['error' => 'Order not found']);
@@ -229,6 +224,9 @@ class OrderController extends AbstractController
         // products contains an array of product id and quantity
         foreach ($products as $product_data) {
             $product = $entityManager->getRepository(Product::class)->find($product_data['id']);
+            if (!$product || $product->isDeleted()) {
+                return $this->json(['status' => false, 'error' => 'Product not found']);
+            }
             $quantity = $product_data['quantity'];
             if ($product && $quantity > 0 && $product->getQuantity() >= $quantity) {
                 $productOrder = new ProductOrder();
