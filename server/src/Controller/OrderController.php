@@ -14,9 +14,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class OrderController extends AbstractController
 {
+
     #[Route('/orders', name: 'app_orders')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -32,7 +38,6 @@ class OrderController extends AbstractController
         foreach ($orders as $order) {
             $arr[] = [$order->serializeAll()];
         }
-
         return $this->json($arr);
     }
 
@@ -79,7 +84,6 @@ class OrderController extends AbstractController
 
         $entityManager->persist($order);
         $entityManager->flush();
-
         return $this->json($order->serializeAll());
     }
 
@@ -146,8 +150,9 @@ class OrderController extends AbstractController
         return $this->json(['message' => 'Order deleted']);
     }
 
+
     #[Route('/purchase', name: 'app_purchase', methods: ['POST'])]
-    public function purchase(EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator): Response
+    public function purchase(MailerInterface $mailer, EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator): Response
     {
         $data = json_decode($request->getContent(), true);
 
@@ -222,7 +227,31 @@ class OrderController extends AbstractController
 
         $entityManager->persist($order);
         $entityManager->flush();
-
+        $productDetails = [];
+        foreach ($products as $product_data) {
+            $product = $entityManager->getRepository(Product::class)->find($product_data['id']);
+            $quantity = $product_data['quantity'];
+            if ($product && $quantity > 0 && $product->getQuantity() >= $quantity) {
+                $productDetails[] = [
+                    'name' => $product->getName(),
+                    'quantity' => $quantity
+                ];
+            }
+        }
+        
+        $email = (new TemplatedEmail())
+            ->from(new Address('commandes@fauvedeco.fr', 'FauveDeco'))
+            ->to($email)  // Utilisez l'email du client
+            ->subject('Confirmation de commande')
+            ->htmlTemplate('emails/confirmation.twig')
+            ->context([
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'products' => $productDetails
+            ]);
+        
+        $mailer->send($email);
+        
         return $this->json(['status' => true]);
     }
 }

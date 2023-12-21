@@ -125,7 +125,7 @@ function NavBar(props) {
 
 
     return (
-        <div>
+        <header>
             <Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
 
             <div className="navbar">
@@ -203,7 +203,7 @@ function NavBar(props) {
                 <ShoppingCartButton cart={props.cart} />
                 {isAdmin && <AdminButton handleDisplayAdmin={handleDisplayAdmin} />}
             </div>
-        </div>
+        </header>
     )
 }
 
