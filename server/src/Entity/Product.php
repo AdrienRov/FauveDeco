@@ -28,7 +28,7 @@ class Product
     #[ORM\Column]
     private ?int $quantity = null;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Image::class)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Image::class, fetch: 'EAGER')]
     private Collection $images;
 
     #[ORM\ManyToOne(inversedBy: 'products')]

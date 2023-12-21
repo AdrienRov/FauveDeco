@@ -51,7 +51,6 @@ class CreateTestDataCommand extends Command
             [ "name" => "Lavage", "parent" => 1 ],
             [ "name" => "Cuisinière", "parent" => 3 ],
             [ "name" => "Four", "parent" => 3 ],
-            [ "name" => "Micro-ondes", "parent" => 3 ],
             [ "name" => "Réfrigérateur", "parent" => 4 ],
             [ "name" => "Congélateur", "parent" => 4 ],
             [ "name" => "Lave-linge", "parent" => 5 ],
@@ -59,18 +58,7 @@ class CreateTestDataCommand extends Command
             [ "name" => "Lave-vaisselle", "parent" => 5 ],
             [ "name" => "Cafetière", "parent" => 2 ],
             [ "name" => "Bouilloire", "parent" => 2 ],
-            [ "name" => "Grille-pain", "parent" => 2 ],
-            [ "name" => "Robot de cuisine", "parent" => 2 ],
-            [ "name" => "Mixeur", "parent" => 2 ],
-            [ "name" => "Centrifugeuse", "parent" => 2 ],
-            [ "name" => "Presse-agrumes", "parent" => 2 ],
-            [ "name" => "Friteuse", "parent" => 2 ],
-            [ "name" => "Appareil à raclette", "parent" => 2 ],
-            [ "name" => "Appareil à fondue", "parent" => 2 ],
-            [ "name" => "Gaufrier", "parent" => 2 ],
-            [ "name" => "Croque-monsieur", "parent" => 2 ],
-            [ "name" => "Plancha", "parent" => 2 ],
-            [ "name" => "Barbecue", "parent" => 2 ]
+            [ "name" => "Grille-pain", "parent" => 2 ]
         ];
 
         $categoryEntities = [];
@@ -123,8 +111,8 @@ class CreateTestDataCommand extends Command
 
         // create users
         $users = [
-            [ "email" => "admin@localhost", "firstName" => "Admin", "lastName" => "Admin", "role" => 1, "password" => "admin", "phone" => "0123456789", "address" => "1 rue de l'admin", "country" => "France" ],
-            [ "email" => "user@localhost", "firstName" => "User", "lastName" => "User", "role" => 2, "password" => "user", "phone" => "0123456789", "address" => "1 rue de l'user", "country" => "France" ]
+            [ "email" => "admin@localhost", "firstName" => "Admin", "lastName" => "Admin", "role" => 2, "password" => "admin", "phone" => "0123456789", "address" => "1 rue de l'admin", "country" => "France" ],
+            [ "email" => "user@localhost", "firstName" => "User", "lastName" => "User", "role" => 1, "password" => "user", "phone" => "0123456789", "address" => "1 rue de l'user", "country" => "France" ]
         ];
 
         $userEntities = [];

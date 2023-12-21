@@ -22,6 +22,21 @@ function Produit(props) {
         });
     }, [id]);
 
+    // Carousel
+    const [currentImage, setCurrentImage] = useState(0);
+
+    // change every 5 seconds
+    useEffect(() => {
+        if (!produit?.images?.length) {
+            return;
+        }
+        const interval = setInterval(() => {
+            setCurrentImage((currentImage + 1) % produit.images.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [currentImage, produit?.images?.length]);
+
+
     if (!produit) {
         return (<div>Produit introuvable</div>);
     }
@@ -46,6 +61,9 @@ function Produit(props) {
     }
 
     const changeQuantity = (produit, quantity) => {
+        if (typeof quantity !== "number") {
+            quantity = parseInt(quantity);
+        }
         if (quantity < 1) {
             return;
         }
@@ -59,6 +77,10 @@ function Produit(props) {
         }
     }
 
+
+
+    
+
     const cartItem = cart.find((x) => x.id === produit.id);
     return (
         <div class="py-6">
@@ -67,17 +89,33 @@ function Produit(props) {
                     <div class="md:flex-1 px-4">
                         <div x-data="{ image: 1 }" x-cloak>
                             <div class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4">
-                                <div class="h-64 md:h-80 rounded-lg bg-gray-100 mb-4 flex items-center justify-center">
-                                    <img className="object-cover w-full h-full rounded-lg" src={produit.images[0].url} alt="" />
+                                <div class="h-64 md:h-80 bg-gray-100 mb-4 flex items-center justify-center">
+                                    {
+                                        produit.images.map((image, index) => (
+                                            <img src={image.url} alt="product" class={`h-full w-full object-cover ${index === currentImage ? 'block' : 'hidden'}`} />
+                                        ))
+                                    }                                 
                                 </div>
                             </div>
+                        </div>
+                        {
+                            // image thumbnails, when clicked, set the index as the current image
+                        }
+                        <div class="flex -mx-2 mb-4 justify-center">
+                            {
+                                produit.images.map((image, index) => (
+                                    <div class="h-12 md:h-16 bg-gray-100 overflow-hidden cursor-pointer mx-2" onClick={() => setCurrentImage(index)}>
+                                        <img src={image.url} alt="product" class="h-full w-full object-cover" />
+                                    </div>
+                                ))
+                            }
                         </div>
                         <div class="md:flex-1 px-4">
                             <h2 class="mb-2 leading-tight tracking-tight font-bold text-gray-800 text-2xl md:text-3xl">{ produit.name }</h2>
 
                             <div class="flex items-center space-x-4 my-4">
                                 <div>
-                                    <div class="rounded-lg bg-gray-100 flex py-2 px-3">
+                                    <div class="bg-gray-100 flex py-2 px-3">
                                         <span class="font-bold prix text-3xl">{produit.price}€</span>
                                     </div>
                                 </div>
@@ -90,22 +128,22 @@ function Produit(props) {
                                 {
                                     cartItem && (<>
                                     <div class="flex items-center">
-                                        <button class="rounded-lg bg-gray-100 py-2 px-3" onClick={() => changeQuantity(cartItem, cartItem.buy_quantity - 1)}>
+                                        <button class="bg-gray-100 py-2 px-3" onClick={() => changeQuantity(cartItem, cartItem.buy_quantity - 1)}>
                                             <span class="font-bold text-gray-600 text-lg">-</span>
                                         </button>
                                         <span class="mx-2 text-gray-700">{cartItem.buy_quantity}</span>
-                                        <button class="rounded-lg bg-gray-100 py-2 px-3" onClick={() => changeQuantity(cartItem, cartItem.buy_quantity + 1)}>
+                                        <button class="bg-gray-100 py-2 px-3" onClick={() => changeQuantity(cartItem, cartItem.buy_quantity + 1)}>
                                             <span class="font-bold text-gray-600 text-lg">+</span>
                                         </button>
                                     </div>
-                                    <button class="flex items-center justify-center px-4 py-2 bg-gray-800 text-white text-base font-medium rounded-lg hover:bg-gray-700" onClick={() => removeFromCart(produit)}>
+                                    <button class="flex items-center justify-center px-4 py-2 bg-gray-800 text-white text-base font-medium hover:bg-gray-700" onClick={() => removeFromCart(produit)}>
                                         <svg class="h-6 w-6 mr-2 fill-current text-white" viewBox="0 0 24 24">
                                             <path d="M19 13H5v-2h14v2z" />
                                         </svg>
                                         <span>Retirer du panier</span>
                                     </button>
                                     </>) || (
-                                        <button type="button" class="h-14 px-6 py-2 font-semibold rounded-xl btn-ajouter hover:bg-black text-white" onClick={() => addToCart(produit)}>
+                                        <button type="button" class="h-14 px-6 py-2 font-semibold btn-ajouter" onClick={() => addToCart(produit)}>
                                             Ajouter au panier
                                         </button>
                                     )

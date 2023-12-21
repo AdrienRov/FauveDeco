@@ -8,8 +8,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+
 
 class UserController extends AbstractController
 {
@@ -66,8 +73,89 @@ class UserController extends AbstractController
 		]);
 	}
 
+	#[Route('/logout', name: 'app_logout', methods: ['GET'])]
+	public function logout(#[CurrentUser] ?User $user, Security $security): Response
+	{
+		// $security->logout(false);
+		// fix Unable to logout as there is no logged-in user.
+
+
+		if (!$user) {
+			return $this->json([
+				'status' => false,
+				'error' => 'User not found'
+			]);
+		}
+
+
+
+		return $this->json([
+			"status" => true
+		]);
+	}
+
+	#[Route('/register', name: 'app_register', methods: ['POST'])]
+	public function register(MailerInterface $mailer,EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+	{
+		// get name and parent from request
+		$request = Request::createFromGlobals();
+		$data = json_decode($request->getContent(), true);
+
+		$requiredKeys = ['email', 'firstName', 'lastName', 'password', 'phone', 'address', 'country'];
+
+		foreach ($requiredKeys as $key) {
+			if (!isset($data[$key])) {
+				return $this->json([
+					'status' => false,
+					'error' => "Missing or invalid key: $key",
+				]);
+			}
+		}
+
+		// if email already exists
+		$user = $entityManager->getRepository(User::class)->findOneBy(['email' => $data['email']]);
+		if ($user && $user->getRole() != 0) {
+			return $this->json([
+				'status' => false,
+				'error' => 'Email already exists'
+			]);
+		}
+
+		$user = $user ?? new User();
+		
+		$user->setEmail($data['email']);
+		$user->setFirstName($data['firstName']);
+		$user->setLastName($data['lastName']);
+		$user->setRole(1);
+		$user->setPhone($data['phone']);
+		$user->setAddress($data['address']);
+		$user->setCountry($data['country']);
+
+		$hashed_password = $passwordHasher->hashPassword(
+			$user,
+			$data['password']
+		);
+		$user->setPassword($hashed_password);
+
+		$entityManager->persist($user);
+		$entityManager->flush();
+		$email = (new TemplatedEmail())
+        ->from(new Address('commandes@fauvedeco.fr', 'FauveDeco'))
+        ->to($user->getEmail())  // Utilisez l'email de l'utilisateur
+        ->subject('Confirmation de création de compte')
+        ->htmlTemplate('emails/inscription.twig')
+        ->context([
+            'firstname' => $user->getFirstName(),
+            'lastname' => $user->getLastName(),
+            // Vous pouvez ajouter d'autres détails si nécessaire
+        ]);
+
+    $mailer->send($email);
+		return $this->json($user->serializeAll());
+	}
+
 	#[Route('/user', name: 'app_user_create', methods: ['POST'])]
-	public function create(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
+	public function create( EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher): Response
 	{
 		// get name and parent from request
 		$request = Request::createFromGlobals();
@@ -101,7 +189,6 @@ class UserController extends AbstractController
 
 		$entityManager->persist($user);
 		$entityManager->flush();
-
 		return $this->json($user->serializeAll());
 	}
 

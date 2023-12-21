@@ -5,6 +5,8 @@ namespace App\Controller;
 use App\Entity\Order;
 use App\Entity\ProductOrder;
 use App\Entity\Product;
+use App\Entity\Category;
+use App\Entity\Image;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,9 +14,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 
 class OrderController extends AbstractController
 {
+
     #[Route('/orders', name: 'app_orders')]
     public function index(EntityManagerInterface $entityManager): Response
     {
@@ -30,7 +38,6 @@ class OrderController extends AbstractController
         foreach ($orders as $order) {
             $arr[] = [$order->serializeAll()];
         }
-
         return $this->json($arr);
     }
 
@@ -77,7 +84,6 @@ class OrderController extends AbstractController
 
         $entityManager->persist($order);
         $entityManager->flush();
-
         return $this->json($order->serializeAll());
     }
 
@@ -97,6 +103,8 @@ class OrderController extends AbstractController
             $order->setType($data['type']);
         if (isset($data['status']))
             $order->setStatus($data['status']);
+        if (isset($data['date']))
+            $order->setDate($data['date']);
         if (isset($data['products'])) {
 
             foreach ($order->getProductOrders() as $productOrder) {
@@ -142,4 +150,108 @@ class OrderController extends AbstractController
         return $this->json(['message' => 'Order deleted']);
     }
 
+
+    #[Route('/purchase', name: 'app_purchase', methods: ['POST'])]
+    public function purchase(MailerInterface $mailer, EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator): Response
+    {
+        $data = json_decode($request->getContent(), true);
+
+        $user = $this->getUser();
+        $shippingData = $data['shippingdata'] ?? null;
+        $products = $data['products'] ?? null;
+        $email = $shippingData['email'] ?? null;
+        $firstname = $shippingData['firstname'] ?? null;
+        $lastname = $shippingData['lastname'] ?? null;
+        $address = $shippingData['address'] ?? null;
+        $country = $shippingData['country'] ?? null;
+
+
+
+        if ($user) {
+            $email = $user->getEmail();
+            $firstname = $user->getFirstName();
+            $lastname = $user->getLastName();
+            $address = $user->getAddress();
+            $country = $user->getCountry();
+        } else {
+            if (!$email || !$firstname || !$lastname || !$address || !$country) {
+                return $this->json(['status' => false, 'error' => $request->getContent()]);
+                
+            }
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+            if (!$user) {
+                // create new user
+                $user = new User();
+                $user->setEmail($email);
+                $user->setFirstName($firstname);
+                $user->setLastName($lastname);
+                $user->setRole(0);
+                $user->setPhone('');
+                $user->setAddress($address);
+                $user->setCountry($country);
+
+                $user->setPassword(null);
+
+                $entityManager->persist($user);
+                $entityManager->flush();
+            }
+            if ($user->getRole() != 0) {
+                return $this->json(['status' => false, 'error' => 'User already exists']);
+            }
+        }
+
+        $order = new Order();
+        $order->setDate(new \DateTime('now'));
+        $order->setType($data['type']);
+        $order->setStatus(0);
+        $order->setClient($user);
+
+        // products contains an array of product id and quantity
+        foreach ($products as $product_data) {
+            $product = $entityManager->getRepository(Product::class)->find($product_data['id']);
+            $quantity = $product_data['quantity'];
+            if ($product && $quantity > 0 && $product->getQuantity() >= $quantity) {
+                $productOrder = new ProductOrder();
+                $productOrder->setProduct($product);
+                $productOrder->setQuantity($quantity);
+                $productOrder->setInOrder($order);
+                $order->addProductOrder($productOrder);
+            }
+        }
+
+        $errors = $validator->validate($order);
+
+        if (count($errors) > 0) {
+            return $this->json(['status' => false, 'error' => (string) $errors], 400);
+        }
+
+        $entityManager->persist($order);
+        $entityManager->flush();
+        $productDetails = [];
+        foreach ($products as $product_data) {
+            $product = $entityManager->getRepository(Product::class)->find($product_data['id']);
+            $quantity = $product_data['quantity'];
+            if ($product && $quantity > 0 && $product->getQuantity() >= $quantity) {
+                $productDetails[] = [
+                    'name' => $product->getName(),
+                    'quantity' => $quantity
+                ];
+            }
+        }
+        
+        $email = (new TemplatedEmail())
+            ->from(new Address('commandes@fauvedeco.fr', 'FauveDeco'))
+            ->to($email)  // Utilisez l'email du client
+            ->subject('Confirmation de commande')
+            ->htmlTemplate('emails/confirmation.twig')
+            ->context([
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'products' => $productDetails
+            ]);
+        
+        $mailer->send($email);
+        
+        return $this->json(['status' => true]);
+    }
 }

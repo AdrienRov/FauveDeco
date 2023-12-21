@@ -128,14 +128,10 @@ class Order
         $metadata->addPropertyConstraint('date', new Assert\NotNull());
         //$metadata->addPropertyConstraint('date', new Assert\DateTime());
 
-        $metadata->addPropertyConstraint('total', new Assert\NotNull());
-        $metadata->addPropertyConstraint('total', new Assert\PositiveOrZero());
-
         $metadata->addPropertyConstraint('type', new Assert\NotNull());
         $metadata->addPropertyConstraint('type', new Assert\Positive());
 
         $metadata->addPropertyConstraint('status', new Assert\NotNull());
-        $metadata->addPropertyConstraint('status', new Assert\Positive());
 
         $metadata->addPropertyConstraint('client', new Assert\NotNull());
 
@@ -150,6 +146,8 @@ class Order
         foreach ($this->getProductOrders() as $productOrder) {
             $total += $productOrder->getProduct()->getPrice() * $productOrder->getQuantity();
         }
+
+        $total = round($total, 2);
 
         return [
             'id' => $this->getId(),
