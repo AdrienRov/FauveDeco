@@ -51,7 +51,7 @@ function TableOrders() {
 				console.log(error);
 				setLoading(false);
 			});
-	}, []);
+	}, [visible]);
 
 	const status = {
 		0: "En attente",
