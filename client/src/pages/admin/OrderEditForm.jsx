@@ -4,9 +4,6 @@ import Select from 'react-select';
 
 function OrderEditForm(props) {
     const [editedOrder, setEditedOrder] = useState({});
-    const [clients, setClients] = useState([]);
-    const [filteredClients, setFilteredClients] = useState([]);
-    const [selectedClient, setSelectedClient] = useState(null);
     const [loading, setLoading] = useState(true);
     const { order } = props;
 
@@ -31,57 +28,44 @@ function OrderEditForm(props) {
         }
     };
 
-
-    const handleClientSelect = (selectedOption) => {
-        setSelectedClient(selectedOption);
-    };
-
-    const handleClientSearch = (query) => {
-        const filtered = clients.filter((client) =>
-            `${client.lastName} ${client.firstName}`.toLowerCase().includes(query.toLowerCase())
-        );
-        setFilteredClients(filtered);
-    };
-
-    const formatDate = (date) => {
-        const year = date.getFullYear();
-        const month = String(date.getMonth() + 1).padStart(2, '0');
-        const day = String(date.getDate()).padStart(2, '0');
-        return `${year}-${month}-${day}`;
-    };
-
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const orderResponse = await axios.get(`http://127.0.0.1:8000/order/${order}`);
-                const clientsResponse = await axios.get(`http://127.0.0.1:8000/users`);
-                setEditedOrder(orderResponse.data);
-                setClients(clientsResponse.data);
-                setSelectedClient(orderResponse.data.client);
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-            }
-        };
+        if (!order) {
+            return; 
+        }
+        axios.get(`http://127.0.0.1:8000/order/${order}`).then((response) => {
+            setEditedOrder(response.data);
+            setLoading(false);
+        }).catch((error) => {
+            console.log(error);
+        });
+        
 
-        fetchData();
+
     }, [order]);
 
     const onTrigger = (event) => {
-        const formData = new FormData();
-        formData.append('date', editedOrder.date);
-    
         const url = `http://127.0.0.1:8000/order/${order}`; // Assurez-vous d'avoir l'ID de la commande ici
-    
-        axios.patch(url, formData)
+        console.log(editedOrder);
+        axios.patch(url, {
+            status: editedOrder.status,
+        })
             .then((response) => {
                 console.log('Mise à jour réussie !', response.data);
+                window.location.reload();
             })
             .catch((error) => {
                 console.error('Erreur lors de la mise à jour', error);
             });
     
         event.preventDefault();
+    };
+
+    const status = {
+        0: "En attente",
+        1: "En préparation",
+        2: "Prêt",
+        3: "Terminé",
+        4: "Annulé"
     };
     
 
@@ -95,73 +79,53 @@ function OrderEditForm(props) {
                         Modifier une commande
                     </h2>
 
+                    {/* Card avec les infos de la commande */}
+                    <div className="bg-gray-100 p-4 rounded-md mb-4">
+                        <div className="flex justify-between mb-2">
+                            <div className="flex-1">
+                                <h3 className="text-lg font-semibold">
+                                    Commande #{editedOrder.id}
+                                </h3>
+                                <p className="text-sm text-gray-600">
+                                    {editedOrder.date}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                    {editedOrder.client.address}, {editedOrder.client.country}
+                                </p>
+                            </div>
+                            <div className="flex-1">
+                                <h3 className="text-lg font-semibold">
+                                    {editedOrder.client.firstName}{' '}
+                                    {editedOrder.client.lastName}
+                                </h3>
+                                <p className="text-sm text-gray-600">
+                                    {editedOrder.client.email}
+                                </p>
+                                <p className="text-sm text-gray-600">
+                                    {editedOrder.client.phone}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Formulaire d'édition */}
                     <form>
-                        {/* Barre de recherche pour les clients */}
-                        <Select
-                            value={selectedClient ? { value: selectedClient, label: `${selectedClient.lastName} ${selectedClient.firstName}` } : null}
-                            options={filteredClients.map((client) => ({
-                                value: client,
-                                label: `${client.lastName} ${client.firstName}`,
-                            }))}
-                            onInputChange={(value) => handleClientSearch(value)}
-                            onChange={(selectedOption) => handleClientSelect(selectedOption.value)}
-                            placeholder="Rechercher un client"
-                        />
 
-                        {/* Ajoutez des champs pour le téléphone, l'e-mail, l'adresse, le pays et la date */}
+                        {/* Select pour le status */}
                         <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-600">Téléphone :</label>
-                            <input
-                                type="text"
-                                name="phone"
-                                value={editedOrder.client.phone || ''}
+                            <label className="block text-sm font-medium text-gray-600">Status :</label>
+                            <select
+                                name="status"
+                                value={editedOrder.status}
                                 onChange={handleChange}
                                 className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-600">E-mail :</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={editedOrder.client.email || ''}
-                                onChange={handleChange}
-                                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-600">Adresse :</label>
-                            <textarea
-                                name="address"
-                                value={editedOrder.client.address || ''}
-                                onChange={handleChange}
-                                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-600">Pays :</label>
-                            <input
-                                type="text"
-                                name="country"
-                                value={editedOrder.client.country || ''}
-                                onChange={handleChange}
-                                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            />
-                        </div>
-
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium text-gray-600">Date :</label>
-                            <input
-                                type="date"
-                                name="date"
-                                value={formatDate(new Date(editedOrder.date))}
-                                onChange={handleChange}
-                                className="mt-1 p-2 border border-gray-300 rounded-md w-full"
-                            />
+                            >
+                                {Object.keys(status).map((key) => (
+                                    <option key={key} value={key}>
+                                        {status[key]}
+                                    </option>
+                                ))}
+                            </select>
                         </div>
 
                         <button
