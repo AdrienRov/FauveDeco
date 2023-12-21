@@ -16,7 +16,7 @@ function TableUsers() {
     };
 
 	const handleDelete = (id) => {
-		axios.delete(`http://127.0.0.1:8000/user/${id}`)
+		axios.delete(`http://localhost:8000/user/${id}`)
 			.then((response) => {
 				console.log(`User ${id} deleted successfully`);
 				// Mettre à jour l'état local après la suppression
@@ -34,7 +34,7 @@ function TableUsers() {
 	};
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/users')
+        axios.get('http://localhost:8000/users')
             .then((response) => {
                 setUsers(response.data);
                 setLoading(false); // Mettre le chargement à false une fois les données chargées

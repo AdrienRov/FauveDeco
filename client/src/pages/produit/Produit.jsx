@@ -16,7 +16,7 @@ function Produit(props) {
     const [ produit, setProduit ] = useState(null);
 
     useEffect(() => {
-        const url = `http://127.0.0.1:8000/product/${id}`;
+        const url = `http://localhost:8000/product/${id}`;
         axios.get(url).then(response => {
             setProduit(response.data);
         });

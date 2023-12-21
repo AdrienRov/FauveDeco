@@ -18,7 +18,7 @@ function TableOrders() {
 	};
 
 	const handleDelete = (id) => {
-		axios.delete(`http://127.0.0.1:8000/order/${id}`)
+		axios.delete(`http://localhost:8000/order/${id}`)
 			.then((response) => {
 				console.log(`Order ${id} deleted successfully`);
 				setOrders(prevOrders => prevOrders.filter(order => order.id !== id));
@@ -35,7 +35,7 @@ function TableOrders() {
 	};
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:8000/orders?limit=99999999999999&order=desc')
+		axios.get('http://localhost:8000/orders?limit=99999999999999&order=desc')
 			.then((response) => {
 				setOrders(response.data.map(order => order[0]));
 				setLoading(false);

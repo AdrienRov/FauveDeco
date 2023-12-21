@@ -17,7 +17,7 @@ function TableProducts() {
     };
 
     const handleDelete = (id) => {
-        axios.delete(`http://127.0.0.1:8000/product/${id}`)
+        axios.delete(`http://localhost:8000/product/${id}`)
 			.then((response) => {
 				console.log(`Product ${id} deleted successfully`);
 				// Mettre à jour l'état local après la suppression
@@ -40,7 +40,7 @@ function TableProducts() {
     }
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/products?limit=99999999999999')
+        axios.get('http://localhost:8000/products?limit=99999999999999')
             .then((response) => {
                 const productsArray = [response.data[0]];
                 setproducts(response.data);

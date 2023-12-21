@@ -22,7 +22,7 @@ function CategorieEditForm(props) {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const categorieResponse = await axios.get(`http://127.0.0.1:8000/categorie/${categorieId}`);
+				const categorieResponse = await axios.get(`http://localhost:8000/categorie/${categorieId}`);
 				setEditedCategorie(categorieResponse.data);
 				setLoading(false);
 			} catch (error) {

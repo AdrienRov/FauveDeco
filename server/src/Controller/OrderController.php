@@ -34,6 +34,8 @@ class OrderController extends AbstractController
         $orders = [];
 
         $nowUser = $this->getUser();
+        if (!$nowUser)
+            return $this->json(['error' => 'User not found']);
         if ($nowUser->getRole() == 0) {
             $orders = $entityManager->getRepository(Order::class)->findBy(['client' => $nowUser], ['id' => $order], $limit, $start);
         } else {
@@ -156,7 +158,7 @@ class OrderController extends AbstractController
     public function delete(EntityManagerInterface $entityManager, int $id): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        
+
         $order = $entityManager->getRepository(Order::class)->find($id);
 
         if (!$order)
