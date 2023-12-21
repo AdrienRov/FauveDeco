@@ -47,7 +47,7 @@ function TableProducts() {
 
 	const handleModifImages = (productId) => {
 		setForm(
-			<ModifImage productId={productId} parentCallback={handleCallback} />
+			<ModifImage typeId={productId} dataType="product" parentCallback={handleCallback} />
 		);
 		setFormKey(formKey + 1);
 		setVisible(true);
