@@ -160,7 +160,7 @@ class ProductController extends AbstractController
         return $product;
     }
 
-    #[Route('/product/{id}/add-image', name: 'app_product_add_image', methods: ['POST'])]
+    #[Route('/product/{id}/images', name: 'app_product_add_image', methods: ['POST'])]
     public function addImage(Request $request, Product $product): JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -174,19 +174,26 @@ class ProductController extends AbstractController
         $uploadsDirectory = $this->getParameter('images_directory'); // This parameter in services.yaml or config file
         $fileName = md5(uniqid()) . '.' . $uploadedFile->getClientOriginalExtension();
         $uploadedFile->move($uploadsDirectory, $fileName);
-    
+        
+        # add http host and port to the url
+        $finalUrl = $request->getSchemeAndHttpHost() . "/images/$fileName";
+
         $image = new Image();
-        $image->setUrl($fileName);
+        $image->setUrl($finalUrl);
         $image->setProduct($product);
     
         $this->entityManager->persist($product);
         $this->entityManager->persist($image);
         $this->entityManager->flush();
     
-        return $this->json(['status' => true]);
+        return $this->json([
+            'status' => true,
+            'id' => $image->getId(),
+            'url' => $image->getUrl()
+        ]);
     }
 
-    #[Route('/product/{id}/remove-image/{imageId}', name: 'app_product_remove_image', methods: ['DELETE'])]
+    #[Route('/product/{id}/images/{imageId}', name: 'app_product_remove_image', methods: ['DELETE'])]
     public function removeImage(Product $product, int $imageId): JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
