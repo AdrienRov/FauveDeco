@@ -106,7 +106,7 @@ function TableOrders() {
 									<td>{order.client.address}, {order.client.country}</td>
 									<td>{new Date(order.date).toLocaleDateString('fr-FR')}</td>
 
-									<td>
+									<td className='flex gap-2'>
 										<button
 											className="bg-green-500 text-white px-2 py-1 rounded mr-2"
 											onClick={() => setShownOrder(order.id)}
@@ -114,7 +114,7 @@ function TableOrders() {
 											Voir
 										</button>
 										<button
-											className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+											className="bg-blue-500 text-white px-2 py-1 rounded2"
 											onClick={() => handleEdit(order.id)}
 										>
 											Modifier

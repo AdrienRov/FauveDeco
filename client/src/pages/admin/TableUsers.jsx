@@ -81,9 +81,9 @@ function TableUsers() {
                                     <td>{user.email}</td>
                                     <td>{user.address}</td>
                                     <td>{user.country}</td>
-                                    <td>
+                                    <td className='flex gap-2'>
                                         <button
-                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            className="bg-blue-500 text-white px-2 py-1 rounded"
                                             onClick={() => handleEdit(user.id)}
                                         >
                                             Modifier
