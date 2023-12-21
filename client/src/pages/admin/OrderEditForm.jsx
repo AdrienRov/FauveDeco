@@ -61,12 +61,13 @@ function OrderEditForm(props) {
     };
 
     const status = {
-        0: "En attente",
-        1: "En préparation",
-        2: "Prêt",
-        3: "Terminé",
-        4: "Annulé"
-    };
+		0: "En attente",
+        1: "Attente de paiement",
+		2: "En préparation",
+		3: "Prêt",
+		4: "Terminé",
+		5: "Annulé"
+	};
     
 
     return (

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import ModifImage from './ModifImages';
 import ProductEditForm from './ProductEditForm';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableProducts() {
     const [products, setproducts] = useState([]);
@@ -55,7 +56,7 @@ function TableProducts() {
     return (
         <>
             {loading ? (
-                <p>Chargement en cours...</p>
+                <LoadingSpinner />
             ) : (
 				<div className="overflow-x-auto">
 					<Modal
