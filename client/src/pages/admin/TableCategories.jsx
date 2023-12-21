@@ -13,7 +13,7 @@ function TableCategorie() {
 	const [formKey, setFormKey] = useState(10);
 
 	const handleEdit = (id) => {
-		setForm(<CategorieEditForm product={id} parentCallback={handleCallback} />);
+		setForm(<CategorieEditForm categorieId={id} parentCallback={handleCallback} />);
 		setVisible(true);
 	};
 
