@@ -80,17 +80,17 @@ function TableProducts() {
             title="Modifier le produit"
           />
 
-          <div className="vert py-0 px-4 flex justify-between items-center text-white font-bold text-xs">
+          <div className="vert py-0 px-4 flex justify-between items-center font-bold text-xs">
             <div className="navbar-start flex items-center">
-              <label className="mr-2">Rechercher :</label>
               <input
                 type="text"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="p-2 border border-gray-300 rounded-md"
+                placeholder="Rechercher..."
               />
             </div>
-            <label className="navbar-center text-base">Liste des produits</label>
+            <label className="navbar-center text-base text-white">Liste des produits</label>
             <div className="navbar-end flex items-center">
               <button
                 className="bg-accent-content text-white px-4 py-2 rounded"
@@ -115,7 +115,7 @@ function TableProducts() {
             </thead>
             <tbody>
               {Array.isArray(products) &&
-                products.map((product, i) => (
+                products.filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase())).map((product, i) => (
                   <tr key={i}>
                     <td>
                       <button onClick={() => handleModifImages(product.id)}>

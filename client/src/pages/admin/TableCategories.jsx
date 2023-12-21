@@ -10,6 +10,7 @@ function TableCategorie() {
 	const [loading, setLoading] = useState(true);
 	const [visible, setVisible] = useState(false);
 	const [formKey, setFormKey] = useState(10);
+	const [searchTerm, setSearchTerm] = useState("");
 
 	const handleEdit = (id) => {
 		setForm(<CategorieEditForm product={id} parentCallback={handleCallback} />);
@@ -59,9 +60,23 @@ function TableCategorie() {
 			) : (
 				<div className="overflow-x-auto">
 					<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
-
+					<div className="vert py-0 px-4 flex justify-between items-center font-bold text-xs">
+                        <div className="navbar-start flex items-center">
+                        <input
+                            type="text"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="p-2 border border-gray-300 rounded-md"
+                            placeholder="Rechercher..."
+                        />
+                        </div>
+                        <label className="navbar-center text-base text-white">Liste des catégories</label>
+                        <div className="navbar-end flex items-center">
+                        
+                        </div>
+                    </div>
 					<table className="table table-zebra">
-						<thead className="bg-accent-content text-white">
+						<thead className="vert bg-accent-content text-white">
 							<tr>
 								<th>Images</th>
 								<th>Nom</th>
@@ -70,7 +85,7 @@ function TableCategorie() {
 							</tr>
 						</thead>
 						<tbody>
-							{categories.map((category) => (
+							{categories.filter((category) => category.name.toLowerCase().includes(searchTerm.toLowerCase())).map((category) => (
 								<tr key={category.id}>
 									<td>
 										<button onClick={() => handleModifImages(category.id)}>Modifier images</button>
