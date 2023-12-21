@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import UserEditForm from './UserEditForm';
 import Modal from "../../components/Modal";
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableUsers() {
     const [users, setUsers] = useState([]);
@@ -48,7 +49,7 @@ function TableUsers() {
 	return (
 		<>
 			{loading ? (
-				<p>Chargement en cours...</p>
+				<LoadingSpinner />
 			) : (
 				<div className="overflow-x-auto">
 					<Modal

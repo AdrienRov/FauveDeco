@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import ModifImage from './ModifImages';
 import CategorieEditForm from './CategorieEditForm';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableCategorie() {
 	const [categories, setCategories] = useState([]);
@@ -55,7 +56,7 @@ function TableCategorie() {
 	return (
 		<>
 			{loading ? (
-				<p>Chargement en cours...</p>
+				<LoadingSpinner />
 			) : (
 				<div className="overflow-x-auto">
 					<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import OrderEditForm from './OrderEditForm'; // Assurez-vous d'importer correctement votre composant
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableOrders() {
 	const [orders, setOrders] = useState([]);
@@ -48,16 +49,17 @@ function TableOrders() {
 
 	const status = {
 		0: "En attente",
-		1: "En préparation",
-		2: "Prêt",
-		3: "Terminé",
-		4: "Annulé"
+        1: "Attente de paiement",
+		2: "En préparation",
+		3: "Prêt",
+		4: "Terminé",
+		5: "Annulé"
 	};
 
 	return (
 		<>
 			{loading ? (
-				<p>Chargement en cours...</p>
+				<LoadingSpinner />
 			) : (
 				<div className="overflow-x-auto">
 					<Modal
@@ -83,14 +85,14 @@ function TableOrders() {
 							{orders.map((order, i) => (<>
 								<tr key={i}>
 									<td>{order.client.lastName} {order.client.firstName}</td>
-									<td>{order.type == 1 ? "Click and Collect" : "Livraison"}</td>
+									<td>{order.type == 1 ? "Livraison" : "Click and Collect"}</td>
 									<td>{status[order.status]}</td>
 									<td>{order.client.address}, {order.client.country}</td>
 									<td>{new Date(order.date).toLocaleDateString('fr-FR')}</td>
 
 									<td>
 										<button
-											className="bg-green-500 text-white px-2 py-1 rounded"
+											className="bg-green-500 text-white px-2 py-1 rounded mr-2"
 											onClick={() => setShownOrder(order.id)}
 										>
 											Voir
@@ -102,7 +104,7 @@ function TableOrders() {
 											Modifier
 										</button>
 										<button
-											className="bg-red-500 text-white px-2 py-1 rounded mr-2"
+											className="bg-red-500 text-white px-2 py-1 rounded"
 											onClick={() => handleDelete(order.id)}
 										>
 											Effacer
