@@ -82,7 +82,7 @@ function TableProducts() {
                             {Array.isArray(products) && products.map((product, i) => (
                                 <tr key={i}>
                                     <td>
-                                        <button onClick={() => handleModifImages(product.id)}>Edit Images</button>
+                                        <button onClick={() => handleModifImages(product.id)}>Modifier images</button>
                                     </td>                                    <td>{product.name}</td>
                                     <td>{product.description}</td>
 									<td>{product.category.name}</td>
@@ -93,14 +93,14 @@ function TableProducts() {
                                             className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
                                             onClick={() => handleEdit(product.id)}
                                         >
-                                            Edit
+                                            Modifier
                                         </button>
 
                                         <button
                                             className="bg-red-500 text-white px-2 py-1 rounded"
                                             onClick={() => handleDelete(product.id)}
                                         >
-                                            Delete
+                                            Effacer
                                         </button>
                                     </td>
                                 </tr>

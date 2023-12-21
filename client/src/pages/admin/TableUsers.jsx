@@ -85,14 +85,14 @@ function TableUsers() {
                                             className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
                                             onClick={() => handleEdit(user.id)}
                                         >
-                                            Edit
+                                            Modifier
                                         </button>
 
 										<button
 											className="bg-red-500 text-white px-2 py-1 rounded"
 											onClick={() => handleDelete(user.id)}
 										>
-											Delete
+											Effacer
 										</button>
 									</td>
 								</tr>
