@@ -32,7 +32,7 @@ function OrderEditForm(props) {
         if (!order) {
             return; 
         }
-        axios.get(`http://127.0.0.1:8000/order/${order}`).then((response) => {
+        axios.get(`http://localhost:8000/order/${order}`).then((response) => {
             setEditedOrder(response.data);
             setLoading(false);
         }).catch((error) => {
@@ -44,14 +44,14 @@ function OrderEditForm(props) {
     }, [order]);
 
     const onTrigger = (event) => {
-        const url = `http://127.0.0.1:8000/order/${order}`; // Assurez-vous d'avoir l'ID de la commande ici
+        const url = `http://localhost:8000/order/${order}`; // Assurez-vous d'avoir l'ID de la commande ici
         console.log(editedOrder);
         axios.patch(url, {
             status: editedOrder.status,
         })
             .then((response) => {
                 console.log('Mise à jour réussie !', response.data);
-                window.location.reload();
+                props.parentCallback(false);
             })
             .catch((error) => {
                 console.error('Erreur lors de la mise à jour', error);
@@ -61,12 +61,13 @@ function OrderEditForm(props) {
     };
 
     const status = {
-        0: "En attente",
-        1: "En préparation",
-        2: "Prêt",
-        3: "Terminé",
-        4: "Annulé"
-    };
+		0: "En attente",
+        1: "Attente de paiement",
+		2: "En préparation",
+		3: "Prêt",
+		4: "Terminé",
+		5: "Annulé"
+	};
     
 
     return (

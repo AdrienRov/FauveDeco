@@ -3,10 +3,11 @@ import React from "react";
 
 const status = {
   0: "En attente",
-  1: "En préparation",
-  2: "Prêt",
-  3: "Terminé",
-  4: "Annulé"
+  1: "Attente de paiement",
+  2: "En préparation",
+  3: "Prêt",
+  4: "Terminé",
+  5: "Annulé"
 };
 
 const OrderField = ({ order }) => (
@@ -30,7 +31,7 @@ const OrderField = ({ order }) => (
               {status[order.status]}
             </div>
             <p className="text-gray-500">
-              Type : {order.type === 1 ? "Livraison" : "Click And Collect"}
+              Type : {order.type === 1 ? "Livraison" : "Click and Collect"}
             </p>
           </div>
           <span className="text-xl font-semibold text-blue-600">
@@ -41,7 +42,7 @@ const OrderField = ({ order }) => (
           {order.productOrders.slice(0, 3).map((productOrder, index) => (
             <li key={index}>
               <img
-                src={productOrder.product.images[0].url}
+                src={productOrder.product.images[0]?.url}
                 className="w-32 h-full object-cover rounded"
                 alt={`Product ${index + 1}`}
               />
@@ -62,7 +63,7 @@ const OrderField = ({ order }) => (
         {order.productOrders.map((productOrder, index) => (
           <li key={index} className="flex items-center space-x-2">
             <img
-              src={productOrder.product.images[0].url}
+              src={productOrder.product.images[0]?.url}
               className="w-32 h-full object-cover rounded"
               alt={`Product ${index + 1}`}
             />

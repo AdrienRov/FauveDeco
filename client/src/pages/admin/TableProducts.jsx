@@ -4,6 +4,7 @@ import Modal from "../../components/Modal";
 import ModifImage from "./ModifImages";
 import ProductEditForm from "./ProductEditForm";
 import ProductAddForm from "./ProductAddForm";
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableProducts() {
   const [products, setproducts] = useState([]);
@@ -25,7 +26,7 @@ function TableProducts() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://127.0.0.1:8000/product/${id}`)
+      .delete(`http://localhost:8000/product/${id}`)
       .then((response) => {
         console.log(`Product ${id} deleted successfully`);
         // Mettre à jour l'état local après la suppression
@@ -54,7 +55,7 @@ function TableProducts() {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/products?limit=99999999999999")
+      .get("http://localhost:8000/products?limit=99999999999999")
       .then((response) => {
         const productsArray = [response.data[0]];
         setproducts(response.data);
@@ -69,7 +70,7 @@ function TableProducts() {
   return (
     <>
       {loading ? (
-        <p>Chargement en cours...</p>
+        <LoadingSpinner />
       ) : (
         <div className="overflow-x-auto">
           <Modal
@@ -104,7 +105,6 @@ function TableProducts() {
           <table className="table table-zebra">
             <thead className="vert text-white">
               <tr>
-                <th>Images</th>
                 <th>Nom</th>
                 <th>Description</th>
                 <th>Catégories</th>
@@ -117,11 +117,6 @@ function TableProducts() {
               {Array.isArray(products) &&
                 products.filter((product) => product.name.toLowerCase().includes(searchTerm.toLowerCase())).map((product, i) => (
                   <tr key={i}>
-                    <td>
-                      <button onClick={() => handleModifImages(product.id)}>
-                        Modifier images
-                      </button>
-                    </td>{" "}
                     <td>{product.name}</td>
                     <td>{product.description}</td>
                     <td>{product.category.name}</td>
@@ -141,6 +136,13 @@ function TableProducts() {
                       >
                         Effacer
                       </button>
+
+                                        <button
+                                            className="bg-green-500 text-white px-2 py-1 rounded"
+                                            onClick={() => handleModifImages(product.id)}
+                                        >
+                                            Modifier images
+                                        </button>
                     </td>
                   </tr>
                 ))}

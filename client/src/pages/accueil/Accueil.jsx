@@ -13,6 +13,7 @@ const Accueil = (props) => {
     }));
 
     const bestProduct = categories.flatMap(c => c.products).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 1)[0];
+    const bestCategories = categories.sort((a, b) => b.products.length - a.products.length).slice(0, 2);
 
     const [current, setCurrent] = useState(0);
 
@@ -50,7 +51,7 @@ const Accueil = (props) => {
             
             <div className="flex justify-center">
                 <div className="grid grid-cols-2 gap-8 md:p-10 h-50 w-50 md:h-3/5 md:w-3/5">
-                    {categories?.filter(c => !c.parent && c.imageUrl).map(categ => (
+                    {bestCategories.map(categ => (
                         <Link to={`/categories/${categ.id}`} className="relative overflow-hidden bg-gray-100 p-1 categorie">
                             <img src={categ.imageUrl} alt={categ.name} className="w-full h-full object-cover" />
                             <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-5 text-center">
@@ -94,7 +95,7 @@ const Accueil = (props) => {
                     <div class="relative flex w-full mx-2 md:mx-20 flex-row bg-white bg-clip-border text-gray-700 shadow-md">
                         <div class="relative m-0 w-2/5 shrink-0 overflow-hidden bg-white bg-clip-border text-gray-700 hidden md:block">
                             <img
-                                src={bestProduct?.images[0].url}
+                                src={bestProduct?.images[0]?.url}
                                 alt="image"
                                 class="h-full w-full object-cover block"
                             />
@@ -149,7 +150,7 @@ const Accueil = (props) => {
                         <div class="mx-auto px-5">
                             <Link to={`/produit/${product.id}`}>
                                 <div class="max-w-xs cursor-pointer bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                                    <img class="w-full h-56 object-cover object-center" src={product.images[0].url} alt="product" />
+                                    <img class="w-full h-56 object-cover object-center" src={product.images[0]?.url} alt="product" />
                                     <p class="mt-4 font-bold text-center">{product.name}</p>
                                     <p class="mb-4 text-gray-800 text-center">{product.price}€</p>
                                 </div>

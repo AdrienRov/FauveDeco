@@ -45,7 +45,7 @@ class CategoryController extends AbstractController
     #[Route('/category', name: 'app_category_create', methods: ['POST'])]
     public function create(EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
-        // get name and parent from request
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $request = Request::createFromGlobals();
         $data = json_decode($request->getContent(), true);
 
@@ -94,7 +94,7 @@ class CategoryController extends AbstractController
     #[Route('/category/{id}', name: 'app_category_delete', methods: ['DELETE'])]
     public function delete(EntityManagerInterface $entityManager, int $id): Response
     {
-        // get category from database
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $category = $entityManager->getRepository(Category::class)->find($id);
 
         // validate category
@@ -118,7 +118,7 @@ class CategoryController extends AbstractController
     #[Route('/category/{id}', name: 'app_category_update', methods: ['PATCH'])]
     public function update(EntityManagerInterface $entityManager, ValidatorInterface $validator, int $id): Response
     {
-        // get category from database
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $category = $entityManager->getRepository(Category::class)->find($id);
 
         // validate category

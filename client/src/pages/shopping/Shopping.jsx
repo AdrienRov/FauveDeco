@@ -8,7 +8,7 @@ import LoadingSpinner from '../../components/LoadingSpinner';
 
 function Produit(props) {
 
-    const urlProduits = "http://127.0.0.1:8000/products";
+    const urlProduits = "http://localhost:8000/products";
     const [produits, setProduits] = useState([]);
     const [loading, setLoading] = useState(true);
     const [ search, setSearch ] = useState("");

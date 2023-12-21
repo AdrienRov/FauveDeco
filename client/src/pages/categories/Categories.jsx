@@ -19,7 +19,7 @@ function Categories(props) {
         category = categories.find(category => category.id == id);
     }
 
-    const url = "http://127.0.0.1:8000/products";
+    const url = "http://localhost:8000/products";
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
