@@ -31,7 +31,14 @@ class OrderController extends AbstractController
         $limit = $request->query->get('limit', 10);
         $start = $request->query->get('start', 0);
         
-        $orders = $entityManager->getRepository(Order::class)->findBy([], ['id' => $order], $limit, $start);
+        $orders = [];
+
+        $nowUser = $this->getUser();
+        if ($nowUser->getRole() == 0) {
+            $orders = $entityManager->getRepository(Order::class)->findBy(['client' => $nowUser], ['id' => $order], $limit, $start);
+        } else {
+            $orders = $entityManager->getRepository(Order::class)->findBy([], ['id' => $order], $limit, $start);
+        }
 
         $arr = [];
 
@@ -46,6 +53,11 @@ class OrderController extends AbstractController
     {
         $order = $entityManager->getRepository(Order::class)->find($id);
 
+        if ($order->getClient() != $this->getUser())
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+
+
         if (!$order)
             return $this->json(['error' => 'Order not found']);
 
@@ -55,6 +67,8 @@ class OrderController extends AbstractController
     #[Route('/order', name: 'app_order_create', methods: ['POST'])]
     public function create(EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $request = Request::createFromGlobals();
         $data = json_decode($request->getContent(), true);
 
@@ -91,6 +105,8 @@ class OrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_update', methods: ['PATCH'])]
     public function update(EntityManagerInterface $entityManager, ValidatorInterface $validator, int $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $request = Request::createFromGlobals();
         $data = json_decode($request->getContent(), true);
 
@@ -139,6 +155,8 @@ class OrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_delete', methods: ['DELETE'])]
     public function delete(EntityManagerInterface $entityManager, int $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
         $order = $entityManager->getRepository(Order::class)->find($id);
 
         if (!$order)

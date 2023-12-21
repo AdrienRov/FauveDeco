@@ -98,9 +98,6 @@ function Produit(props) {
                                 </div>
                             </div>
                         </div>
-                        {
-                            // image thumbnails, when clicked, set the index as the current image
-                        }
                         <div class="flex -mx-2 mb-4 justify-center">
                             {
                                 produit.images.map((image, index) => (
