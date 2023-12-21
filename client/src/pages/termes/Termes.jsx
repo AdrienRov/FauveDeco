@@ -7,7 +7,7 @@ function Termes() {
             <div className="collapse collapse-arrow bg-base-200 my-6">
                 <input type="radio" name="my-accordion-2" checked="checked" />
                 <div className="collapse-title text-xl font-medium">
-                    <h1 class="text-3xl font-bold mb-4 ml-10">Termes et Conditions Générales d'inscription</h1>
+                    <h1 class="text-3xl font-bold mb-4">Termes et Conditions Générales d'inscription</h1>
                 </div>
                 <div className="collapse-content">
                     <div class="container mx-auto p-8">
