@@ -77,7 +77,7 @@ function TableOrders() {
 					/>
 
 					<table className="table table-zebra">
-						<thead className="bg-accent-content text-white">
+						<thead className="vert bg-accent-content text-white">
 							<tr>
 								<th>Client</th>
 								<th>Type</th>
