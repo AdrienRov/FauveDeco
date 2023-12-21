@@ -57,9 +57,9 @@ function ModifImage(props) {
 			<h1>Chargement ... </h1>
 			{Object.keys(type).length > 0 && (
 				<div className="bg-white p-4 shadow-md rounded-md">
-					<h2 className="text-xl font-semibold mb-2">Nom du type: {type.name}</h2>
+					<h2 className="text-xl font-semibold mb-2">Nom du {dataType} : {type.name}</h2>
 
-					<h3 className="text-lg font-semibold mb-2">Images du type:</h3>
+					<h3 className="text-lg font-semibold mb-2">Images du {dataType} :</h3>
 
 					<ul className="grid grid-cols-2 gap-4">
 						{dataType === 'product' && type.images.map((image, index) => (
@@ -74,7 +74,7 @@ function ModifImage(props) {
 						))}
 						{dataType === 'category' && (
 							<li className="mb-2">
-								<img src={type.image_url} alt="Category Image" className="w-full h-auto rounded-md" />
+								<img src={type.imageUrl} alt="Category Image" className="w-full h-auto rounded-md" />
 
 								{/* Bouton pour supprimer une image */}
 								<button className="bg-red-500 text-white px-2 py-1 rounded mt-2" onClick={() => handleDeleteImage(type.image_url)}>
