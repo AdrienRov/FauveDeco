@@ -1,0 +1,58 @@
+@import 'colors';
+
+.navbar {
+	background-color: $vert-fonce;
+	color: $blanc;
+	padding: 0;
+	padding: 20px 10px 10px 10px;
+	height: 100px;
+}
+
+.navbar-center {
+	display: flex;
+	flex-direction: column;
+
+	.text-xxl {
+		font-size: 30px;
+	}
+}
+
+.fauve {
+	font-family: $fauve;
+	margin-bottom: -10px;
+}
+
+.text-rose {
+	color: $rose;
+}
+
+.back-vert {
+	background-color: $vert-fonce;
+	//on enlève les bords
+	border: none;
+}
+
+.btn-nav {
+	border-radius: 0;
+	color: $blanc;
+	margin-left: 5%;
+	margin-right: 5%;
+	font-size: large;
+
+	// Lorsqu'on passe la souris sur les boutons, ils deviennent vert foncé
+	&:hover {
+		background-color: $vert-fonce;
+		color: $rose;
+	}
+}
+
+.dropdown {
+	display: flex;
+	margin-left: -4%;
+	margin-right: 4%;
+}
+
+.divider-white::before,
+.divider-white::after {
+	background-color: $blanc;
+}

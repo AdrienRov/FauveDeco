@@ -1,0 +1,37 @@
+@import '../commons/colors.scss';
+
+.rose-color{
+    color: $rose ;
+}
+
+.back-rose-clair{
+    background-color: $rose-clair ;
+
+    &:hover{
+        color: $vert-fonce ;
+    }
+}
+
+.vert-color{
+    color: $vert-fonce ;
+}
+
+.titre-background{
+    background-color: $rose ;
+}
+
+.titre-50{
+    width: 50%;
+}
+
+.gris-background{
+    background-color: $gris ;
+}
+
+.vert-background{
+    background-color: $vert ;
+}
+
+.vert-fonce-background{
+    background-color: $vert-fonce ;
+}

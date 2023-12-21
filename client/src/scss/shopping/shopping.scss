@@ -1,0 +1,13 @@
+@import '../commons/colors.scss';
+
+
+
+.btn-panier{
+    background-color: $rose;
+    color: $vert-fonce;
+    border-radius: 0;
+
+    &:hover{
+        background-color: $rose-fonce;
+    }
+}

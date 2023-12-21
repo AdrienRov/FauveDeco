@@ -1,0 +1,16 @@
+@import 'colors';
+.footer{
+    background-color: $vert-fonce;
+    color: white;
+    height: 150px;
+}
+html,body, #root{
+    height: 100%;
+}
+main{
+    min-height: calc(100% - 150px);
+}
+*{
+    margin: 0;
+    padding: 0;
+}
