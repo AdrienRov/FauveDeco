@@ -272,4 +272,58 @@ class OrderController extends AbstractController
         
         return $this->json(['status' => true]);
     }
+    #[Route('/send-invoice/{id}', name: 'app_invoice', methods: ['POST'])]
+    public function sendInvoice(int $id, MailerInterface $mailer, EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator): Response
+    {
+        $url = $data['url'] ?? null;
+        $order = $entityManager->getRepository(Order::class)->find($id);
+        if (!$order) {
+            return $this->json(['error' => 'Order not found']);
+        }
+    
+        $user = $order->getClient();
+        $email = $user->getEmail();
+        $firstname = $user->getFirstName();
+        $lastname = $user->getLastName();
+        $products = $order->getProductOrders();
+        
+        $productDetails = [];
+        $totalAmount = 0;  
+        
+        foreach ($products as $product) {
+            $productName = $product->getProduct()->getName();
+            $quantity = $product->getQuantity();
+            $price = $product->getProduct()->getPrice();  
+            
+            $productDetails[] = [
+                'name' => $productName,
+                'quantity' => $quantity,
+                'price' => $price  
+            ];
+    
+            $totalAmount += $price * $quantity;
+        }
+    
+        $email = (new TemplatedEmail())
+            ->from(new Address('commandes@fauvedeco.fr', 'FauveDeco'))
+            ->to($email)
+            ->subject('Facturation de commande')
+            ->htmlTemplate('emails/facturation.twig')
+            ->context([
+                'firstname' => $firstname,
+                'lastname' => $lastname,
+                'products' => $productDetails,
+                'total_amount' => $totalAmount,
+                'url' => $url  
+            ]);
+        
+        $mailer->send($email);
+        
+        $order->setStatus(1);
+        $entityManager->persist($order);
+        $entityManager->flush();
+    
+        return $this->json(['status' => true]);
+    }
+    
 }
