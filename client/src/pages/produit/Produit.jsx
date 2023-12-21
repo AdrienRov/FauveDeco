@@ -16,7 +16,7 @@ function Produit(props) {
     const [ produit, setProduit ] = useState(null);
 
     useEffect(() => {
-        const url = `http://127.0.0.1:8000/product/${id}`;
+        const url = `http://localhost:8000/product/${id}`;
         axios.get(url).then(response => {
             setProduit(response.data);
         });
@@ -98,9 +98,6 @@ function Produit(props) {
                                 </div>
                             </div>
                         </div>
-                        {
-                            // image thumbnails, when clicked, set the index as the current image
-                        }
                         <div class="flex -mx-2 mb-4 justify-center">
                             {
                                 produit.images.map((image, index) => (

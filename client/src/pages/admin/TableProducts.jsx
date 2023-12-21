@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import ModifImage from './ModifImages';
 import ProductEditForm from './ProductEditForm';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableProducts() {
     const [products, setproducts] = useState([]);
@@ -17,7 +18,7 @@ function TableProducts() {
     };
 
     const handleDelete = (id) => {
-        axios.delete(`http://127.0.0.1:8000/product/${id}`)
+        axios.delete(`http://localhost:8000/product/${id}`)
 			.then((response) => {
 				console.log(`Product ${id} deleted successfully`);
 				// Mettre à jour l'état local après la suppression
@@ -40,7 +41,7 @@ function TableProducts() {
     }
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/products?limit=99999999999999')
+        axios.get('http://localhost:8000/products?limit=99999999999999')
             .then((response) => {
                 const productsArray = [response.data[0]];
                 setproducts(response.data);
@@ -55,7 +56,7 @@ function TableProducts() {
     return (
         <>
             {loading ? (
-                <p>Chargement en cours...</p>
+                <LoadingSpinner />
             ) : (
 				<div className="overflow-x-auto">
 					<Modal
@@ -88,9 +89,9 @@ function TableProducts() {
 									<td>{product.category.name}</td>
                                     <td>{product.quantity}</td>
                                     <td>{product.price}</td>
-                                    <td>
+                                    <td className='flex gap-2'>
                                         <button
-                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            className="bg-blue-500 text-white px-2 py-1 rounded"
                                             onClick={() => handleEdit(product.id)}
                                         >
                                             Modifier

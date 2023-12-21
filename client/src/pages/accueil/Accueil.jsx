@@ -13,6 +13,7 @@ const Accueil = (props) => {
     }));
 
     const bestProduct = categories.flatMap(c => c.products).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 1)[0];
+    const bestCategories = categories.sort((a, b) => b.products.length - a.products.length).slice(0, 2);
 
     const [current, setCurrent] = useState(0);
 
@@ -50,7 +51,7 @@ const Accueil = (props) => {
             
             <div className="flex justify-center">
                 <div className="grid grid-cols-2 gap-8 md:p-10 h-50 w-50 md:h-3/5 md:w-3/5">
-                    {categories?.filter(c => !c.parent && c.imageUrl).map(categ => (
+                    {bestCategories.map(categ => (
                         <Link to={`/categories/${categ.id}`} className="relative overflow-hidden bg-gray-100 p-1 categorie">
                             <img src={categ.imageUrl} alt={categ.name} className="w-full h-full object-cover" />
                             <div className="absolute bottom-0 left-0 right-0 bg-white bg-opacity-70 text-white p-5 text-center">

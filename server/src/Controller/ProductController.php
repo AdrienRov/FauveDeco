@@ -45,6 +45,9 @@ class ProductController extends AbstractController
         $productArray = [];
 
         foreach ($products as $product) {
+            if ($product->isDeleted()) {
+                continue;
+            }
             $productArray[] = $product->serializeAll();
         }
         return $this->json($productArray);
@@ -53,12 +56,17 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'app_product', methods: ['GET'])]
     public function show(Product $product): JsonResponse
     {
+        if ($product->isDeleted()) {
+            return $this->json(['status' => false, 'error' => 'Product not found.'], 404);
+        }
         return $this->json($product->serializeAll());
     }
 
     #[Route('/product', name: 'app_product_create', methods: ['POST'])]
     public function create(Request $request, ValidatorInterface $validator): JsonResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $data = json_decode($request->getContent(), true);
         $product = $this->createProductFromRequest($data);
 
@@ -77,7 +85,10 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'app_product_delete', methods: ['DELETE'])]
     public function delete(Product $product): JsonResponse
     {
-        $this->entityManager->remove($product);
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $product->setDeleted(true);
+        
         $this->entityManager->flush();
 
         return $this->json(['status' => true]);
@@ -86,6 +97,8 @@ class ProductController extends AbstractController
     #[Route('/product/{id}', name: 'app_product_update', methods: ['PATCH'])]
     public function update(Request $request, Product $product, ValidatorInterface $validator): JsonResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $data = json_decode($request->getContent(), true);
         $product = $this->updateProductFromRequest($product, $data);
 
@@ -150,6 +163,8 @@ class ProductController extends AbstractController
     #[Route('/product/{id}/add-image', name: 'app_product_add_image', methods: ['POST'])]
     public function addImage(Request $request, Product $product): JsonResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $uploadedFile = $request->files->get('image');
     
         // Handle file upload logic, move the file to the desired directory, etc.
@@ -174,6 +189,8 @@ class ProductController extends AbstractController
     #[Route('/product/{id}/remove-image/{imageId}', name: 'app_product_remove_image', methods: ['DELETE'])]
     public function removeImage(Product $product, int $imageId): JsonResponse
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $imageRepository = $this->entityManager->getRepository(Image::class);
         $image = $imageRepository->find($imageId);
 

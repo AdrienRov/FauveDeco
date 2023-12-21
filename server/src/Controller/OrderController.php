@@ -24,14 +24,20 @@ class OrderController extends AbstractController
 {
 
     #[Route('/orders', name: 'app_orders')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, User $user): Response
     {
         $request = Request::createFromGlobals();
         $order = $request->query->get('order', 'asc');
         $limit = $request->query->get('limit', 10);
         $start = $request->query->get('start', 0);
         
-        $orders = $entityManager->getRepository(Order::class)->findBy([], ['id' => $order], $limit, $start);
+        $orders = [];
+
+        if (!$this->isGranted('ROLE_ADMIN')) {
+            $orders = $entityManager->getRepository(Order::class)->findBy(['client' => $user], ['id' => $order], $limit, $start);
+        } else {
+            $orders = $entityManager->getRepository(Order::class)->findBy([], ['id' => $order], $limit, $start);
+        }
 
         $arr = [];
 
@@ -46,6 +52,9 @@ class OrderController extends AbstractController
     {
         $order = $entityManager->getRepository(Order::class)->find($id);
 
+        if ($order->getClient() != $this->getUser())
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         if (!$order)
             return $this->json(['error' => 'Order not found']);
 
@@ -55,6 +64,8 @@ class OrderController extends AbstractController
     #[Route('/order', name: 'app_order_create', methods: ['POST'])]
     public function create(EntityManagerInterface $entityManager, ValidatorInterface $validator): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $request = Request::createFromGlobals();
         $data = json_decode($request->getContent(), true);
 
@@ -91,6 +102,8 @@ class OrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_update', methods: ['PATCH'])]
     public function update(EntityManagerInterface $entityManager, ValidatorInterface $validator, int $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $request = Request::createFromGlobals();
         $data = json_decode($request->getContent(), true);
 
@@ -139,6 +152,8 @@ class OrderController extends AbstractController
     #[Route('/order/{id}', name: 'app_order_delete', methods: ['DELETE'])]
     public function delete(EntityManagerInterface $entityManager, int $id): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $order = $entityManager->getRepository(Order::class)->find($id);
 
         if (!$order)
@@ -209,6 +224,9 @@ class OrderController extends AbstractController
         // products contains an array of product id and quantity
         foreach ($products as $product_data) {
             $product = $entityManager->getRepository(Product::class)->find($product_data['id']);
+            if (!$product || $product->isDeleted()) {
+                return $this->json(['status' => false, 'error' => 'Product not found']);
+            }
             $quantity = $product_data['quantity'];
             if ($product && $quantity > 0 && $product->getQuantity() >= $quantity) {
                 $productOrder = new ProductOrder();

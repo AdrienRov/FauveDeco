@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Modal from "../../components/Modal";
 import ModifImage from './ModifImages';
 import CategorieEditForm from './CategorieEditForm';
+import LoadingSpinner from '../../components/LoadingSpinner';
 
 function TableCategorie() {
 	const [categories, setCategories] = useState([]);
@@ -17,7 +18,7 @@ function TableCategorie() {
 	};
 
 	const handleDelete = (id) => {
-		axios.delete(`http://127.0.0.1:8000/category/${id}`)
+		axios.delete(`http://localhost:8000/category/${id}`)
 			.then((response) => {
 				console.log(`Categorie ${id} deleted successfully`);
 				// Mettre à jour l'état local après la suppression
@@ -40,7 +41,7 @@ function TableCategorie() {
 	};
 
 	useEffect(() => {
-		axios.get("http://127.0.0.1:8000/categories?limit=99999999999999")
+		axios.get("http://localhost:8000/categories?limit=99999999999999")
 			.then((response) => {
 				const categoriesArray = [response.data[0]];
 				setCategories(response.data);
@@ -55,7 +56,7 @@ function TableCategorie() {
 	return (
 		<>
 			{loading ? (
-				<p>Chargement en cours...</p>
+				<LoadingSpinner />
 			) : (
 				<div className="overflow-x-auto">
 					<Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
@@ -77,9 +78,9 @@ function TableCategorie() {
 									</td>
 									<td>{category.name}</td>
 									<td>{category.parent && category.parent.name || ''}</td>
-									<td>
+									<td className='flex gap-2'>
                                         <button
-                                            className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                                            className="bg-blue-500 text-white px-2 py-1 rounded"
                                             onClick={() => handleEdit(category.id)}
                                         >
                                             Modifier
