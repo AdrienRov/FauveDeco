@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import ModifImage from "./ModifImages";
 import ProductEditForm from "./ProductEditForm";
+import ProductAddForm from "./ProductAddForm";
 
 function TableProducts() {
   const [products, setproducts] = useState([]);
@@ -13,6 +14,8 @@ function TableProducts() {
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleAdd = () => {
+    setForm(<ProductAddForm parentCallback={handleCallback} />);
+    setVisible(true);
   };
 
   const handleEdit = (id) => {
@@ -38,6 +41,7 @@ function TableProducts() {
   const handleCallback = (data) => {
     setVisible(data);
     setFormKey(formKey + 1);
+
   };
 
   const handleModifImages = (productId) => {
@@ -60,7 +64,7 @@ function TableProducts() {
         console.log(error);
         setLoading(false);
       });
-  }, []);
+  }, [visible]);
 
   return (
     <>
