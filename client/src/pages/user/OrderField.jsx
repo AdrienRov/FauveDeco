@@ -1,6 +1,14 @@
 // OrderField.jsx
 import React from "react";
 
+const status = {
+  0: "En attente",
+  1: "En préparation",
+  2: "Prêt",
+  3: "Terminé",
+  4: "Annulé"
+};
+
 const OrderField = ({ order }) => (
   <div className="mb-4">
       <label className="border border-gray-300 block rounded-md hover:bg-gray-50 transition duration-150 ease-in-out">
@@ -18,12 +26,8 @@ const OrderField = ({ order }) => (
           </div>
           <div className="mt-2">
             <div className="flex">
-              <p className="text-gray-500">Statut : </p>
-              {order.status === 1 ? (
-                <p className="text-green-500 ml-1 -semibold">Livré</p>
-              ) : (
-                <p className="text-orange-500 ml-1 font-semibold">En cours</p>
-              )}
+              <p className="text-gray-500">Statut :&nbsp;</p>
+              {status[order.status]}
             </div>
             <p className="text-gray-500">
               Type : {order.type === 1 ? "Livraison" : "Click And Collect"}
