@@ -10,6 +10,8 @@ function TableOrders() {
 	const [formKey, setFormKey] = useState(10);
 	const [form, setForm] = useState(<OrderEditForm />);
 
+    const [shownOrder, setShownOrder] = useState(null);
+
 	const handleEdit = (id) => {
 		setForm(<OrderEditForm order={id} parentCallback={handleCallback} />);
 		setVisible(true);
@@ -19,7 +21,6 @@ function TableOrders() {
 		axios.delete(`http://127.0.0.1:8000/order/${id}`)
 			.then((response) => {
 				console.log(`Order ${id} deleted successfully`);
-				// Mettre à jour l'état local après la suppression
 				setOrders(prevOrders => prevOrders.filter(order => order.id !== id));
 			})
 			.catch((error) => {
@@ -34,7 +35,7 @@ function TableOrders() {
 	};
 
 	useEffect(() => {
-		axios.get('http://127.0.0.1:8000/orders')
+		axios.get('http://127.0.0.1:8000/orders?limit=99999999999999&order=desc')
 			.then((response) => {
 				setOrders(response.data.map(order => order[0]));
 				setLoading(false);
@@ -44,6 +45,14 @@ function TableOrders() {
 				setLoading(false);
 			});
 	}, []);
+
+    const status = {
+        0: "En attente",
+        1: "En préparation",
+        2: "Prêt",
+        3: "Terminé",
+        4: "Annulé"
+    };
 
 	return (
 		<>
@@ -63,22 +72,20 @@ function TableOrders() {
 						<thead className="bg-accent-content text-white">
 							<tr>
 								<th>Client</th>
-								<th>Téléphone</th>
-								<th>Email</th>
+								<th>Type</th>
+								<th>Status</th>
 								<th>Adresse</th>
-								<th>Pays</th>
 								<th>Date</th>
 								<th>Actions</th>
 							</tr>
 						</thead>
 						<tbody>
-							{orders.map((order, i) => (
+							{orders.map((order, i) => (<>
 								<tr key={i}>
 									<td>{order.client.lastName} {order.client.firstName}</td>
-									<td>{order.client.phone}</td>
-									<td>{order.client.email}</td>
-									<td>{order.client.address}</td>
-									<td>{order.client.country}</td>
+									<td>{order.type == 1 ? "Click and Collect" : "Livraison"}</td>
+									<td>{status[order.status]}</td>
+									<td>{order.client.address}, {order.client.country}</td>
 									<td>{new Date(order.date).toLocaleDateString('fr-FR')}</td>
 
 									<td>
@@ -90,14 +97,47 @@ function TableOrders() {
 										</button>
 
 										<button
-											className="bg-red-500 text-white px-2 py-1 rounded"
+											className="bg-red-500 text-white px-2 py-1 rounded mr-2"
 											onClick={() => handleDelete(order.id)}
 										>
 											Effacer
 										</button>
+
+                                        <button
+                                            className="bg-green-500 text-white px-2 py-1 rounded"
+                                            onClick={() => setShownOrder(order.id)}
+                                        >
+                                            Voir
+                                        </button>
 									</td>
 								</tr>
-							))}
+                                {
+                                    shownOrder === order.id && (
+                                        <tr>
+                                            <td colSpan="7">
+                                                <table className="table table-zebra">
+                                                    <thead className="bg-accent-content text-white">
+                                                        <tr>
+                                                            <th>Produit</th>
+                                                            <th>Quantité</th>
+                                                            <th>Prix</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {order.productOrders.map((productOrder, i) => (
+                                                            <tr key={i}>
+                                                                <td>{productOrder.product.name}</td>
+                                                                <td>{productOrder.quantity}</td>
+                                                                <td>{productOrder.product.price}</td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    )
+                                }
+							</>))}
 						</tbody>
 					</table>
 				</div>
