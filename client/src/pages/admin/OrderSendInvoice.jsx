@@ -4,24 +4,40 @@ import Select from 'react-select';
 
 function OrderSendInvoice(props) {
     const { order } = props;
+    const [alert, setAlert] = useState({ state: false, type: '', message: '' });
 
     const onTrigger = (event) => {
-        const url = `http://localhost:8000/send-invoice/${order.id}`; // Assurez-vous d'avoir l'ID de la commande ici
+        const url = `http://localhost:8000/send-invoice/${order.id}`;
         axios.post(url, {
             url: event.target.url.value,
         })
             .then((response) => {
                 console.log('Mise à jour réussie !', response.data);
-                props.parentCallback(false);
+                setAlert({
+                    state: true,
+                    type: 'success',
+                    message: 'Facture envoyée !'
+                });
+                console.log(alert);
+                setTimeout(() => {
+
+                    props.parentCallback(false);
+                }, 2000);
             })
             .catch((error) => {
-                console.error('Erreur lors de la mise à jour', error);
+                console.error('Erreur lors de l\'envoi de la facture', error);
+                setAlert({
+                    state: true,
+                    type: 'error',
+                    message: 'Erreur lors de l\'envoi de la facture'
+                });
             });
-    
+
         event.preventDefault();
     };
 
-    
+
+
 
     return (
         <>
@@ -71,7 +87,7 @@ function OrderSendInvoice(props) {
                             name="url"
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                         />
-                        
+
                     </div>
 
                     <input
@@ -79,9 +95,19 @@ function OrderSendInvoice(props) {
                         value="Envoyer"
                         className="bg-blue-500 text-white px-4 py-2 rounded mt-4 hover:bg-blue-600"
                     />
+                    {/* Affichage de l'alerte en fonction de l'état */}
+                    {alert.state && (
+                            <div role="alert" className={`alert ${alert.type === 'success' ? 'alert-success' : 'alert-error'}`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={alert.type === 'success' ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"} />
+                                </svg>
+                                <span>{alert.message}</span>
+                            </div>
+                    )}
+
                 </form>
             </div>
-        
+
         </>
     );
 }

@@ -43,7 +43,7 @@ const SidePanel = (props) => {
                 address: address,
                 country: country
             },
-            type: typeLivraison === "click-collect" ? 1 : 2
+            type: typeLivraison === "click-collect" ? 2 : 1
 
         };
 
@@ -235,7 +235,7 @@ function Panier(props) {
                 <div class="md:w-2/3">
                     {cart.map((produit) => (
                         <div class="justify-between mb-6 bg-white p-6 shadow-md sm:flex sm:justify-start">
-                            <img src={produit.images[0].url} alt="product-image" class="w-full sm:w-40" />
+                            <img src={produit.images[0]?.url} alt="product-image" class="w-full sm:w-40" />
                             <div class="sm:ml-4 sm:flex sm:w-full sm:justify-between">
                                 <Link to={`/produit/${produit.id}`}>
                                     <div class="mt-5 sm:mt-0">

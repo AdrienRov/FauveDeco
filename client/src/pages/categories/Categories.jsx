@@ -70,6 +70,7 @@ function Categories(props) {
                             </div>
                         </Link>)
                     }
+                    <hr className="my-4" />
                     {
                         category.subCategories.map(child => (<Link to={`/categories/${child.id}`} className="text-blue-600 hover:text-blue-800">
                             <div key={child.id} className="bg-white mt-2 shadow-lg p-4" style={{ backgroundImage: `url(${child.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>

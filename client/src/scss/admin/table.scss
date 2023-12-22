@@ -1,5 +1,9 @@
 @import '../commons/colors';
 
+.vert {
+    background-color: $vert-fonce;
+}
+
 .divImage{
     display: flex;
     justify-content: center;

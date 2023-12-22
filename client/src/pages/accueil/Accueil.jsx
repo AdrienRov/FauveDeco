@@ -9,7 +9,8 @@ const Accueil = (props) => {
 
     const carouselItems = categories.filter(c => c.imageUrl).sort(c => c.products.length).slice(0, 4).map(p => ({
         id: p.id,
-        image: p.imageUrl
+        image: p.imageUrl,
+        name: p.name
     }));
 
     const bestProduct = categories.flatMap(c => c.products).sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 1)[0];
@@ -24,6 +25,17 @@ const Accueil = (props) => {
         return () => clearInterval(interval);
     }, [carouselItems.length]);
 
+    const fixPrice = (price) => {
+        if (price === undefined) {
+            return 0;
+        }
+        if (typeof price === 'string') {
+            price = parseFloat(price);
+        }
+        return price.toFixed(2);
+    }
+        
+
 
     return (
         <>
@@ -34,7 +46,7 @@ const Accueil = (props) => {
                         carouselItems.map((item, index) => (
                             index === current && (
                                 <Link to={`/categories/${item.id}`} key={item.id} id={`item${index + 1}`} className={`carousel-item w-full ${index === current ? 'active' : ''}`}>
-                                    <img src={item.image} className="w-full object-cover" alt={`Item ${index + 1}`} />
+                                    <img src={item.image} className="w-full object-cover" alt={item.name} />
                                 </Link>)
                         ))
                     }
@@ -95,14 +107,14 @@ const Accueil = (props) => {
                     <div class="relative flex w-full mx-2 md:mx-20 flex-row bg-white bg-clip-border text-gray-700 shadow-md">
                         <div class="relative m-0 w-2/5 shrink-0 overflow-hidden bg-white bg-clip-border text-gray-700 hidden md:block">
                             <img
-                                src={bestProduct?.images[0].url}
+                                src={bestProduct?.images[0]?.url}
                                 alt="image"
                                 class="h-full w-full object-cover block"
                             />
                         </div>
                         <div class="p-6">
                             <h6 class="mb-4 block font-sans text-base font-semibold uppercase leading-relaxed tracking-normal vert-color antialiased">
-                                {bestProduct?.price}€
+                                {fixPrice(bestProduct?.price)} €
                             </h6>
                             <h4 class="mb-2 block font-sans text-2xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
                                 {bestProduct?.name}
@@ -150,9 +162,9 @@ const Accueil = (props) => {
                         <div class="mx-auto px-5">
                             <Link to={`/produit/${product.id}`}>
                                 <div class="max-w-xs cursor-pointer bg-white p-2 shadow duration-150 hover:scale-105 hover:shadow-md">
-                                    <img class="w-full h-56 object-cover object-center" src={product.images[0].url} alt="product" />
+                                    <img class="w-full h-56 object-cover object-center" src={product.images[0]?.url || "https://cdn.discordapp.com/attachments/1183682581741437029/1187426923173920899/fr-default-large_default.jpg"} alt="product" />
                                     <p class="mt-4 font-bold text-center">{product.name}</p>
-                                    <p class="mb-4 text-gray-800 text-center">{product.price}€</p>
+                                    <p class="mb-4 text-gray-800 text-center">{fixPrice(product.price)} €</p>
                                 </div>
                             </Link>
                         </div>

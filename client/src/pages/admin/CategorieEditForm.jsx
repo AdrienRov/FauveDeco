@@ -59,7 +59,7 @@ function CategorieEditForm(props) {
 
 	const onTrigger = (event) => {
 
-		const url = `http://127.0.0.1:8000/category/${categorieId}`;
+		const url = `http://localhost:8000/category/${categorieId}`;
 		axios.patch(url, {
 			name: editedCategorie.name,
 			// Add other properties to update
