@@ -67,6 +67,17 @@ function TableProducts() {
 			});
 	}, [visible]);
 
+
+    const fixPrice = (price) => {
+        if (isNaN(price)) {
+            return price;
+        }
+        if (typeof price === 'string') {
+            price = parseFloat(price);
+        }
+        return price.toFixed(2);
+    }
+
 	return (
 		<>
 			{loading ? (
@@ -121,7 +132,7 @@ function TableProducts() {
 										<td>{product.description}</td>
 										<td>{product.category.name}</td>
 										<td>{product.quantity}</td>
-										<td>{product.price}</td>
+										<td>{fixPrice(product.price)} €</td>
 										<td className="flex gap-2">
 											<button
 												className="bg-blue-500 text-white px-2 py-1 rounded"
