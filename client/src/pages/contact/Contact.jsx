@@ -38,9 +38,9 @@ function Contact() {
 						<h2 className="card-title">Informations</h2>
 						<div className="divider"></div>
 						<div className="mt-6 pt-2">
-							<p><span className="font-bold">Adresse : </span> 1 rue de la paix, 75000 Paris</p>
+							<p><span className="font-bold">Adresse : </span> 1 rue de la paix, 76620 Le Havre</p>
 							<p><span className="font-bold">Téléphone : </span> 01 23 45 67 89</p>
-							<p><span className="font-bold">Email : </span>/</p>
+							<p><span className="font-bold">Email : </span> fauve-deco@gmail.com</p>
 						</div>
 					</div>
 				</div>
