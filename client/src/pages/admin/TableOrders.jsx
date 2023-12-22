@@ -62,6 +62,16 @@ function TableOrders() {
 		5: "Annulé"
 	};
 
+    const fixPrice = (price) => {
+        if (isNaN(price)) {
+            return price;
+        }
+        if (typeof price === 'string') {
+            price = parseFloat(price);
+        }
+        return price.toFixed(2);
+    }
+
 	return (
 		<>
 			{loading ? (
@@ -83,6 +93,7 @@ function TableOrders() {
 								<th>Type</th>
 								<th>Status</th>
 								<th>Adresse</th>
+                                <th>Total</th>
 								<th>Date</th>
 								<th>Actions</th>
 							</tr>
@@ -104,6 +115,7 @@ function TableOrders() {
                                         )}
                                     </td>
 									<td>{order.client.address}, {order.client.country}</td>
+                                    <td>{fixPrice(order.total)} €</td>
 									<td>{new Date(order.date).toLocaleDateString('fr-FR')}</td>
 
 									<td className='flex gap-2'>
@@ -144,7 +156,7 @@ function TableOrders() {
 															<tr key={i}>
 																<td>{productOrder.product.name}</td>
 																<td>{productOrder.quantity}</td>
-																<td>{productOrder.product.price}</td>
+																<td>{fixPrice(productOrder.product.price)} €</td>
 															</tr>
 														))}
 													</tbody>
