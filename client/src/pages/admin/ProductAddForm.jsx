@@ -50,7 +50,7 @@ function ProductAddForm(props) {
   }, []);
 
   const onTrigger = (event) => {
-    const url = `http://127.0.0.1:8000/product`;
+    const url = `http://localhost:8000/product`;
 
     axios
       .post(url, {

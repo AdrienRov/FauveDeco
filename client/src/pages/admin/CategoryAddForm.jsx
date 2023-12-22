@@ -33,7 +33,7 @@ function CategoryAddForm(props) {
     };
 
     const onTrigger = (event) => {
-        const url = 'http://127.0.0.1:8000/category';
+        const url = 'http://localhost:8000/category';
 
         axios.post(url, {
             name: newCategory.name,
@@ -52,7 +52,7 @@ function CategoryAddForm(props) {
     };
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/categories?limit=99999999999999').then((response) => {
+        axios.get('http://localhost:8000/categories?limit=99999999999999').then((response) => {
             setParentCategories(response.data);
             setFilteredParentCategories(response.data);
             setLoading(false);
