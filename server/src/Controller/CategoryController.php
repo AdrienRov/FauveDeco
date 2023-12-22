@@ -114,6 +114,84 @@ class CategoryController extends AbstractController
         ]);
     }
 
+    // set image (post)
+    #[Route('/category/{id}/image', name: 'app_category_image', methods: ['POST'])]
+    public function setImage(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $category = $entityManager->getRepository(Category::class)->find($id);
+
+        // validate category
+        if (!$category) {
+            return $this->json([
+                'status' => false,
+                'error' => 'Category not found'
+            ]);
+        }
+
+        // get image from request
+        $request = Request::createFromGlobals();
+        $image = $request->files->get('image');
+
+        // validate image
+        if (!$image) {
+            return $this->json([
+                'status' => false,
+                'error' => 'Image not found'
+            ]);
+        }
+
+        $uploadedFile = $request->files->get('image');
+    
+        // Handle file upload logic, move the file to the desired directory, etc.
+        // You may want to use a service or manager class for handling file uploads.
+    
+        // Move the uploaded file to a directory
+        $uploadsDirectory = $this->getParameter('images_directory'); // This parameter in services.yaml or config file
+        $fileName = md5(uniqid()) . '.' . $uploadedFile->getClientOriginalExtension();
+        $uploadedFile->move($uploadsDirectory, $fileName);
+        
+        # add http host and port to the url
+        $finalUrl = $request->getSchemeAndHttpHost() . "/images/$fileName";
+
+        $category->setImageUrl($finalUrl);
+
+        // save to database
+        $entityManager->persist($category);
+        $entityManager->flush();
+
+        return $this->json([
+            'status' => true,
+            'url' => $finalUrl
+        ]);
+    }
+
+    // delete image
+    #[Route('/category/{id}/image', name: 'app_category_image_delete', methods: ['DELETE'])]
+    public function deleteImage(EntityManagerInterface $entityManager, int $id): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        $category = $entityManager->getRepository(Category::class)->find($id);
+
+        // validate category
+        if (!$category) {
+            return $this->json([
+                'status' => false,
+                'error' => 'Category not found'
+            ]);
+        }
+
+        $category->setImageUrl(null);
+
+        // save to database
+        $entityManager->persist($category);
+        $entityManager->flush();
+
+        return $this->json([
+            'status' => true
+        ]);
+    }
+
     // Patch to update category
     #[Route('/category/{id}', name: 'app_category_update', methods: ['PATCH'])]
     public function update(EntityManagerInterface $entityManager, ValidatorInterface $validator, int $id): Response

@@ -275,7 +275,9 @@ class OrderController extends AbstractController
     #[Route('/send-invoice/{id}', name: 'app_invoice', methods: ['POST'])]
     public function sendInvoice(int $id, MailerInterface $mailer, EntityManagerInterface $entityManager, Request $request, ValidatorInterface $validator): Response
     {
+        $data = json_decode($request->getContent(), true);
         $url = $data['url'] ?? null;
+        
         $order = $entityManager->getRepository(Order::class)->find($id);
         if (!$order) {
             return $this->json(['error' => 'Order not found']);
