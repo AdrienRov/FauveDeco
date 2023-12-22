@@ -121,9 +121,9 @@ function TableOrders() {
 									<td className='flex gap-2'>
 										<button
 											className="bg-green-500 text-white px-2 py-1 rounded mr-2"
-											onClick={() => setShownOrder(order.id)}
+											onClick={() => setShownOrder(shownOrder !== order.id ? order.id : null)}
 										>
-											Voir
+											{shownOrder === order.id ? "Cacher" : "Voire"}
 										</button>
 										<button
 											className="bg-blue-500 text-white px-2 py-1 rounded2"
