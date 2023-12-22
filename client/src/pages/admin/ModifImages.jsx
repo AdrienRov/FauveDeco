@@ -8,7 +8,27 @@ function ModifImage(props) {
 	const handleAddImage = async (e) => {
 		e.preventDefault();
 		const formData = new FormData();
-		formData.append('image', e.target.image.files[0]);
+		formData.append('image', e.target.image?.files[0]);
+
+
+        if (dataType === 'category') {
+
+            //     #[Route('/category/{id}/image', name: 'app_category_image', methods: ['POST'])]
+
+            axios.post(`http://localhost:8000/${dataType}/${typeId}/image`, formData).then((response) => {
+                console.log('Image ajoutée avec succès');
+                // Mettre à jour l'état local après l'ajout
+                setType((prevType) => {
+                    const newType = { ...prevType };
+                    newType.imageUrl = response.data.url;
+                    return newType;
+                });
+            }).catch((error) => {
+                console.log('Erreur lors de l\'ajout de l\'image:', error);
+            });
+
+            return;
+        }
 
 		axios.post(`http://localhost:8000/${dataType}/${typeId}/images`, formData).then((response) => {
 			console.log('Image ajoutée avec succès');
@@ -25,16 +45,38 @@ function ModifImage(props) {
 	};
 
 	const handleDeleteImage = async (image) => {
-		axios.delete(`http://localhost:8000/${dataType}/${typeId}/images/${image.id}`).then((response) => {
-			console.log(`Image ${image.id} deleted successfully`);
+
+
+        if (dataType === 'category') {
+                
+                //     #[Route('/category/{id}/image', name: 'app_category_image', methods: ['DELETE'])]
+    
+                axios.delete(`http://localhost:8000/${dataType}/${typeId}/image`).then((response) => {
+                    console.log(`Image ${image?.id} deleted successfully`);
+                    // Mettre à jour l'état local après la suppression
+                    setType((prevType) => {
+                        const newType = { ...prevType };
+                        newType.imageUrl = null;
+                        return newType;
+                    });
+                }).catch((error) => {
+                    console.log(`Error deleting image ${image?.id}:`, error);
+                });
+    
+                return;
+
+        }
+
+		axios.delete(`http://localhost:8000/${dataType}/${typeId}/images/${image?.id}`).then((response) => {
+			console.log(`Image ${image?.id} deleted successfully`);
 			// Mettre à jour l'état local après la suppression
 			setType((prevType) => {
 				const newType = { ...prevType };
-				newType.images = newType.images.filter((img) => img.id !== image.id);
+				newType.images = newType.images.filter((img) => img.id !== image?.id);
 				return newType;
 			});
 		}).catch((error) => {
-			console.log(`Error deleting image ${image.id}:`, error);
+			console.log(`Error deleting image ${image?.id}:`, error);
 		});
 	};
 
@@ -59,12 +101,12 @@ function ModifImage(props) {
 				<div className="bg-white p-4 shadow-md rounded-md">
 					<h2 className="text-xl font-semibold mb-2">Nom du {dataType} : {type.name}</h2>
 
-					<h3 className="text-lg font-semibold mb-2">Images du {dataType} :</h3>
+					<h3 className="text-lg font-semibold mb-2">Images du {dataType}</h3>
 
 					<ul className="grid grid-cols-2 gap-4">
 						{dataType === 'product' && type.images.map((image, index) => (
 							<li key={index} className="mb-2">
-								<img src={image.url} alt={`Image ${index + 1}`} className="w-full h-auto rounded-md" />
+								<img src={image?.url} alt={`Image ${index + 1}`} className="w-full h-auto rounded-md" />
 
 								{/* Bouton pour supprimer une image */}
 								<button className="bg-red-500 text-white px-2 py-1 rounded mt-2" onClick={() => handleDeleteImage(image)}>
@@ -72,7 +114,7 @@ function ModifImage(props) {
 								</button>
 							</li>
 						))}
-						{dataType === 'category' && (
+						{dataType === 'category' && type.imageUrl != null && (
 							<li className="mb-2">
 								<img src={type.imageUrl} alt="Category Image" className="w-full h-auto rounded-md" />
 
@@ -85,11 +127,13 @@ function ModifImage(props) {
 					</ul>
 
 					{/* Bouton pour ajouter une image */}
-					<form onSubmit={handleAddImage} className="mt-4">
-						<input type="file" name="image" id="image" className="mb-2" />
-						<input className="bg-green-500 text-white px-4 py-2 rounded mt-4" type="submit" value="Ajouter une image" />
+					{(dataType != 'category' || type.imageUrl == null) &&
+                        <form onSubmit={handleAddImage} className="mt-4">
+                            <input type="file" name="image" id="image" className="mb-2" />
+                            <input className="bg-green-500 text-white px-4 py-2 rounded mt-4" type="submit" value="Ajouter une image" />
 
-					</form>
+                        </form>
+                    }
 
 				</div>
 			)}
