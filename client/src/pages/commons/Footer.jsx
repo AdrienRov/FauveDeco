@@ -12,11 +12,9 @@ function Footer() {
         <footer className="footer footer-center p-10 text-base-content rounded">
             <div className="flex justify-between">
                 <nav className="">
-                    
-                    <Link to="/accueil" className="link link-hover pr-3">Accueil</Link>
-                    <Link to="/contact" className="link link-hover pr-3">Contact</Link>
-                    <Link to="/shopping" className="link link-hover pr-3">Shopping</Link>
-
+                    {location.pathname === "/accueil" ? <a href="#navbar" className="link link-hover pr-3">Accueil</a> : <Link to="/accueil" className="link link-hover pr-3">Accueil</Link>}
+                    {location.pathname === "/contact" ? <a href="#navbar" className="link link-hover pr-3">Contact</a> : <Link to="/contact" className="link link-hover pr-3">Contact</Link>}
+                    {location.pathname === "/shopping" ? <a href="#navbar" className="link link-hover pr-3">Shopping</a> : <Link to="/shopping" className="link link-hover pr-3">Shopping</Link>}
                 </nav>
                 <div className="flex items-center">
                     <Link to="https://www.instagram.com/fauve.lh/" className="pr-5">
