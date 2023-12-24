@@ -12,20 +12,17 @@ function OrderSendInvoice(props) {
             url: event.target.url.value,
         })
             .then((response) => {
-                console.log('Mise à jour réussie !', response.data);
                 setAlert({
                     state: true,
                     type: 'success',
                     message: 'Facture envoyée !'
                 });
-                console.log(alert);
                 setTimeout(() => {
 
                     props.parentCallback(false);
                 }, 2000);
             })
             .catch((error) => {
-                console.error('Erreur lors de l\'envoi de la facture', error);
                 setAlert({
                     state: true,
                     type: 'error',
