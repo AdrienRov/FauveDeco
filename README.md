@@ -6,7 +6,24 @@
 - NodeJS ( https://nodejs.org/en )
 - Docker ( https://www.docker.com/products/docker-desktop/ )
 
-## Installation
+## Configuration php
+
+Dans le `php.ini` à la racine de votre installation php
+- Activer les extensions `zip` & `pdo_pgsql` et également le répertoire d'extension 
+  
+(Conseil : utilisé CTRL + F)
+
+```
+; On windows:
+extension_dir = "ext"
+[...]
+extension=pdo_pgsql
+[...]
+extension=zip
+```
+
+## Installation de l'environnement
+
 - Installer la base de donnée sur Docker
 
 `docker run --name fauvedeco -e POSTGRES_PASSWORD=00000000 -d -p 5432:5432 postgres`
@@ -20,26 +37,24 @@ cd server
 composer install
 php bin/console doctrine:database:create
 php bin/console doctrine:migrations:migrate
+php bin/console doctrine:schema:update 
 cd ../client
+composer install
 npm install
 ```
 
-## Commandes Symphony
+## Config pour les mails
+- Se rendre sur 
+https://mailtrap.io/
+- créer un compte
+- aller dans "Email Testing"
+- "Add Inbox"
+- Dans "Integration"
+- selectionner "Symfony 5+"
+- copier le MAILER_DSN et le mettre dans `.env` du /server
+- Les mails seront reçu sur la boite de mailtrap
 
-Lancer serveur de développement
+## Lancement du serveur
 
-`symfony server:start`
-
-Créer une migration
-
-`php bin/console make:migration`
-
-Appliquer une migration
-
-`php bin/console doctrine:migrations:migrate`
-
-## Commandes NodeJS
-
-Lancer serveur de développement
-
-`npm start`
+- Dans /client faire `npm start`
+- Dans /server faire `symfony serve`
