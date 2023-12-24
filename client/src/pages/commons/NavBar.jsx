@@ -128,7 +128,7 @@ function NavBar(props) {
         <header>
             <Modal key={formKey} parentCallback={handleCallback} open={visible} form={form} title="Connexion" />
 
-            <div className="navbar">
+            <div id="navbar" className="navbar">
                 <div className="navbar-start divider divider-white">
                     <div className="dropdown px-15 mb-1 hidden md:flex">
                         <div tabIndex={0} role="button" className="btn btn-nav back-vert duration-150">Catégories<svg class="w-[15px] h-[15px] fill-[#ffffff]" viewBox="0 0 320 512" xmlns="http://www.w3.org/2000/svg"><path d="M182.6 470.6c-12.5 12.5-32.8 12.5-45.3 0l-128-128c-9.2-9.2-11.9-22.9-6.9-34.9s16.6-19.8 29.6-19.8H288c12.9 0 24.6 7.8 29.6 19.8s2.2 25.7-6.9 34.9l-128 128z"></path></svg></div>

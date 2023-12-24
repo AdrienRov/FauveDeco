@@ -43,7 +43,7 @@ const SidePanel = (props) => {
                 address: address,
                 country: country
             },
-            type: typeLivraison === "click-collect" ? 1 : 2
+            type: typeLivraison === "click-collect" ? 2 : 1
 
         };
 
