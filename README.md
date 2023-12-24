@@ -26,7 +26,16 @@ extension=zip
 
 - Installer la base de donnée sur Docker
 
-`docker run --name fauvedeco -e POSTGRES_PASSWORD=00000000 -d -p 5432:5432 postgres`
+```sh
+docker run --name fauvedeco -e POSTGRES_PASSWORD=00000000 -d -p 5432:5432 postgres 
+
+docker exec -it fauvedeco psql -U postgres
+
+<!-- copié/collé le contenue du fichier "dump.sql" situé à la racine du projet dans le terminal-->
+
+\q
+```
+
 - Cloner le repo
 
 `git clone git@github.com:AdrienRov/FauveDeco.git`
@@ -58,3 +67,16 @@ https://mailtrap.io/
 
 - Dans /client faire `npm start`
 - Dans /server faire `symfony serve`
+
+Au premier lancement :
+
+```sql
+docker exec -it fauvedeco psql -U postgres
+
+-- créé un utilisateur en s'inscrivant depuis le site puis executer le code suivant pour créer l'administrateur
+UPDATE user 
+SET role = 2 
+WHERE id = 1;
+
+\q
+```
