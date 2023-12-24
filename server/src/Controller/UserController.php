@@ -214,6 +214,33 @@ class UserController extends AbstractController
 		]);
 	}
 
+	#[Route('/contact', name: 'app_user_contact', methods: ['POST'])]
+	public function contact(MailerInterface $mailer): Response
+	{
+		// get name and parent from request
+		$request = Request::createFromGlobals();
+		$data = json_decode($request->getContent(), true);
+		$name = $data['name'];
+		$mail = $data['mail'];
+		$message = $data['message'];
+
+		$email = (new TemplatedEmail())
+            ->from(new Address($mail, 'Contact client'))
+            ->to('contact@fauvedeco.fr')  
+            ->subject('Nouveau message de contact')	
+            ->htmlTemplate('emails/contact.twig')
+            ->context([
+				'mail' => $mail,
+                'name' => $name,
+                'message' => $message
+            ]);
+        $mailer->send($email);
+		return $this->json([
+			'status' => true,
+			'message' => 'Message envoyé'
+		]);
+	}
+
 	// Patch to update user
 	#[Route('/user/{id}', name: 'app_user_update', methods: ['PATCH'])]
 	public function update(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, int $id): Response
